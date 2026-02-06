@@ -1,0 +1,20 @@
+data_dir = "alloc/data/vector/"
+[api]
+  enabled = false
+[sources.logs]
+  type = "docker_logs"	
+[sinks.out]
+  type = "console"
+  inputs = [ "logs" ]
+  encoding.codec = "json"	
+[sinks.loki]
+  type = "loki"
+  inputs = ["logs"]
+  endpoint = "http://loki.${consul_domain}:3100"
+  encoding.codec = "json"
+  healthcheck.enabled = false
+  [sinks.loki.labels]
+    job   = "{{label.\"com.hashicorp.nomad.job_name\" }}"
+    task  = "{{label.\"com.hashicorp.nomad.task_name\" }}"
+    group = "{{label.\"com.hashicorp.nomad.task_group_name\" }}"
+    node  = "{{label.\"com.hashicorp.nomad.node_name\" }}"

@@ -1,0 +1,72 @@
+tls:
+  certificates:
+    - certFile: "/etc/traefik/certs/${domain}.fullchain"
+      keyFile: "/etc/traefik/certs/${domain}.key"
+  stores:
+    default:
+      defaultCertificate:
+        certFile: "/etc/traefik/certs/${domain}.fullchain"
+        keyFile: "/etc/traefik/certs/${domain}.key"
+
+
+http:
+  routers:
+    nomad:
+      service: nomad
+      rule: Host(`nomad.${domain}`)
+      entrypoints:
+        - websecure
+      middlewares:
+        - auth@consulcatalog
+
+    consul:
+      service: consul
+      rule: Host(`consul.${domain}`)
+      entrypoints:
+        - websecure
+      middlewares:
+        - auth@consulcatalog
+
+    pfsense:
+      service: pfsense
+      rule: Host(`pfsense.${domain}`)
+      entrypoints:
+        - websecure
+
+    proxmox:
+      service: proxmox
+      rule: Host(`pve.${domain}`)
+      entrypoints:
+        - websecure
+
+    backup:
+      service: backup
+      rule: Host(`backup.${domain}`)
+      entrypoints:
+        - websecure
+
+  services:
+    nomad:
+      loadbalancer:
+        servers:
+          - url: ${nomad_url} 
+
+    consul:
+      loadbalancer:
+        servers:
+          - url: ${consul_url}
+
+    pfsense:
+      loadbalancer:
+        servers:
+          - url: ${pfsense_url}
+
+    proxmox:
+      loadbalancer:
+        servers:
+          - url: ${pve_url}
+
+    backup:
+      loadbalancer:
+        servers:
+          - url: ${pve_backup_url}
