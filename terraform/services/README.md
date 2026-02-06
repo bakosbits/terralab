@@ -1,6 +1,6 @@
-## Add a New Service
+# Add a New Service 
 
-- [Instructions](https://github.com/bakosbits/terralab/tree/main/terraform/services#adding-new-services)
+- [Add a new service to an existing cluster](https://github.com/bakosbits/terralab/tree/main/terraform/services#adding-new-services)
 
 # Services Deployment
 
