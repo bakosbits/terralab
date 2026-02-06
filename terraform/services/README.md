@@ -210,7 +210,6 @@ consul catalog services
 
 Essential infrastructure components:
 
-- **Traefik**: Reverse proxy and load balancer
 - **CoreDNS**: Internal DNS and service discovery  
 - **Keepalived**: VIP management for HA
 - **storage-controller**: CSI controller plugin
@@ -258,19 +257,106 @@ See [`nomad_jobs/`](nomad_jobs/) for all available services.
 
 ## Adding New Services
 
-### 1. Create Nomad Job
+Follow these steps to add a new job to the cluster. Steps marked **Required** are mandatory, while **Optional** steps depend on your service's needs.
 
-Create `nomad_jobs/myservice.hcl`:
+### Step 1: Define Volume (Optional)
+
+If your service needs persistent storage, define a volume in [`service.volumes.auto.tfvars`](service.volumes.auto.tfvars):
+
+```hcl
+volumes = {
+  myservice = {
+    volume_id   = "myservice"
+    external_id = "myservice"              # NFS path or external volume ID
+    access_mode = "single-node-writer"    # See "Volume Management" section
+  }
+}
+```
+
+**Note**: You must also create the volume on your storage backend (e.g., NFS directory) before deploying.
+
+### Step 2: Define Environment Variables (Optional)
+
+If your service requires environment variables or secrets, add them to [`services.env_vars.auto.tfvars`](services.env_vars.auto.tfvars):
+
+```hcl
+env_vars = {
+  myservice = {
+    vars = {
+      MY_VAR      = "value"
+      MY_SECRET   = "changeme"
+      # Add all needed environment variables
+    }
+  }
+}
+```
+
+⚠️ **Security**: Consider using Vault or Nomad Variables with ACLs for sensitive data.
+
+### Step 3: Define Job Variables (Required)
+
+Add your service configuration to [`services.hcl_vars.auto.tfvars`](services.hcl_vars.auto.tfvars):
+
+```hcl
+# Add to the appropriate tier based on dependencies:
+# - core_services    (Tier 1: Infrastructure)
+# - data_services    (Tier 2: Databases)
+# - cluster_services (Tier 3: Applications)
+
+cluster_services = {
+  myservice = {
+    vars = {
+      version = "1.0"       # Container image version
+      cpu     = 100         # CPU in MHz
+      ram     = 128         # Memory in MB
+      # Add any custom variables your job template needs
+    }
+  }
+}
+```
+
+### Step 4: Create Job Definition (Required)
+
+Create your Nomad job specification in [`nomad_jobs/myservice.hcl`](nomad_jobs/):
 
 ```hcl
 job "myservice" {
   datacenters = ["${datacenter}"]
+  type        = "service"
   
   group "myservice" {
+    count = 1
+    
     network {
       port "http" { to = 8080 }
     }
     
+    # If using volume from Step 1
+    volume "data" {
+      type      = "csi"
+      source    = "myservice"
+      read_only = false
+    }
+    
+      # Add service registration for Consul
+    service {
+      name = "myservice"
+      port = "http"
+      
+      tags = [
+        "traefik.enable=true",
+        "traefik.http.routers.myservice.rule=Host(`myservice.${internal_domain}`)",
+      ]
+      
+      check {
+        type     = "http"
+        path     = "/health"
+        interval = "10s"
+        timeout  = "2s"
+      }
+            
+    }    
+
     task "myservice" {
       driver = "docker"
       
@@ -279,57 +365,99 @@ job "myservice" {
         ports = ["http"]
       }
       
+
+      # If using volume from Step 1
+      volume_mount {
+        volume      = "data"
+        destination = "/data"
+      }      
+      
       resources {
         cpu    = ${cpu}
         memory = ${ram}
       }
+
+      # If using env vars from Step 2
+      template {
+        data = <<EOF
+{{- with nomadVar "nomad/jobs/myservice" }}
+{{- range $k, $v := . }}
+{{ $k }}={{ $v }}
+{{- end }}
+{{- end }}
+EOF
+        destination = "secrets/env"
+        env         = true
+      }
+
     }
   }
 }
 ```
 
-### 2. Add Variables
+### Step 5: Define Consul KV Config (Optional)
 
-In `services.hcl_vars.auto.tfvars`:
-
-```hcl
-cluster_services = {
-  myservice = { vars = { version = "1.0", cpu = 100, ram = 128 }}
-}
-```
-
-### 3. Add Environment Variables (if needed)
-
-In `services.env_vars.auto.tfvars`:
-
-```hcl
-env_vars = {
-  myservice = {
-    vars = {
-      MY_VAR = "value"
-    }
-  }
-}
-```
-
-### 4. Add Volume (if needed)
-
-In `service.volumes.auto.tfvars`:
-
-```hcl
-volumes = {
-  myservice = {
-    volume_id   = "myservice"
-    external_id = "myservice"
-    access_mode = "single-node-writer"
-  }
-}
-```
-
-### 5. Apply Changes
+If your service needs configuration files stored in Consul KV, create them in [`consul_kv/myservice/`](consul_kv/):
 
 ```bash
-terraform apply
+# Create directory
+mkdir -p consul_kv/myservice
+
+# Create configuration file(s)
+cat > consul_kv/myservice/config.yaml <<EOF
+# Your service configuration
+EOF
+```
+
+Then add to [`consul_kv.tf`](consul_kv.tf):
+
+```hcl
+resource "consul_keys" "myservice" {
+  key {
+    path  = "myservice/config"
+    value = file("${path.module}/consul_kv/myservice/config.yaml")
+  }
+}
+```
+
+Access in your job template:
+
+```hcl
+task "myservice" {
+  template {
+    data        = "{{ key \"myservice/config\" }}"
+    destination = "local/config.yaml"
+  }
+}
+```
+
+### Step 6: Validate and Deploy
+
+```bash
+# Validate Nomad job syntax
+make validate-jobs
+
+# Plan Terraform changes
+make plan-services
+
+# Deploy
+make deploy-services
+```
+
+### Step 7: Verify Deployment
+
+```bash
+# Check job status
+nomad job status myservice
+
+# View allocation details
+nomad alloc status <alloc-id>
+
+# Check logs
+nomad alloc logs <alloc-id>
+
+# Verify service in Consul
+consul catalog services | grep myservice
 ```
 
 ## Nomad Job Templates
