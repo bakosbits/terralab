@@ -1,3 +1,7 @@
+## Add a New Service
+
+- [Instructions](https://github.com/bakosbits/terralab/tree/main/terraform/services#adding-new-services)
+
 # Services Deployment
 
 This directory contains Terraform configurations for deploying services on the Consul/Nomad cluster.
