@@ -11,7 +11,7 @@ locals {
 
       name        = format("${var.manager.name}%02d", i + 1)
       ip          = cidrhost(var.global.cidr, var.manager.offset + i)
-      target_node = var.global.pve_nodes[i % length(var.global.pve_nodes)]
+      target_node = var.pve_nodes[i % length(var.pve_nodes)]
       role        = var.manager.role
       clone       = var.manager.clone
       clone_id    = var.manager.clone_id
@@ -27,7 +27,7 @@ locals {
              
       name        = format("${var.worker.name}%02d", i + 1)
       ip          = cidrhost(var.global.cidr, var.worker.offset + i)
-      target_node = var.global.pve_nodes[i % length(var.global.pve_nodes)]
+      target_node = var.pve_nodes[i % length(var.pve_nodes)]
       role        = "worker"
       clone       = "worker-tpl"
       clone_id    = 9002

@@ -1,7 +1,7 @@
 
 resource "nomad_csi_volume_registration" "arcade-config" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "arcade-config"
   name        = "arcade-config"
@@ -15,7 +15,7 @@ resource "nomad_csi_volume_registration" "arcade-config" {
 
 resource "nomad_csi_volume_registration" "arcade-data" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "arcade-data"
   name        = "arcade-data"
@@ -29,7 +29,7 @@ resource "nomad_csi_volume_registration" "arcade-data" {
 
 resource "nomad_csi_volume_registration" "docker_registry" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "docker_registry"
   name        = "docker_registry"
@@ -43,7 +43,7 @@ resource "nomad_csi_volume_registration" "docker_registry" {
 
 resource "nomad_csi_volume_registration" "vaultwarden" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "vaultwarden"
   name        = "vaultwarden"
@@ -57,7 +57,7 @@ resource "nomad_csi_volume_registration" "vaultwarden" {
 
 resource "nomad_csi_volume_registration" "n8n" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "n8n"
   name        = "n8n"
@@ -71,7 +71,7 @@ resource "nomad_csi_volume_registration" "n8n" {
 
 resource "nomad_csi_volume_registration" "flaresolverr" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "flaresolverr"
   name        = "flaresolverr"
@@ -85,7 +85,7 @@ resource "nomad_csi_volume_registration" "flaresolverr" {
 
 resource "nomad_csi_volume_registration" "motioneye-shared" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "motioneye-shared"
   name        = "motioneye-shared"
@@ -99,7 +99,7 @@ resource "nomad_csi_volume_registration" "motioneye-shared" {
 
 resource "nomad_csi_volume_registration" "motioneye-etc" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "motioneye-etc"
   name        = "motioneye-etc"
@@ -113,7 +113,7 @@ resource "nomad_csi_volume_registration" "motioneye-etc" {
 
 resource "nomad_csi_volume_registration" "grafana" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "grafana"
   name        = "grafana"
@@ -127,7 +127,7 @@ resource "nomad_csi_volume_registration" "grafana" {
 
 resource "nomad_csi_volume_registration" "hass" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "hass"
   name        = "hass"
@@ -141,7 +141,7 @@ resource "nomad_csi_volume_registration" "hass" {
 
 resource "nomad_csi_volume_registration" "influxdb-config" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "influxdb-config"
   name        = "influxdb-config"
@@ -155,7 +155,7 @@ resource "nomad_csi_volume_registration" "influxdb-config" {
 
 resource "nomad_csi_volume_registration" "influxdb-data" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "influxdb-data"
   name        = "influxdb-data"
@@ -169,7 +169,7 @@ resource "nomad_csi_volume_registration" "influxdb-data" {
 
 resource "nomad_csi_volume_registration" "matter" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "matter"
   name        = "matter"
@@ -183,7 +183,7 @@ resource "nomad_csi_volume_registration" "matter" {
 
 resource "nomad_csi_volume_registration" "mongo" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "mongo"
   name        = "mongo"
@@ -197,7 +197,7 @@ resource "nomad_csi_volume_registration" "mongo" {
 
 resource "nomad_csi_volume_registration" "mosquitto-config" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "mosquitto-config"
   name        = "mosquitto-config"
@@ -211,7 +211,7 @@ resource "nomad_csi_volume_registration" "mosquitto-config" {
 
 resource "nomad_csi_volume_registration" "mosquitto-data" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "mosquitto-data"
   name        = "mosquitto-data"
@@ -225,7 +225,7 @@ resource "nomad_csi_volume_registration" "mosquitto-data" {
 
 resource "nomad_csi_volume_registration" "mosquitto-log" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "mosquitto-log"
   name        = "mosquitto-log"
@@ -239,7 +239,7 @@ resource "nomad_csi_volume_registration" "mosquitto-log" {
 
 resource "nomad_csi_volume_registration" "loki" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "loki"
   name        = "loki"
@@ -253,7 +253,7 @@ resource "nomad_csi_volume_registration" "loki" {
 
 resource "nomad_csi_volume_registration" "plex" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "plex"
   name        = "plex"
@@ -267,7 +267,7 @@ resource "nomad_csi_volume_registration" "plex" {
 
 resource "nomad_csi_volume_registration" "postgres" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "postgres"
   name        = "postgres"
@@ -281,7 +281,7 @@ resource "nomad_csi_volume_registration" "postgres" {
 
 resource "nomad_csi_volume_registration" "prowlarr" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "prowlarr"
   name        = "prowlarr"
@@ -295,7 +295,7 @@ resource "nomad_csi_volume_registration" "prowlarr" {
 
 resource "nomad_csi_volume_registration" "radarr" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "radarr"
   name        = "radarr"
@@ -310,7 +310,7 @@ resource "nomad_csi_volume_registration" "radarr" {
 
 resource "nomad_csi_volume_registration" "sonarr" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "sonarr"
   name        = "sonarr"
@@ -325,7 +325,7 @@ resource "nomad_csi_volume_registration" "sonarr" {
 
 resource "nomad_csi_volume_registration" "jellyfin" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "jellyfin"
   name        = "jellyfin"
@@ -339,7 +339,7 @@ resource "nomad_csi_volume_registration" "jellyfin" {
 
 resource "nomad_csi_volume_registration" "sabnzbd" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "sabnzbd"
   name        = "sabnzbd"
@@ -353,7 +353,7 @@ resource "nomad_csi_volume_registration" "sabnzbd" {
 
 resource "nomad_csi_volume_registration" "transmission" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "transmission"
   name        = "transmission"
@@ -367,7 +367,7 @@ resource "nomad_csi_volume_registration" "transmission" {
 
 resource "nomad_csi_volume_registration" "unifi" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "unifi"
   name        = "unifi"
@@ -381,7 +381,7 @@ resource "nomad_csi_volume_registration" "unifi" {
 
 resource "nomad_csi_volume_registration" "wikijs" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "wikijs"
   name        = "wikijs"
@@ -395,7 +395,7 @@ resource "nomad_csi_volume_registration" "wikijs" {
 
 resource "nomad_csi_volume_registration" "media" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "media"
   name        = "media"
@@ -409,7 +409,7 @@ resource "nomad_csi_volume_registration" "media" {
 
 resource "nomad_csi_volume_registration" "downloads" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "downloads"
   name        = "downloads"
@@ -423,7 +423,7 @@ resource "nomad_csi_volume_registration" "downloads" {
 
 resource "nomad_csi_volume_registration" "torrents" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "torrents"
   name        = "torrents"
@@ -437,7 +437,7 @@ resource "nomad_csi_volume_registration" "torrents" {
 
 resource "nomad_csi_volume_registration" "certs" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "certs"
   name        = "certs"
@@ -451,7 +451,7 @@ resource "nomad_csi_volume_registration" "certs" {
 
 resource "nomad_csi_volume_registration" "traefik-logs" {
 
-  depends_on  = [nomad_job.storage_services]
+  depends_on  = [nomad_job.core_services]
   plugin_id   = "nfs"
   volume_id   = "traefik-logs"
   name        = "traefik-logs"

@@ -59,7 +59,7 @@ job "jellyfin" {
       env {
         PUID                        = ${uid}
         PGID                        = ${gid}
-        JELLYFIN_PublishedServerUrl = "https://jellyfin.${domain}"
+        JELLYFIN_PublishedServerUrl = "https://jellyfin.${external_domain}"
       }
 
       resources {

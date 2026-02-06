@@ -9,7 +9,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   # the cloning configuration
   clone {
     vm_id     = each.value.clone_id
-    node_name = var.vm.pve_nodes[2]
+    node_name = var.pve_nodes[2]
     full      = var.vm.full_clone
   }
 
@@ -29,7 +29,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   network_device {
     bridge  = var.vm.bridge
     model   = var.vm.network_model
-    vlan_id = var.vm.vlan_id 
+    # vlan_id = var.vm.vlan_id 
   }
 
   disk {
@@ -61,7 +61,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
     ip_config {
       ipv4 {
         address = "${each.value.ip}/24"
-        gateway = cidrhost(var.global.cluster_cidr, 1)
+        gateway = cidrhost(var.global.cidr, 1)
       }
     }
 

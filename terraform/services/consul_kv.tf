@@ -76,12 +76,12 @@ resource "consul_key_prefix" "traefik" {
   subkeys = {
     "traefik.yaml" = templatefile("${local.files}/traefik/traefik.yaml",
       {
-        domain = var.global.global.external_domain
+        domain = var.global.external_domain
     }),
 
     "dynamic.yaml" = templatefile("${local.files}/traefik/dynamic.yaml",
       {
-        domain         = var.global.domain
+        domain         = var.global.external_domain
         consul_domain  = var.global.consul_domain
         nomad_url      = var.global.nomad_url
         consul_url     = var.global.consul_url
