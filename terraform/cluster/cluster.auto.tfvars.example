@@ -1,0 +1,93 @@
+# Cluster Variables Example
+# Copy this file to cluster.auto.tfvars and update with your values
+
+# Proxmox Provider Configuration
+provider_vars = {
+  proxmox_url      = "https://192.168.1.203:8006"  # Proxmox API URL
+  proxmox_user     = "root@pam"                    # API user (recommend creating dedicated user)
+  proxmox_password = "your-proxmox-password"       # API password or token
+}
+
+# Global Configuration
+global = {
+  # Cloud-init user configuration
+  ciuser     = "your-username"                      # Default user for VMs
+  cipassword = "your-secure-password"               # Password for default user
+  sshkeys    = "ssh-rsa AAAAB3Nza... your-key..."  # SSH public key(s) - newline separated for multiple
+  
+  # Network configuration
+  cidr             = "192.168.1.0/24"              # Network CIDR for cluster
+  dns1             = "192.168.1.1"                 # Primary DNS server
+  
+  # Domain configuration
+  external_domain  = "example.com"                 # External domain for services
+  internal_domain  = "example.lan"                 # Internal domain
+  
+  # Docker registry mirror (optional)
+  registry_mirror  = "http://registry.example.lan" # Docker registry mirror URL
+}
+
+# List of Proxmox nodes for VM distribution
+# VMs will be distributed across these nodes using round-robin
+pve_nodes = ["pve01", "pve02", "pve03"]
+
+# Manager Node Configuration
+manager = {
+  name      = "manager"       # Hostname prefix (results in manager01, manager02, etc.)
+  role      = "manager"       # Role identifier
+  clone     = "manager-tpl"   # Template name to clone from (ID 9001)
+  clone_id  = 9001           # Template VM ID
+  disk_size = 8              # Disk size in GB
+  cores     = 4              # CPU cores per manager
+  memory    = 8192           # Memory in MB (8GB)
+  offset    = 71             # IP offset from CIDR base (results in .71, .72, .73)
+  count     = 3              # Number of managers (use 1, 3, or 5 for quorum)
+}
+
+# Worker Node Configuration
+worker = {
+  name      = "worker"        # Hostname prefix (results in worker01, worker02, etc.)
+  role      = "worker"        # Role identifier
+  clone     = "worker-tpl"    # Template name to clone from (ID 9002)
+  clone_id  = 9002           # Template VM ID
+  disk_size = 30             # Disk size in GB
+  cores     = 12             # CPU cores per worker
+  memory    = 65536          # Memory in MB (64GB)
+  offset    = 81             # IP offset from CIDR base (results in .81, .82, .83)
+  count     = 3              # Number of workers (scale as needed)
+}
+
+# VM Hardware Configuration
+vm = {
+  storage             = "rbd"      # Storage pool for VM disks (Ceph RBD)
+  cloud_init_storage  = "cephfs"   # Storage for cloud-init drive
+  full_clone          = true       # Use full clone (recommended)
+  cpu_type            = "host"     # CPU type (host = passthrough)
+  agent_enabled       = true       # Enable QEMU guest agent
+  bridge              = "vmbr2"    # Network bridge
+  network_model       = "virtio"   # Network adapter model
+  disk_interface      = "scsi0"    # Disk interface
+  disk_iothread       = true       # Enable IO thread for better performance
+  disk_discard        = "on"       # Enable discard/TRIM
+  disk_ssd            = true       # Emulate SSD
+  cloudinit_interface = "ide0"     # Cloud-init drive interface
+  vlan_id             = ""         # VLAN ID (empty for no VLAN)
+}
+
+# IP Address Allocation Examples:
+# With cidr = "192.168.1.0/24", offset = 71, count = 3:
+#   manager01: 192.168.1.71
+#   manager02: 192.168.1.72
+#   manager03: 192.168.1.73
+#
+# With cidr = "192.168.1.0/24", offset = 81, count = 3:
+#   worker01: 192.168.1.81
+#   worker02: 192.168.1.82
+#   worker03: 192.168.1.83
+
+# Storage Options:
+# - "local-lvm" - Local LVM storage
+# - "rbd" - Ceph RBD (block storage)
+# - "cephfs" - Ceph filesystem
+# - "nfs" - NFS storage
+# Update based on your Proxmox storage configuration

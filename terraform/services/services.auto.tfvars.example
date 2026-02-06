@@ -1,0 +1,46 @@
+# Services Global Variables Example
+# Copy this file to services.auto.tfvars and update with your values
+
+global = {
+  # DNS Configuration
+  dns1 = "192.168.1.1"    # Primary internal DNS server
+  dns2 = "192.168.1.2"    # Secondary DNS (often Keepalived VIP with CoreDNS)
+  
+  # Virtual IP (Keepalived)
+  virtual_ip = "192.168.1.2"  # Shared VIP for HA services
+  
+  # Datacenter
+  datacenter = "dc1"  # Nomad datacenter name
+  
+  # Domains
+  external_domain = "example.com"  # Public domain for external services
+  internal_domain = "example.lan"  # Internal domain for cluster services
+  
+  # User/Group/Timezone for containerized services
+  uid      = "1000"           # User ID (match your system user)
+  gid      = "1000"           # Group ID (match your system group)
+  timezone = "America/Denver" # Container timezone
+  
+  # Consul Configuration
+  consul_domain = "service.consul"  # Consul DNS domain
+  
+  # API Endpoints
+  nomad_url  = "http://192.168.1.71:4646"  # Nomad API (manager node)
+  consul_url = "http://192.168.1.71:8500"  # Consul API (manager node)
+  
+  # Secret ID for Nomad provider (if ACLs enabled)
+  # Generate with: nomad acl bootstrap
+  secret_id = "your-nomad-acl-token-here"
+  
+  # Optional: Additional service URLs for Traefik routing
+  pfsense_url    = "https://192.168.1.1:8443"   # pfSense/firewall UI
+  pve_url        = "http://192.168.1.10:8006"   # Proxmox primary
+  pve_backup_url = "http://192.168.1.200:8007"  # Proxmox backup server
+}
+
+# Notes:
+# - virtual_ip should be the Keepalived VIP where core services are accessible
+# - nomad_url and consul_url should point to any manager node or the VIP
+# - secret_id is required if Nomad ACLs are enabled
+# - uid/gid should match the user/group running services (often 1000)
+# - Timezone affects log timestamps and scheduled tasks in containers

@@ -1,0 +1,230 @@
+# Services Job Variables Example
+# Copy this file to services.hcl_vars.auto.tfvars and update with your values
+#
+# These variables are merged with global variables when rendering Nomad job templates.
+# Each service can specify version, CPU (MHz), and RAM (MB) requirements.
+
+# Core Services - Infrastructure components deployed first
+core_services = {
+  coredns = {
+    vars = {
+      version = "1.11.1"  # CoreDNS version
+      cpu     = 100       # CPU in MHz
+      ram     = 128       # Memory in MB
+    }
+  }
+  
+  keepalived = {
+    vars = {
+      version = "2.0.20"  # Keepalived version
+    }
+  }
+  
+  storage-controller = {
+    vars = {
+      nfs_server = "192.168.1.225:/exports/cephfs/volumes"  # NFS server and path for CSI
+    }
+  }
+  
+  storage-node = {
+    vars = {
+      nfs_server = "192.168.1.225:/exports/cephfs/volumes"  # NFS server and path for CSI
+    }
+  }
+}
+
+# Data Services - Databases deployed after core services
+data_services = {
+  influxdb = {
+    vars = {
+      version = "2.7.8-alpine"  # InfluxDB version
+      cpu     = 500             # CPU in MHz
+      ram     = 512             # Memory in MB
+    }
+  }
+  
+  mongodb8 = {
+    vars = {
+      version = "8.0.14"  # MongoDB version
+      cpu     = 500       # CPU in MHz
+      ram     = 1024      # Memory in MB
+    }
+  }
+  
+  postgres = {
+    vars = {
+      version = "18.1"  # PostgreSQL version
+      cpu     = 1000    # CPU in MHz
+      ram     = 1024    # Memory in MB
+    }
+  }
+}
+
+# Cluster Services - Applications deployed after data services
+cluster_services = {
+  # Authentication & Security
+  auth = {
+    vars = {
+      version = "2.2.0"  # Traefik Forward Auth version
+      cpu     = 200      # CPU in MHz
+      ram     = 256      # Memory in MB
+    }
+  }
+  
+  vaultwarden = {
+    vars = {}  # Empty vars object uses defaults from job template
+  }
+  
+  # Reverse Proxy & DNS
+  traefik = {
+    vars = {
+      version = "3.6.6"  # Traefik version
+      cpu     = 250      # CPU in MHz
+      ram     = 256      # Memory in MB
+    }
+  }
+  
+  # Networking
+  cloudflared = {
+    vars = {
+      version = "latest"  # Cloudflare tunnel version
+      cpu     = 100       # CPU in MHz
+      ram     = 64        # Memory in MB
+    }
+  }
+  
+  nginx = {
+    vars = {}
+  }
+  
+  unifi = {
+    vars = {
+      version = "10.0.162"  # UniFi Network Controller version
+      cpu     = 1500        # CPU in MHz
+      ram     = 1536        # Memory in MB
+    }
+  }
+  
+  # Monitoring & Logging
+  prometheus = {
+    vars = {}
+  }
+  
+  grafana = {
+    vars = {}
+  }
+  
+  loki = {
+    vars = {}
+  }
+  
+  telegraf = {
+    vars = {}
+  }
+  
+  # Media Services
+  jellyfin = {
+    vars = {}
+  }
+  
+  plex = {
+    vars = {
+      PLEX_CLAIM = "claim-your-claim-token-here"  # Get from plex.tv/claim
+    }
+  }
+  
+  sonarr = {
+    vars = {}
+  }
+  
+  radarr = {
+    vars = {}
+  }
+  
+  prowlarr = {
+    vars = {}
+  }
+  
+  sabnzbd = {
+    vars = {}
+  }
+  
+  transmission = {
+    vars = {}
+  }
+  
+  # Home Automation
+  home-assistant = {
+    vars = {}
+  }
+  
+  mosquitto = {
+    vars = {}  # MQTT broker
+  }
+  
+  matter = {
+    vars = {}  # Matter controller
+  }
+  
+  # Development & Utilities
+  n8n = {
+    vars = {}  # Workflow automation
+  }
+  
+  drawio = {
+    vars = {}  # Diagram editor
+  }
+  
+  wikijs = {
+    vars = {}  # Documentation wiki
+  }
+  
+  pgweb = {
+    vars = {}  # PostgreSQL web UI
+  }
+  
+  # Other Services
+  ollama = {
+    vars = {}  # LLM inference
+  }
+  
+  samba = {
+    vars = {
+      cpu = 250   # CPU in MHz
+      ram = 256   # Memory in MB
+    }
+  }
+  
+  emulatorjs = {
+    vars = {}  # Retro game emulator
+  }
+  
+  motioneye = {
+    vars = {}  # Camera surveillance
+  }
+  
+  flaresolverr = {
+    vars = {}  # Cloudflare solver
+  }
+  
+  # Maintenance Jobs
+  docker-cleanup = {
+    vars = {}  # Periodic cleanup of unused Docker resources
+  }
+  
+  journalctl-cleanup = {
+    vars = {}  # Systemd journal cleanup
+  }
+  
+  nomad-cleanup = {
+    vars = {}  # Nomad allocation cleanup
+  }
+}
+
+# Notes:
+# - Empty vars objects ({}) are valid - the job will use defaults
+# - CPU is measured in MHz (1000 = 1 core)
+# - RAM is measured in MB
+# - Version tags should match available Docker image tags
+# - Some services may require additional variables (see job files)
+# - Remove or comment out services you don't want to deploy

@@ -1,0 +1,226 @@
+# Services Volume Definitions Example
+# Copy this file to service.volumes.auto.tfvars and update with your values
+#
+# These volumes are registered with Nomad CSI and must exist on your storage backend.
+# Before deploying, ensure the NFS/Ceph paths exist with correct permissions.
+
+# NFS path: <nfs_server>:/exports/volumes/each.key (or whatever your nfs export path is)
+
+volumes = {
+  # Media Services
+  jellyfin = {
+    volume_id   = "jellyfin"
+    external_id = "jellyfin"              
+    access_mode = "single-node-writer"
+  }
+
+  plex = {
+    volume_id   = "plex"
+    external_id = "plex"
+    access_mode = "single-node-writer"
+  }
+
+  # *arr Media Management
+  sonarr = {
+    volume_id   = "sonarr"
+    external_id = "sonarr"
+    access_mode = "single-node-writer"
+  }
+
+  radarr = {
+    volume_id   = "radarr"
+    external_id = "radarr"
+    access_mode = "single-node-writer"
+  }
+
+  prowlarr = {
+    volume_id   = "prowlarr"
+    external_id = "prowlarr"
+    access_mode = "single-node-writer"
+  }
+
+  # Download Clients
+  transmission = {
+    volume_id   = "transmission"
+    external_id = "transmission"
+    access_mode = "single-node-writer"
+  }
+
+  sabnzbd = {
+    volume_id   = "sabnzbd"
+    external_id = "sabnzbd"
+    access_mode = "single-node-writer"
+  }
+
+  # Monitoring & Logging
+  grafana = {
+    volume_id   = "grafana"
+    external_id = "grafana"
+    access_mode = "single-node-writer"
+  }
+
+  prometheus = {
+    volume_id   = "prometheus"
+    external_id = "prometheus"
+    access_mode = "single-node-writer"
+  }
+
+  loki = {
+    volume_id   = "loki"
+    external_id = "loki"
+    access_mode = "single-node-writer"
+  }
+
+  # Databases
+  postgres = {
+    volume_id   = "postgres"
+    external_id = "postgres"
+    access_mode = "single-node-writer"
+  }
+
+  mongodb8 = {
+    volume_id   = "mongodb8"
+    external_id = "mongodb8"
+    access_mode = "single-node-writer"
+  }
+
+  influxdb = {
+    volume_id   = "influxdb"
+    external_id = "influxdb"
+    access_mode = "single-node-writer"
+  }
+
+  # Development & Utilities
+  n8n = {
+    volume_id   = "n8n"
+    external_id = "n8n"
+    access_mode = "single-node-writer"
+  }
+
+  wikijs = {
+    volume_id   = "wikijs"
+    external_id = "wikijs"
+    access_mode = "single-node-writer"
+  }
+
+  docker_registry = {
+    volume_id   = "docker_registry"
+    external_id = "docker_registry"
+    access_mode = "multi-node-single-writer"
+  }
+
+  # Security
+  vaultwarden = {
+    volume_id   = "vaultwarden"
+    external_id = "vaultwarden"
+    access_mode = "single-node-writer"
+  }
+
+  # Home Automation
+  home-assistant = {
+    volume_id   = "home-assistant"
+    external_id = "home-assistant"
+    access_mode = "single-node-writer"
+  }
+
+  mosquitto-data = {
+    volume_id   = "mosquitto-data"
+    external_id = "mosquitto/data"
+    access_mode = "single-node-writer"
+  }
+
+  mosquitto-log = {
+    volume_id   = "mosquitto-log"
+    external_id = "mosquitto/log"
+    access_mode = "single-node-writer"
+  }
+
+  # Surveillance
+  motioneye-shared = {
+    volume_id   = "motioneye-shared"
+    external_id = "motioneye/shared"
+    access_mode = "single-node-writer"
+  }
+
+  motioneye-etc = {
+    volume_id   = "motioneye-etc"
+    external_id = "motioneye/etc"
+    access_mode = "single-node-writer"
+  }
+
+  # Networking
+  unifi = {
+    volume_id   = "unifi"
+    external_id = "unifi"
+    access_mode = "single-node-writer"
+  }
+
+  # Gaming
+  arcade-config = {
+    volume_id   = "arcade-config"
+    external_id = "arcade/config"
+    access_mode = "single-node-writer"
+  }
+
+  arcade-data = {
+    volume_id   = "arcade-data"
+    external_id = "arcade/data"
+    access_mode = "single-node-writer"
+  }
+
+  # Other Services
+  flaresolverr = {
+    volume_id   = "flaresolverr"
+    external_id = "flaresolverr"
+    access_mode = "single-node-writer"
+  }
+
+  graylog = {
+    volume_id   = "graylog"
+    external_id = "graylog"
+    access_mode = "single-node-writer"
+  }
+
+  ollama = {
+    volume_id   = "ollama"
+    external_id = "ollama"
+    access_mode = "single-node-writer"
+  }
+
+  drawio = {
+    volume_id   = "drawio"
+    external_id = "drawio"
+    access_mode = "single-node-writer"
+  }
+}
+
+# Volume Access Modes:
+# - single-node-writer: Volume mounted on one node, read-write (most common)
+# - single-node-reader-only: Volume mounted on one node, read-only
+# - multi-node-reader-only: Volume mounted on multiple nodes, read-only
+# - multi-node-single-writer: Volume mounted on multiple nodes, one writer
+# - multi-node-multi-writer: Volume mounted on multiple nodes, all can write (requires filesystem support)
+
+# Volume Creation:
+# Before deploying, create the NFS directories on your storage server:
+#
+# For NFS at <nfs_server>:/path/to/exports
+#   ssh <nfs_server>
+#   cd /path/to/exports
+#   mkdir -p jellyfin plex sonarr radarr grafana prometheus postgres ...
+#   chown -R 1000:1000 *  # Match uid/gid from services.auto.tfvars
+#   chmod 750 *
+#
+# For Ceph CephFS:
+#   ceph fs subvolume create cephfs jellyfin
+#   ceph fs subvolume create cephfs plex
+#   ...
+
+# Notes:
+# - volume_id: Nomad's identifier for the volume
+# - external_id: Path on the storage backend (NFS path, Ceph subvolume name, etc.)
+# - Volumes must exist before the Nomad job starts
+# - Check CSI plugin logs if volumes fail to mount
+# - Use 'nomad volume status' to check volume registration
+# - Permissions (uid/gid) should match the container user
+# - Remove volumes you don't need for services you're not deploying
