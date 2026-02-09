@@ -1,6 +1,5 @@
-#####################################################################
-# the primary resource for creating consul, nomad and coredns hosts #
-#####################################################################
+# The primary resource for creating consul, nomad and coredns hosts
+
 resource "proxmox_virtual_environment_vm" "vm" {
   for_each  = local.all_nodes
   name      = each.value.name

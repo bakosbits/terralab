@@ -22,52 +22,12 @@ The provisioning process is as follows:
 
 ## Configuration
 
-Configuration is managed via a file named `cluster.auto.tfvars` in this directory. This file is not checked into source control and should contain all your environment-specific variables.
+Configuration is managed via a file named `cluster.auto.tfvars`. Ther eis an example [HERE] This file is not checked into source control and should contain all your environment-specific variables.
 
 ### `cluster.auto.tfvars`
 
-This file should contain a single `env` variable of type `map(any)`. Here is a complete example with placeholder values:
+This file should contain a single `env` variable of type `map(any)`. There is a complete example with placeholder values [HERE](https://github.com/bakosbits/terralab/blob/main/terraform/services/examples/auto.tfvars.example)
 
-```hcl
-env = {
-  # Proxmox API credentials
-  proxmox_url      = "https://proxmox.example.com:8006/api2/json"
-  proxmox_user     = "root@pam"
-  proxmox_password = "your-password"
-
-  # Proxmox node to provision on
-  pve_nodes        = ["pve-node-1"]
-
-  # VM settings
-  vm = {
-    full_clone         = true
-    cpu_type           = "host"
-    agent_enabled      = true
-    bridge             = "vmbr0"
-    network_model      = "virtio"
-    storage            = "local-lvm"
-    disk_interface     = "scsi0"
-    disk_iothread      = true
-    disk_discard       = true
-    disk_ssd           = true
-    cloudinit_interface = "eth0"
-    cloud_init_storage = "local-lvm"
-  }
-
-  # Cloud-init settings
-  ciuser             = "admin"
-  cipassword         = "your-ci-password"
-  sshkeys            = "ssh-rsa AAAA..."
-
-  # Network settings
-  internal_domain    = "homelab.local"
-  cidr               = "192.168.1.0/24"
-  dns1               = "192.168.1.1"
-
-  # Cluster settings
-  datacenter         = "dc1"
-}
-```
 
 ### Node Definitions
 
@@ -75,7 +35,7 @@ The cluster nodes (managers and workers) are defined in `cluster_nodes.tf`. You 
 
 ## Deployment
 
-You can use the `Makefile` in the root of the project to deploy the cluster.
+You can use the [`Makefile`](https://github.com/bakosbits/terralab/blob/main/Makefile) in the root of the project to deploy the cluster.
 
 1.  **Initialize Terraform:**
 

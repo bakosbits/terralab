@@ -1,0 +1,59 @@
+env = {
+  registry_mirror = "http://registry.example.lan"
+  datacenter      = "dc1"
+  cidr            = "192.168.1.0/24"
+  ciuser          = "ci-user"
+  cipassword      = "<REDACTED>"
+  sshkeys         = "ssh-rsa AAAA...REDACTED... user@example"
+  external_domain = "example.com"
+  internal_domain = "example.lan"
+  dns1            = "192.168.1.1"
+  dns2            = "192.168.1.2"
+  pve_nodes       = ["pve01", "pve02", "pve03"]
+
+  provider = {
+    url      = "https://192.168.1.203:8006"
+    user     = "root@pam"
+    password = "<REDACTED>"
+  }
+
+  worker = {
+    name      = "worker"
+    role      = "worker"
+    clone     = "worker-tpl"
+    clone_id  = 9002
+    disk_size = 30
+    cores     = 12
+    memory    = 65536
+    offset    = 81
+    count     = 3
+  }
+
+  manager = {
+    name      = "manager"
+    role      = "manager"
+    clone     = "manager-tpl"
+    clone_id  = 9001
+    disk_size = 8
+    cores     = 4
+    memory    = 8192
+    offset    = 71
+    count     = 3
+  }
+
+  vm = {
+    storage             = "rbd"
+    cloud_init_storage  = "cephfs"
+    full_clone          = true
+    cpu_type            = "host"
+    agent_enabled       = true
+    bridge              = "vmbr2"
+    network_model       = "virtio"
+    disk_interface      = "scsi0"
+    disk_iothread       = true
+    disk_discard        = "on"
+    disk_ssd            = true
+    cloudinit_interface = "ide0"
+    vlan_id             = ""
+  }
+}
