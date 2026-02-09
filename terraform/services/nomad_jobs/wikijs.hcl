@@ -8,7 +8,7 @@ job "wikijs" {
     }
 
     volume "wikijs" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "wikijs"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"

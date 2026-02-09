@@ -9,7 +9,7 @@ job "samba" {
     }
 
     volume "media" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "media"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
@@ -40,8 +40,8 @@ job "samba" {
       }
 
       resources {
-        cpu    = ${cpu}
-        memory = ${ram}
+        cpu    = 250
+        memory = 256
       }
 
       template {

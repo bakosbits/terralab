@@ -1,0 +1,77 @@
+# This job_goup map feeds nomad_jobs.tf. Jobs can be deployed all at once e.g. make deploy-services
+# or you can select to deploy and individual job_group e.g. make deploy-network_services
+# WARNING - if you create a new job_group here, you need to account for it in the MAKEFILE
+
+nomad_jobs = {
+  storage_services = {
+    jobs = {
+      storage-controller = {}
+      storage-node       = {}
+    }
+  }
+
+  data_services = {
+    jobs = {
+      influxdb = {}
+      mongodb8 = {}
+      pgweb    = {}
+      postgres = {}
+    }
+  }
+
+  network_services = {
+    jobs = {
+      auth               = {}
+      cloudflared        = {}
+      coredns            = {}
+      keepalived         = {}
+      traefik            = {}
+      unifi              = {}
+    }
+  }
+
+  logging_services = {
+    jobs = {
+      grafana            = {}
+      loki               = {}
+      prometheus         = {}
+    }
+  }  
+  
+  core_services = {
+    jobs = {
+      docker-cleanup     = {}
+      home-assistant     = {}
+      journalctl-cleanup = {}
+      matter             = {}
+      mosquitto          = {}
+      motioneye          = {}
+      nomad-cleanup      = {}
+      vaultwarden        = {}
+    }
+  }
+
+  media_services = {
+    jobs = {
+      flaresolverr       = {}
+      jellyfin           = {}
+      plex               = {}
+      prowlarr           = {}
+      radarr             = {}
+      sabnzbd            = {}
+      sonarr             = {}
+      transmission       = {}
+    }
+  }
+
+  standard_services = {
+    jobs   = {
+      drawio             = {}
+      emulatorjs         = {}
+      n8n                = {}
+      nginx              = {}
+      ollama             = {}
+      wikijs             = {}
+    }
+  }  
+}

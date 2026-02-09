@@ -9,14 +9,14 @@ job "motioneye" {
     }
 
     volume "motioneye-shared" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "motioneye-shared"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
     }
 
     volume "motioneye-etc" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "motioneye-etc"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"

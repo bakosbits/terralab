@@ -1,0 +1,40 @@
+homeassistant:
+  customize: !include customize.yaml
+  customize_domain:
+    automation:
+      initial_state: on
+
+frontend:
+config:
+sun:
+dhcp:
+zeroconf:
+logbook:
+stream:
+history:
+media_source:
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies: !include trusted_proxies.yaml
+  ip_ban_enabled: true
+  login_attempts_threshold: 3
+
+google_assistant: !include google_assistant.yaml
+
+tts:
+  - platform: google_translate
+
+ffmpeg:
+  ffmpeg_bin: /usr/bin/ffmpeg
+
+device_tracker: !include device_tracker.yaml
+binary_sensor: !include binary_sensors.yaml
+fan: !include fans.yaml
+light: !include lights.yaml
+switch: !include switches.yaml
+cover: !include covers.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+
+

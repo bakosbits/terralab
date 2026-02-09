@@ -1,7 +1,7 @@
 
 bind_addr = "0.0.0.0"
 data_dir = "/opt/nomad/"
-datacenter = "dc1"
+datacenter = "${datacenter}"
 log_level = "warn"
 
 client {
@@ -33,7 +33,7 @@ telemetry {
 plugin "docker" {
     config {
         extra_labels = ["job_name", "job_id", "task_group_name", "task_name", "namespace", "node_name", "node_id"]
-        allow_caps = ["CHOWN","DAC_OVERRIDE","FSETID","FOWNER","MKNOD","NET_RAW","SETGID","SETUID","SETFCAP","SETPCAP"," NET_BIND_SERVICE","SYS_CHROOT","NET_ADMIN","NET_RAW","NET_BROADCAST"]
+        allow_caps = ["all"]
         allow_privileged = true
         volumes {
         enabled = true

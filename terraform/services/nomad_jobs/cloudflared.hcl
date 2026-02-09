@@ -14,7 +14,7 @@ job "cloudflared" {
       driver = "docker"
 
       config {
-        image        = "cloudflare/cloudflared:${version}"
+        image        = "cloudflare/cloudflared:latest"
         network_mode = "host"
         args = [
           "tunnel",
@@ -26,8 +26,8 @@ job "cloudflared" {
       }
 
       resources {
-        cpu    = ${cpu}
-        memory = ${ram}
+        cpu    = 100
+        memory = 128
       }
 
       template {

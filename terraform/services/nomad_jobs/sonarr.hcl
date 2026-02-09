@@ -9,14 +9,14 @@ job "sonarr" {
     }
 
     volume "sonarr" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "sonarr"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
     }
 
     volume "media" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "media"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"

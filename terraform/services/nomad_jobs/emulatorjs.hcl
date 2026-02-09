@@ -14,16 +14,9 @@ job "emulatorjs" {
       }
     }
 
-    volume "arcade_config" {
-      type            = "csi"
-      source          = "arcade-config"
-      attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
-    }
-
-    volume "arcade-data" {
-      type            = "csi"
-      source          = "arcade-data"
+    volume "arcade" {
+      type            = "${storage_mode}"
+      source          = "arcade"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
     }
@@ -69,16 +62,15 @@ job "emulatorjs" {
       config {
         image = "linuxserver/emulatorjs:1.9.2"
         ports = ["http", "admin"]
+        volumes = [
+          "local/config:/config",
+          "local/data:/data"
+        ]
       }
 
       volume_mount {
-        volume      = "arcade_config"
-        destination = "/config"
-      }
-
-      volume_mount {
-        volume      = "arcade-data"
-        destination = "/data"
+        volume      = "arcade"
+        destination = "/local"
       }
 
       env {

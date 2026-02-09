@@ -9,14 +9,14 @@ job "jellyfin" {
     }
 
     volume "jellyfin" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "jellyfin"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
     }
 
     volume "media" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "media"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
@@ -57,9 +57,10 @@ job "jellyfin" {
       }
 
       env {
-        PUID                        = ${uid}
-        PGID                        = ${gid}
-        JELLYFIN_PublishedServerUrl = "https://jellyfin.${external_domain}"
+        PUID                        = parseint("${uid}", 10)
+        PGID                        = parseint("${gid}", 10)
+        TZ                          = "${timezone}"
+        JELLYFIN_PublishedServerUrl = "https://jellyfin.${domain}"
       }
 
       resources {

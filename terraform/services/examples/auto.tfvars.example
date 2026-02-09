@@ -1,0 +1,25 @@
+# Global vars that are used throughout the configuration
+# including job templates, consul_kv, provider configurations, etc
+env = {
+  consul_domain   = "service.consul"
+  datacenter      = "dc1"
+  virtual_ip      = "192.168.X.X"
+  timezone        = "America/Region"
+  secret_id       = "REDACTED-SECRET-ID"
+  root_path       = "/mnt/volumes"
+  pve_nodes       = ["node01", "node02", "node03"]
+  storage_mode    = "csi"
+  nfs_server      = "192.168.X.X:/exports/storage/volumes"
+  domain          = "example.com"
+  nomad_url       = "http://192.168.X.X:4646"
+  consul_url      = "http://192.168.X.X:8500"
+  pfsense_url     = "https://192.168.X.X:8443"
+  pve_url         = "http://192.168.X.X:8006"
+  pve_backup_url  = "http://192.168.X.X:8007"
+  dns1            = "192.168.X.X"
+  dns2            = "192.168.X.X"
+  uid             = 1000
+  gid             = 1000
+  client_name     = "worker"
+  server_name     = "manager"
+}

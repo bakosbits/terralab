@@ -13,7 +13,7 @@ job "coredns" {
       driver = "docker"
 
       config {
-        image        = "coredns/coredns:${version}"
+        image        = "coredns/coredns:1.11.1"
         network_mode = "host"
         args         = ["-conf", "/etc/coredns/Corefile"]
         volumes = [
@@ -38,7 +38,7 @@ job "coredns" {
         destination = "local/Corefile"
         change_mode = "restart"
         data        = <<-EOF
-{{- key "homelab/coredns/Corefile" }}
+{{- key "terralab/coredns/corefile.tpl" }}
 EOF
       }
 
@@ -46,13 +46,13 @@ EOF
         destination = "local/zonefile"
         change_mode = "restart"
         data        = <<-EOF
-{{- key "homelab/coredns/zonefile" }} 
+{{- key "terralab/coredns/zonefile.tpl" }} 
 EOF
       }
 
       resources {
-        cpu    = ${cpu}
-        memory = ${ram}
+        cpu    = 100
+        memory = 128
       }
     }
   }

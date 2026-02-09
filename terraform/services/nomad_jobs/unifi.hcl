@@ -6,14 +6,10 @@ job "unifi" {
 
     network {
       port "http" { static = 8443 }
-      # port "unifi-adoption"  { static = 8080 }
-      # port "unifi-stun"      { static = 3478 }
-      # port "unifi-discovery" { static = 10001 }
-      # port "unifi-l2"        { static = 1900 }
     }
 
     volume "unifi" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "unifi"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
@@ -41,7 +37,7 @@ job "unifi" {
 
       config {
         network_mode = "host"
-        image        = "linuxserver/unifi-network-application:${version}"
+        image        = "linuxserver/unifi-network-application:10.0.162"
         ports        = ["http"]
       }
 
@@ -51,8 +47,8 @@ job "unifi" {
       }
 
       resources {
-        cpu    = ${cpu}
-        memory = ${ram}
+        cpu    = 1000
+        memory = 1536
       }
 
       template {

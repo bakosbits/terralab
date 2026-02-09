@@ -1,9 +1,9 @@
 source "proxmox-clone" "server" {
   
-  proxmox_url = var.proxmox_url
-  username    = var.proxmox_user
-  password    = var.proxmox_password
-  node        = var.proxmox_node
+  proxmox_url = var.env.proxmox_url
+  username    = var.env.proxmox_user
+  password    = var.env.proxmox_password
+  node        = var.env.proxmox_node
   clone_vm    = "base-tpl"
 
   insecure_skip_tls_verify = true
@@ -33,8 +33,8 @@ source "proxmox-clone" "server" {
     bridge   = "vmbr2"
   }
   
-  ssh_username = var.ssh_username
-  ssh_password = var.ssh_password
+  ssh_username = var.env.ssh_username
+  ssh_password = var.env.ssh_password
   ssh_timeout  = "20m"
   
 }

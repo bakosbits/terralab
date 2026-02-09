@@ -13,21 +13,21 @@ job "transmission" {
     }
 
     volume "transmission" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "transmission"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
     }
 
     volume "downloads" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "downloads"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
     }
 
     volume "torrents" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "torrents"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"

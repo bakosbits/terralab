@@ -10,25 +10,18 @@ job "mosquitto" {
 
     }
 
-    volume "mosquitto-config" {
-      type            = "csi"
-      source          = "mosquitto-config"
+    volume "mosquitto" {
+      type            = "${storage_mode}"
+      source          = "mosquitto"
       attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
+      access_mode     = "single-node-writer"
     }
 
-    volume "mosquitto-data" {
-      type            = "csi"
-      source          = "mosquitto-data"
+    volume "mosquitto-logs" {
+      type            = "${storage_mode}"
+      source          = "mosquitto-logs"
       attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
-    }
-
-    volume "mosquitto-log" {
-      type            = "csi"
-      source          = "mosquitto-log"
-      attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
+      access_mode     = "single-node-writer"
     }
 
     service {
@@ -50,30 +43,26 @@ job "mosquitto" {
         image = "eclipse-mosquitto"
         ports = ["mqtt", "websocket"]
         volumes = [
-          "local/mosquitto.conf:/mosquitto/config/mosquitto.conf",
-          "secrets/password.txt:/mosquitto/config/password.txt",
+          "secrets/password.txt:/config/password.txt",
+          "local/config/mosquitto.conf:/config/mosquitto.conf"
         ]
       }
 
       volume_mount {
-        volume      = "mosquitto-config"
-        destination = "/config"
-      }
-
-      volume_mount {
-        volume      = "mosquitto-data"
+        volume      = "mosquitto"
         destination = "/data"
       }
 
       volume_mount {
-        volume      = "mosquitto-log"
-        destination = "/log"
+        volume      = "mosquitto-logs"
+        destination = "/logs"
       }
 
+
       env {
-        PUID = "1010"
-        PGID = "1010"
-        TZ   = "America/Denver"
+        PUID = "${uid}"
+        PGID = "${gid}"
+        TZ   = "${timezone}"
       }
 
       resources {
@@ -83,9 +72,9 @@ job "mosquitto" {
 
 
       template {
-        destination = "local/mosquitto.conf"
+        destination = "local/config/mosquitto.conf"
         data        = <<-EOF
-        {{- key "homelab/mqtt/mosquitto.conf" }}
+        {{- key "terralab/mqtt/mosquitto.conf" }}
         EOF
       }
 

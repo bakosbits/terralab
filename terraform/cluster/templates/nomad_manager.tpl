@@ -1,7 +1,7 @@
 
 bind_addr   = "0.0.0.0"
 data_dir    = "/opt/nomad/"
-datacenter  = "dc1"
+datacenter  = "${datacenter}"
 log_level   = "warn"
 
 server {

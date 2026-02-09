@@ -1,5 +1,5 @@
 [global_tags]
-  realm = '${var.region}'
+  realm = 'global'
   role = 'nomad'
 [agent]
 [[outputs.prometheus_client]]

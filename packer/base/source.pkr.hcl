@@ -1,9 +1,9 @@
 source "proxmox-iso" "base" {
   
-  proxmox_url = var.proxmox_url
-  username    = var.proxmox_user
-  password    = var.proxmox_password
-  node        = var.proxmox_node
+  proxmox_url = var.env.proxmox_url
+  username    = var.env.proxmox_user
+  password    = var.env.proxmox_password
+  node        = var.env.proxmox_node
   
   insecure_skip_tls_verify = true
 
@@ -53,8 +53,8 @@ source "proxmox-iso" "base" {
     "<esc><wait>auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg<enter>"
     ]
 
-  ssh_username = var.ssh_username
-  ssh_password = var.ssh_password
+  ssh_username = var.env.ssh_username
+  ssh_password = var.env.ssh_password
   ssh_timeout  = "20m"
   
 }

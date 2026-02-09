@@ -1,0 +1,9 @@
+fan.bedroom_fan:
+  assumed_state: false
+fan.living_room_fan:
+  assumed_state: false
+fan.family_room_fan:
+  assumed_state: false
+light.living_room_fan:
+  assumed_state: false
+

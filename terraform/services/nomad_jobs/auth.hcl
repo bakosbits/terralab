@@ -17,7 +17,7 @@ job "auth" {
         "traefik.http.middlewares.auth.forwardauth.address=http://auth.${consul_domain}:4181/",
         "traefik.http.middlewares.auth.forwardauth.trustForwardHeader=true",
         "traefik.http.middlewares.auth.forwardauth.authResponseHeaders=X-Forwarded-User",
-        "traefik.http.routers.auth.middlewares=auth@consulcatalog",        
+        "traefik.http.routers.auth.middlewares=auth@consulcatalog",
       ]
 
       check {

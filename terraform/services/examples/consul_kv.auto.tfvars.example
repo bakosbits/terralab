@@ -1,0 +1,60 @@
+consul_kv = {
+
+  coredns = {
+    path_prefix = "<Your Lab-name>/coredns/"
+    filenames = ["corefile.tpl", "zonefile.tpl"]
+  }
+
+  hass = {
+    path_prefix = "<Your Lab-name>/hass/"
+    filenames = [
+      "automations.yaml",
+      "binary_sensors.yaml",
+      "configuration.yaml",
+      "covers.yaml",
+      "customize.yaml",
+      "device_tracker.yaml",
+      "google_assistant.yaml",
+      "lights.yaml",
+      "scripts.yaml",
+      "secrets.yaml",
+      "service_account.json",
+      "trusted_proxies.yaml",
+      "fans.yaml",
+      "media_players.yaml",
+      "switches.yaml"
+    ]
+  }
+
+  loki = {
+    path_prefix = "<Your Lab-name>/loki/"
+    filenames = ["loki.yaml"]
+  }
+
+  mqtt = {
+    path_prefix = "<Your Lab-name>/mqtt/"
+    filenames = ["mosquitto.conf"]
+  }
+
+  prometheus = {
+    path_prefix = "<Your Lab-name>/prometheus/"
+    filenames = ["prometheus.yaml"]
+  }
+
+  telegraf = {
+    path_prefix = "<Your Lab-name>/telegraf/"
+    filenames = ["config.toml"]
+  }
+
+  traefik = {
+    path_prefix = "<Your Lab-name>/traefik/"
+    filenames = ["traefik.yaml", "dynamic.yaml"]
+  }
+
+  vector = {
+    path_prefix = "<Your Lab-name>/vector/"
+    filenames = ["vector.toml"]
+  }
+
+}
+

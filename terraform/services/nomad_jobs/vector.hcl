@@ -1,58 +1,65 @@
 job "vector" {
-  datacenters = ["${datacenter}"]
+  datacenters = ["dc1"]
   type        = "system"
 
   group "vector" {
-
-    network {
-      port "api" { static = 8686 }
-    }
-
-    service {
-      name = "vector"
-      port = "api"
-
-      check {
-        type     = "tcp"
-        port     = "api"
-        interval = "10s"
-        timeout  = "2s"
-      }
-    }
-
     task "vector" {
       driver = "docker"
+      user   = "root"
+
+      env {
+        # Nomad reads the node name and puts it in an ENV var for Vector
+        PARENT_HOST = "$${node.unique.name}"
+      }
 
       config {
-        image        = "timberio/vector:0.41.X-debian"
-        network_mode = "host"
-        ports        = ["api"]
+        # CHANGE: Using 'debian' instead of 'alpine' so journalctl works
+        image = "timberio/vector:latest-debian"
+        
+        args = ["--config", "/local/vector.yaml"]
+
         volumes = [
-          "/var/run/docker.sock:/var/run/docker.sock:ro",
+          "/var/log/journal:/var/log/journal:ro",
+          "/run/log/journal:/run/log/journal:ro",
+          "/etc/machine-id:/etc/machine-id:ro"
         ]
       }
 
-      kill_timeout = "30s"
-
-      env {
-        VECTOR_CONFIG          = "local/vector.toml"
-        VECTOR_REQUIRE_HEALTHY = "false"
-      }
-
-      resources {
-        cpu    = 500
-        memory = 1024
-      }
-
       template {
-        destination   = "local/vector.toml"
-        change_mode   = "signal"
-        change_signal = "SIGHUP"
-        data          = <<-EOF
-        {{- key "homelab/vector/vector.toml"}}
-        EOF
+        destination = "local/vector.yaml"
+        left_delimiter  = "[["
+        right_delimiter = "]]"
+        data = <<EOH
+sources:
+  proxmox_journal:
+    type: journald
+
+transforms:
+  process_logs:
+    type: remap
+    inputs: ["proxmox_journal"]
+    source: |
+      # Grab the hostname from the ENV var we injected above
+      .node_name = get_env_var!("PARENT_HOST")
+
+      .is_flap_event = "false"
+      if contains(string!(.message), "arp: moved") {
+          .is_flap_event = "true"
       }
 
+sinks:
+  loki_out:
+    type: loki
+    inputs: ["process_logs"]
+    endpoint: "http://loki.service.consul:3100"
+    encoding:
+      codec: json
+    labels:
+      host: "{{ node_name }}"
+      source: "proxmox_host"
+      flap: "{{ is_flap_event }}"
+EOH
+      }
     }
   }
 }

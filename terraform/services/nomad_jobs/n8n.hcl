@@ -11,7 +11,7 @@ job "n8n" {
     }
 
     volume "n8n" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "n8n"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"

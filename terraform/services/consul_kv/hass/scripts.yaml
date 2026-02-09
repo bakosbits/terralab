@@ -1,0 +1,32 @@
+turn_on_evening_lights:
+  alias: Turn on evening lights
+  sequence:
+  - action: light.turn_on
+    metadata: {}
+    data:
+      color_temp_kelvin: 2000
+      brightness_pct: 15
+    target:
+      entity_id:
+      - light.master_lamp_1
+      - light.master_lamp_2
+  - action: light.turn_on
+    metadata: {}
+    data:
+      brightness_pct: 100
+      color_name: blue
+    target:
+      entity_id: light.color_lights
+  - action: light.turn_on
+    metadata: {}
+    data:
+      brightness_pct: 5
+    target:
+      entity_id: light.nook_light
+  - action: light.turn_on
+    metadata: {}
+    data:
+      brightness_pct: 25
+    target:
+      entity_id: light.sink_light
+  description: ''

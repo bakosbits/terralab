@@ -1,26 +1,27 @@
 job "keepalived" {
   datacenters = ["${datacenter}"]
-  type        = "system"
+  type        = "service"
 
   group "keepalived" {
-
+    count = 2
+    
     task "keepalived" {
       driver = "docker"
 
       config {
-        network_mode = "host"        
+        network_mode = "host"
         image        = "osixia/keepalived:2.0.20"
-        cap_add = ["NET_ADMIN", "NET_BROADCAST", "NET_RAW"]
+        cap_add      = ["NET_ADMIN", "NET_BROADCAST", "NET_RAW"]
         volumes = [
           "local/:/container/environment/01-custom"
         ]
       }
 
       template {
-              destination = "local/env.yaml"
-              change_mode = "restart"
-              splay       = "1m"
-              data        = <<-EOH
+        destination = "local/env.yaml"
+        change_mode = "restart"
+        splay       = "1m"
+        data        = <<-EOH
                 KEEPALIVED_ROUTER_ID: 75
                 KEEPALIVED_VIRTUAL_IPS:
                   - ${virtual_ip}/24

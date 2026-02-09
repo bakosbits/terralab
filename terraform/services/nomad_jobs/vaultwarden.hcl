@@ -9,7 +9,7 @@ job "vaultwarden" {
     }
 
     volume "vaultwarden" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "vaultwarden"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"

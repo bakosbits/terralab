@@ -8,19 +8,19 @@ job "influxdb" {
       port "http" { to = "8086" }
     }
 
-    volume "influxdb-config" {
-      type            = "csi"
-      source          = "influxdb-config"
+    volume "influxdb" {
+      type            = "${storage_mode}"
+      source          = "influxdb"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
     }
 
-    volume "influxdb-data" {
-      type            = "csi"
-      source          = "influxdb-data"
+    volume "influxdb-config" {
+      type            = "${storage_mode}"
+      source          = "influxdb-config"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
-    }
+    }    
 
     service {
       name = "influxdb"
@@ -42,8 +42,13 @@ job "influxdb" {
       driver = "docker"
 
       config {
-        image = "influxdb:${version}"
+        image = "influxdb:2.7.8-alpine"
         ports = ["http"]
+      }
+
+      volume_mount {
+        volume      = "influxdb"
+        destination = "/var/lib/influxdb2"
       }
 
       volume_mount {
@@ -51,14 +56,9 @@ job "influxdb" {
         destination = "/etc/influxdb2"
       }
 
-      volume_mount {
-        volume      = "influxdb-data"
-        destination = "/var/lib/influxdb2"
-      }
-
       resources {
-        cpu    = ${cpu}
-        memory = ${ram}
+        cpu    = 500
+        memory = 512
       }
 
       template {

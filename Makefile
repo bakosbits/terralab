@@ -34,7 +34,7 @@ deploy-cluster:##.........Execute a terraform plan for the cluster
 	cd terraform/cluster && terraform apply --auto-approve
 
 .PHONY: deploy-services
-deploy-services:##........Execute a terraform plan for the services
+deploy-services:##........Deploy all Nomad job groups sequentially
 	cd terraform/services && terraform apply --auto-approve 
 
 .PHONY: format
@@ -42,21 +42,13 @@ format:##................Format both terraform and nomad job files
 	cd terraform/cluster && terraform fmt -recursive -write
 	cd terraform/services && terraform fmt -recursive -write
 	cd terraform/services/nomad_jobs && nomad fmt -recursive -write
-
-.PHONY: validate-jobs
-validate-jobs:##.........Validate all nomad jobs for correctness
-	./terraform/scripts/validate-jobs.sh
-
-# .PHONY: build-%
-# build-%:##...............Build an image with packer
-# 	cd packer/$* && packer build -var-file=../packer.pkrvars.hcl .
+	cd terraform/services/consul_kv && nomad fmt -recursive -write
 
 .PHONY: build-%
 build-%:##...............Build an image with packer
 	cd packer/$* && packer build -var-file=../packer.pkrvars.hcl .
 
 .PHONY: build-all
-
 build-all:##.............Build all images with packer
 	cd packer/base && packer build -var-file=../packer.pkrvars.hcl .
 	cd packer/manager && packer build -var-file=../packer.pkrvars.hcl .

@@ -1,0 +1,908 @@
+- id: '1728520418256'
+  alias: 'Lights: exterior lights on at sunset'
+  description: Turn on the outside lights each night after sunset
+  triggers:
+  - event: sunset
+    offset: +00:30:00
+    trigger: sun
+  conditions: []
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - switch.front_porch_lights
+      - switch.side_door_light
+      - switch.back_patio_light
+  mode: restart
+
+- id: '1728520859935'
+  alias: 'Lights: evening lights on at sunset'
+  description: Turn on evening lights prior to sunset
+  triggers:
+  - event: sunset
+    offset: -00:30:00
+    trigger: sun
+  conditions: []
+  actions:
+  - action: script.turn_on_evening_lights
+    metadata: {}
+    data: {}
+  mode: restart
+
+- id: '1728521120958'
+  alias: 'Motion: toggle kitchen lights'
+  description: Turn on kitchen lights after dark if motion is detected
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.kitchen_motion
+    to: 'on'
+  conditions:
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  actions:
+  - action: light.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.dining_light
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - binary_sensor.kitchen_motion
+      to: 'off'
+      for:
+        hours: 0
+        minutes: 15
+        seconds: 0
+    continue_on_timeout: false
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.kitchen_lights
+      - light.dining_light
+  mode: restart
+
+- id: '1728521312650'
+  alias: 'Motion: toggle living room lights'
+  description: Turn on living room lights after dark if motion is detected
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.living_room_motion
+    to: 'on'
+  conditions:
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  actions:
+  - action: light.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.living_room_lamp
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - binary_sensor.living_room_motion
+      to: 'off'
+      for:
+        hours: 0
+        minutes: 15
+        seconds: 0
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.living_room_lamp
+      - light.living_room_fan_light
+      - light.mantle_lights
+  mode: restart
+
+- id: '1728521542519'
+  alias: 'Motion: toggle loft lights'
+  description: Turn on loft lights after dark if motion is detected
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.loft_motion
+    to: 'on'
+  conditions:
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  actions:
+  - action: light.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.loft_lights
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - binary_sensor.loft_motion
+      to: 'off'
+      for:
+        hours: 0
+        minutes: 15
+        seconds: 0
+    continue_on_timeout: false
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.loft_lights
+  mode: restart
+
+- id: '1728521658861'
+  alias: 'Motion: toggle hall lights'
+  description: Turn on hall lights after dark if motion is detected
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.hall_motion
+    to: 'on'
+  conditions:
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  actions:
+  - action: light.turn_on
+    metadata: {}
+    data:
+      brightness_pct: 30
+    target:
+      entity_id:
+      - light.hall_lights
+      - light.stairway_lights      
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - binary_sensor.hall_motion
+      to: 'off'
+    continue_on_timeout: false
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.hall_lights
+      - light.stairway_lights      
+  mode: restart
+
+- id: '1728522023418'
+  alias: 'Lights: on when occupied'
+  description: Turn on the evening lights if the house has become occupied after sunset
+  triggers:
+  - trigger: state
+    entity_id:
+    - cover.garage_door
+    to: open
+  - trigger: state
+    entity_id:
+    - person.rich_bakos
+    to: home
+  conditions:
+  - condition: and
+    conditions:
+    - condition: time
+      before: 00:00:00
+      weekday:
+      - sat
+      - fri
+      - thu
+      - wed
+      - tue
+      - mon
+      - sun
+    - condition: state
+      entity_id: sun.sun
+      state: below_horizon
+  actions:
+  - action: script.turn_on_evening_lights
+    metadata: {}
+    data: {}
+  mode: restart
+
+- id: '1728522273863'
+  alias: 'Exhaust fans: toggle guest bath fan with vanity'
+  description: Turn on exhaust fan when bathroom is occupied
+  triggers:
+  - trigger: state
+    entity_id:
+    - light.guest_bath_vanity
+    to: 'on'
+  conditions: []
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.guest_bath_fan
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - light.guest_bath_vanity
+      to: 'off'
+  - action: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.guest_bath_fan
+  mode: restart
+
+- id: '1728523914113'
+  alias: 'House: off when vacant'
+  description: Shut down the house when it becomes vacant
+  triggers:
+  - trigger: state
+    entity_id:
+    - person.rich_bakos
+    to: not_home
+    for:
+      hours: 0
+      minutes: 45
+      seconds: 0
+  - trigger: state
+    entity_id:
+    - binary_sensor.motion_sensors
+    to: 'off'
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+  conditions:
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: person.rich_bakos
+      state: not_home
+    - condition: state
+      entity_id: binary_sensor.motion_sensors
+      state: 'off'
+      for:
+        hours: 0
+        minutes: 20
+        seconds: 0
+  actions:
+  - action: fan.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: fan.ceiling_fans
+  - action: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.fireplace
+  - action: homeassistant.turn_off
+    metadata: {}
+    data: {}
+    target:
+      area_id:
+      - family_room
+      - guest_rooms
+      - kitchen
+      - laundry
+      - living_room
+      - loft
+      - master_bath
+      - nook
+      - hallway
+      - water_closet
+      - master_bedroom
+  mode: restart
+
+- id: '1728525357081'
+  alias: 'Ceiling fans: on when house is occupied'
+  description: Turn on the ceiling fans when the house becomes occupied
+  triggers:
+  - entity_id:
+    - person.rich_bakos
+    to: home
+    trigger: state
+  conditions: []
+  actions:
+  - action: fan.turn_on
+    metadata: {}
+    data:
+      percentage: 15
+    target:
+      entity_id:
+      - fan.ceiling_fans
+  mode: restart
+
+- id: '1730526398272'
+  alias: 'Motion: toggle family room lights'
+  description: Turn on family room lights if motion is detectged after sunset
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.family_room_motion
+    to: 'on'
+  conditions:
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  actions:
+  - action: light.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.family_room_lamp
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - binary_sensor.family_room_motion
+      to: 'off'
+      for:
+        hours: 0
+        minutes: 15
+        seconds: 0
+    continue_on_timeout: false
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.family_room_lamp
+      - light.family_room_fan_light
+      - light.mantle_lights
+  mode: restart
+
+- id: '1731984583348'
+  alias: 'Lights: garage light on when door opens'
+  description: Turn of the garage light as the door opens if I arrive at home after
+    sunset
+  triggers:
+  - trigger: state
+    entity_id:
+    - cover.garage_door
+    to: open
+  conditions:
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.garage_light
+  mode: restart
+
+- id: '1732076354656'
+  alias: 'Exhaust fans: toggle nook fan with vanity'
+  description: Turn on exhaust fan when bathroom is occupied
+  triggers:
+  - trigger: state
+    entity_id:
+    - light.nook_bath_vanity
+    to: 'on'
+  conditions: []
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.nook_bath_fan
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - light.nook_bath_vanity
+      to: 'off'
+  - action: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.nook_bath_fan
+  mode: restart
+
+- id: '1732076438388'
+  alias: 'Exhaust fans: toggle water closet fan with light'
+  description: Turn on exhaust fan when bathroom is occupied
+  triggers:
+  - trigger: state
+    entity_id:
+    - light.water_closet_light
+    to: 'on'
+  conditions: []
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.water_closet_fan
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - light.water_closet_light
+      to: 'off'
+  - action: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.water_closet_fan
+  mode: restart
+
+- id: '1732287454096'
+  alias: 'Lights: exterior lights off at sunrise'
+  description: Turn off the outside lights each morning before sunrise
+  triggers:
+  - event: sunrise
+    offset: -01:00:00
+    trigger: sun
+  conditions: []
+  actions:
+  - action: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - switch.front_porch_lights
+      - switch.side_door_light
+      - switch.back_patio_light
+  mode: restart
+
+- id: '1732287589929'
+  alias: 'Lights: evening lights off at sunrise'
+  description: Turn off evening lights prior to sunrise
+  triggers:
+  - event: sunrise
+    offset: -01:00:00
+    trigger: sun
+  conditions: []
+  actions:
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.evening_lights
+      - light.color_lights
+  mode: restart
+
+- id: '1732538845532'
+  alias: 'Timers: laundry light off'
+  description: Turn off the laundry light when it's been left on
+  triggers:
+  - trigger: state
+    entity_id:
+    - switch.laundry_light
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+  conditions: []
+  actions:
+  - action: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.laundry_light
+  mode: single
+
+- id: '1732538962270'
+  alias: 'Timers: entry light off'
+  description: Turn off the entry light when it's been left on
+  triggers:
+  - trigger: state
+    entity_id:
+    - light.entry_light
+    to: 'on'
+    for:
+      hours: 0
+      minutes: 10
+      seconds: 0
+  conditions: []
+  actions:
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.entry_light
+  mode: single
+
+- id: '1732539928941'
+  alias: 'Media players: bedroom TV off'
+  description: Turn off the bedroom TV when it's idle
+  triggers:
+  - trigger: state
+    entity_id:
+    - media_player.bedroom_tv
+    to: idle
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  - trigger: state
+    entity_id:
+    - media_player.bedroom_tv
+    to: paused
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  - trigger: state
+    entity_id:
+    - media_player.bedroom_tv
+    to: standby
+    for:
+      hours: 0
+      minutes: 5
+      seconds: 0
+  conditions: []
+  actions:
+  - action: media_player.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: media_player.bedroom_tv
+  mode: single
+
+- id: '1732610522189'
+  alias: 'Motion: toggle garage lights'
+  description: Turn on garage lights after dark if motion is detected
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.garage_motion
+    to: 'on'
+  conditions:
+  - condition: state
+    entity_id: sun.sun
+    state: below_horizon
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.garage_light
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - binary_sensor.garage_motion
+      to: 'off'
+      for:
+        hours: 0
+        minutes: 10
+        seconds: 0
+    continue_on_timeout: false
+  - action: switch.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: switch.garage_light
+  mode: restart
+
+- id: '1732613084127'
+  alias: 'Ceiling fans: sync bedroom fan switch'
+  description: Keep the wall switch in sync with the bond controlled fan
+  triggers:
+    - trigger: state
+      entity_id:
+        - fan.bedroom_fan
+      to: "on"
+  conditions: []
+  actions:
+    - action: switch.turn_on
+      metadata: {}
+      data: {}
+      target:
+        entity_id: switch.bedroom_fan_switch
+  mode: restart
+
+- id: '1732613358867'
+  alias: 'Ceiling fans: sync living room fan switch'
+  description: Keep the wall switch in sync with the bond controlled fan
+  triggers:
+    - trigger: state
+      entity_id:
+      - fan.living_room_fan
+      to: 'on'
+  conditions: []
+  actions:
+  - action: fan.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - fan.living_room_fan_switch
+  mode: restart
+
+- id: '1732613539790'
+  alias: 'Ceiling fans: sync family room fan switch'
+  description: Keep the wall switch in sync with the bond controlled fan
+  triggers:
+    - trigger: state
+      entity_id:
+      - fan.family_room_fan
+      to: 'on'
+  conditions: []
+  actions:
+  - action: switch.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - switch.family_room_fan_switch
+  mode: restart
+
+- id: '1732706022664'
+  alias: 'Timers: color lights off'
+  description: Turn off the color light at 1am
+  triggers:
+  - trigger: time
+    at: '23:45:00'
+  conditions: []
+  actions:
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.color_lights
+  mode: single
+
+- id: '1732709441528'
+  alias: 'Timers: guest room off'
+  description: Turn off the guest room when it's been left on
+  triggers:
+  - trigger: state
+    entity_id:
+    - light.guest_lamp_1
+    - light.guest_lamp_2
+    - light.guest_room_light
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+    to: 'on'
+  conditions: []
+  actions:
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.guest_room_light
+      - light.guest_lamp_1
+      - light.guest_lamp_2
+  mode: single
+
+- id: '1732709525678'
+  alias: 'Timers: spare room off'
+  description: Turn off the spare room when it's been left on
+  triggers:
+  - trigger: state
+    entity_id:
+    - light.spare_room_light
+    for:
+      hours: 0
+      minutes: 30
+      seconds: 0
+    to: 'on'
+  conditions: []
+  actions:
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.spare_room_light
+  mode: single
+
+- id: '1732875843905'
+  alias: "Media players: setup for music"
+  description: Turn off the tv for music
+  triggers:
+    - trigger: state
+      entity_id:
+        - media_player.home_theater_cast
+      to: CC32E753
+      attribute: app_id
+  actions:
+    - action: media_player.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id:
+          - media_player.sony_bravia
+  mode: single
+
+- id: '1732931352619'
+  alias: "Media players: home theater off"
+  description: Turn off the home theater when not in use
+  triggers:
+    - trigger: state
+      entity_id:
+        - media_player.home_theater
+      to: "off"
+      for:
+        hours: 0
+        minutes: 0
+        seconds: 0
+    - trigger: state
+      entity_id:
+        - media_player.denon_avr
+      to: "off"
+      for:
+        hours: 0
+        minutes: 0
+        seconds: 0
+  conditions: []
+  actions:
+    - action: media_player.turn_off
+      metadata: {}
+      data: {}
+      target:
+        entity_id:
+          - media_player.denon_avr
+          - media_player.sony_bravia
+          - media_player.home_theater
+  mode: single
+
+- id: '1732933447261'
+  alias: 'Motion: toggle master vanity'
+  description: Turn on master vanity after dark if motion is detected
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.master_bath_motion
+    to: 'on'
+  conditions: []
+  actions:
+  - action: light.turn_on
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.master_bath_vanity
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - binary_sensor.master_bath_motion
+      to: 'off'
+      for:
+        hours: 0
+        minutes: 15
+        seconds: 0
+    continue_on_timeout: false
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.master_bath_vanity
+  mode: restart
+
+- id: '1732934583231'
+  alias: 'Motion: toggle guest vanity'
+  description: Turn on guest vanity after dark if motion is detected
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.guest_bath_motion
+    to: 'on'
+  conditions: []
+  actions:
+  - action: light.turn_on
+    metadata: {}
+    data:
+      brightness_pct: 30
+    target:
+      entity_id:
+      - light.guest_bath_vanity
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - binary_sensor.guest_bath_motion
+      to: 'off'
+      for:
+        hours: 0
+        minutes: 2
+        seconds: 0
+    continue_on_timeout: false
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.guest_bath_vanity
+  mode: restart
+
+- id: '1732934997741'
+  alias: 'Motion: toggle water closet lights'
+  description: Turn on water closet lights after dark if motion is detected
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.water_closet_motion
+    to: 'on'
+  conditions: []
+  actions:
+  - action: light.turn_on
+    metadata: {}
+    data:
+      brightness_pct: 30
+    target:
+      entity_id:
+      - light.water_closet_light
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - binary_sensor.water_closet_motion
+      to: 'off'
+      for:
+        hours: 0
+        minutes: 2
+        seconds: 0
+    continue_on_timeout: false
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.water_closet_light
+  mode: restart
+
+- id: '1732935549290'
+  alias: 'Motion: toggle nook vanity'
+  description: Turn on nook bath vanity after dark if motion is detected
+  triggers:
+  - trigger: state
+    entity_id:
+    - binary_sensor.nook_bath_motion
+    to: 'on'
+  conditions: []
+  actions:
+  - action: light.turn_on
+    metadata: {}
+    data:
+      brightness_pct: 30
+    target:
+      entity_id:
+      - light.nook_bath_vanity
+  - wait_for_trigger:
+    - trigger: state
+      entity_id:
+      - binary_sensor.nook_bath_motion
+      to: 'off'
+      for:
+        hours: 0
+        minutes: 2
+        seconds: 0
+    continue_on_timeout: false
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id:
+      - light.nook_bath_vanity
+  mode: restart
+
+- id: '1732987546288'
+  alias: 'Timers: master light off'
+  description: Turn off the Master fan light when it's been left on
+  triggers:
+  - trigger: state
+    entity_id:
+    - light.bedroom_fan_light
+    for:
+      hours: 1
+      minutes: 0
+      seconds: 0
+    to: 'on'
+  conditions: []
+  actions:
+  - action: light.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: light.bedroom_fan_light
+  mode: single

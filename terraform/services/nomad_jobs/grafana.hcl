@@ -9,7 +9,7 @@ job "grafana" {
     }
 
     volume "grafana" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "grafana"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"

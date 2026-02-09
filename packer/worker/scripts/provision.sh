@@ -6,7 +6,7 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Install docker, nomad, consul
 sudo apt-get update
-sudo apt-get install -y consul nomad docker-ce
+sudo apt-get install -y consul nomad docker-ce nfs-common
 
 # Configure consul and nomad
 sudo rm /etc/consul.d/* /etc/nomad.d/*

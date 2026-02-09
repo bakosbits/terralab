@@ -9,7 +9,7 @@ job "mongo" {
     }
 
     volume "mongo" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "mongo"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
@@ -24,7 +24,7 @@ job "mongo" {
       driver = "docker"
 
       config {
-        image        = "mongo:${version}"
+        image        = "mongo:8.0.14"
         network_mode = "host"
         ports        = ["mongo"]
         volumes = [
@@ -38,8 +38,8 @@ job "mongo" {
       }
 
       resources {
-        cpu    = ${cpu}
-        memory = ${ram}
+        cpu    = 500
+        memory = 1024
       }
 
       template {

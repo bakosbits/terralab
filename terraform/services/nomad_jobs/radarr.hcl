@@ -9,21 +9,21 @@ job "radarr" {
     }
 
     volume "radarr" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "radarr"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
     }
 
     volume "media" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "media"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
     }
 
     volume "downloads" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "downloads"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"

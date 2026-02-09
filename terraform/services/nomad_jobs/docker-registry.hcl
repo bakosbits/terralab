@@ -9,7 +9,7 @@ job docker_registry {
     }
 
     volume "docker_registry" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "docker_registry"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"

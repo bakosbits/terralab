@@ -9,7 +9,7 @@ job "postgres" {
     }
 
     volume "postgres" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "postgres"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
@@ -37,7 +37,7 @@ job "postgres" {
       driver = "docker"
 
       config {
-        image = "postgres:${version}"
+        image = "postgres:18.1"
         ports = ["postgres"]
       }
 
@@ -47,8 +47,8 @@ job "postgres" {
       }
 
       resources {
-        cpu    = ${cpu}
-        memory = ${ram}
+        cpu    = 1000
+        memory = 1024
       }
 
       template {

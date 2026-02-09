@@ -39,7 +39,7 @@ job "telegraf" {
         destination = "local/config.toml"
         env         = false
         data        = <<-EOH
-        {{- key "homelab/telegraf/config.toml"}}
+        {{- key "terralab/telegraf/config.toml"}}
         EOH
       }
     }

@@ -10,14 +10,14 @@ job "traefik" {
     }
 
     volume "certs" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "certs"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
     }
 
     volume "traefik-logs" {
-      type            = "csi"
+      type            = "${storage_mode}"
       source          = "traefik-logs"
       attachment_mode = "file-system"
       access_mode     = "multi-node-multi-writer"
@@ -47,7 +47,7 @@ job "traefik" {
       driver = "docker"
 
       config {
-        image        = "traefik:${version}"
+        image        = "traefik:3.6.6"
         ports        = ["http", "https"]
         network_mode = "host"
         volumes = [
@@ -67,21 +67,21 @@ job "traefik" {
       }
 
       resources {
-        cpu    = ${cpu}
-        memory = ${ram}
+        cpu    = 512
+        memory = 512
       }
 
       template {
         destination = "local/traefik.yaml"
         data        = <<-EOF
-        {{- key "homelab/traefik/traefik.yaml" }}
+        {{- key "terralab/traefik/traefik.yaml" }}
         EOF
       }
 
       template {
         destination = "local/dynamic.yaml"
         data        = <<-EOF
-        {{- key "homelab/traefik/dynamic.yaml" }}
+        {{- key "terralab/traefik/dynamic.yaml" }}
         EOF
       }
     }

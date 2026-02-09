@@ -1,6 +1,6 @@
 *.tfplan
 *.tfstate
-*auto.tfvars
+*.auto.tfvars
 *.backup
 *.pkrvars*
 *.secret
@@ -10,3 +10,5 @@
 .ssh/
 plans/
 .roo/
+secrets.yaml
+service_account.json

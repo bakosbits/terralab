@@ -1,6 +1,6 @@
-variable "global" {
-  type        = map(any)
-  description = "Global variables, used across the deployment"
+variable "env" {
+  type = any 
+  description = "A map of all environment variables"
 }
 
 variable "volumes" {
@@ -12,30 +12,25 @@ variable "volumes" {
   description = "Volumes for cluster services"
 }
 
-variable "env_vars" {
+
+variable "consul_kv" {
   type = map(object({
-    vars = map(any)
+    path_prefix = string
+    filenames   = list(string)
+    vars        = optional(map(any), {}) 
   }))
-  description = "Key-Value pairs for Nomad's Variable store"
+  description = "Key-Value pairs for Consul's kv store"
 }
 
-variable "core_services" {
+variable "nomad_jobs" {
   type = map(object({
-    vars = map(any)
+    jobs = map(any) 
   }))
-  description = "Template variables for core_services jobs"
 }
 
-variable "data_services" {
+variable "nomad_vars" {
   type = map(object({
-    vars = map(any)
+    vars = map(any) 
   }))
-  description = "Template variables for data_services jobs"
 }
 
-variable "cluster_services" {
-  type = map(object({
-    vars = map(any)
-  }))
-  description = "Template variables for cluster_services jobs"
-}

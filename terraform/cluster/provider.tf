@@ -8,8 +8,8 @@ terraform {
 }
 
 provider "proxmox" {
-  endpoint = var.provider_vars.proxmox_url
-  username = var.provider_vars.proxmox_user
-  password = var.provider_vars.proxmox_password
+  endpoint = var.env.provider.url
+  username = var.env.provider.user
+  password = var.env.provider.password
   insecure = true
 }

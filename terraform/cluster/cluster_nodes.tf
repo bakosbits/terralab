@@ -7,34 +7,34 @@ locals {
   }
 
   manager_nodes = [
-    for i in range(var.manager.count) : {
+    for i in range(var.env.manager.count) : {
 
-      name        = format("${var.manager.name}%02d", i + 1)
-      ip          = cidrhost(var.global.cidr, var.manager.offset + i)
-      target_node = var.pve_nodes[i % length(var.pve_nodes)]
-      role        = var.manager.role
-      clone       = var.manager.clone
-      clone_id    = var.manager.clone_id
-      disk_size   = var.manager.disk_size
-      cores       = var.manager.cores
-      memory      = var.manager.memory
-      dns1        = var.global.dns1
+      name        = format("${var.env.manager.name}%02d", i + 1)
+      ip          = cidrhost(var.env.cidr, var.env.manager.offset + i)
+      target_node = var.env.pve_nodes[i % length(var.env.pve_nodes)]
+      role        = var.env.manager.role
+      clone       = var.env.manager.clone
+      clone_id    = var.env.manager.clone_id
+      disk_size   = var.env.manager.disk_size
+      cores       = var.env.manager.cores
+      memory      = var.env.manager.memory
+      dns1        = var.env.dns1
     }
   ]
 
   worker_nodes = [
-    for i in range(var.worker.count) : {
-             
-      name        = format("${var.worker.name}%02d", i + 1)
-      ip          = cidrhost(var.global.cidr, var.worker.offset + i)
-      target_node = var.pve_nodes[i % length(var.pve_nodes)]
-      role        = "worker"
-      clone       = "worker-tpl"
-      clone_id    = 9002
-      disk_size   = 30
-      cores       = 12
-      memory      = 65536
-      dns1        = var.global.dns1      
+    for i in range(var.env.worker.count) : {
+
+      name        = format("${var.env.worker.name}%02d", i + 1)
+      ip          = cidrhost(var.env.cidr, var.env.worker.offset + i)
+      target_node = var.env.pve_nodes[i % length(var.env.pve_nodes)]
+      role        = var.env.worker.role
+      clone       = var.env.worker.clone
+      clone_id    = var.env.worker.clone_id
+      disk_size   = var.env.worker.disk_size
+      cores       = var.env.worker.cores
+      memory      = var.env.worker.memory
+      dns1        = var.env.dns1
     }
   ]
 }

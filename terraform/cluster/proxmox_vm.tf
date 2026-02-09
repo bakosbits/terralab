@@ -9,12 +9,12 @@ resource "proxmox_virtual_environment_vm" "vm" {
   # the cloning configuration
   clone {
     vm_id     = each.value.clone_id
-    node_name = var.pve_nodes[2]
-    full      = var.vm.full_clone
+    node_name = var.env.pve_nodes[2]
+    full      = var.env.vm.full_clone
   }
 
   cpu {
-    type  = var.vm.cpu_type
+    type  = var.env.vm.cpu_type
     cores = each.value.cores
   }
 
@@ -23,45 +23,45 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   agent {
-    enabled = var.vm.agent_enabled
+    enabled = var.env.vm.agent_enabled
   }
 
   network_device {
-    bridge  = var.vm.bridge
-    model   = var.vm.network_model
-    # vlan_id = var.vm.vlan_id 
+    bridge = var.env.vm.bridge
+    model  = var.env.vm.network_model
+    # vlan_id = var.env.vm.vlan_id 
   }
 
   disk {
-    datastore_id = var.vm.storage
-    interface    = var.vm.disk_interface
+    datastore_id = var.env.vm.storage
+    interface    = var.env.vm.disk_interface
     size         = each.value.disk_size
-    iothread     = var.vm.disk_iothread
-    discard      = var.vm.disk_discard
-    ssd          = var.vm.disk_ssd
+    iothread     = var.env.vm.disk_iothread
+    discard      = var.env.vm.disk_discard
+    ssd          = var.env.vm.disk_ssd
   }
 
 
   initialization {
 
-    datastore_id = var.vm.storage
-    interface    = var.vm.cloudinit_interface
+    datastore_id = var.env.vm.storage
+    interface    = var.env.vm.cloudinit_interface
 
     user_account {
-      username = var.global.ciuser
-      password = var.global.cipassword
-      keys     = [var.global.sshkeys]
+      username = var.env.ciuser
+      password = var.env.cipassword
+      keys     = [var.env.sshkeys]
     }
 
     dns {
       servers = [each.value.dns1]
-      domain  = var.global.internal_domain
+      domain  = var.env.internal_domain
     }
 
     ip_config {
       ipv4 {
         address = "${each.value.ip}/24"
-        gateway = cidrhost(var.global.cidr, 1)
+        gateway = cidrhost(var.env.cidr, 1)
       }
     }
 

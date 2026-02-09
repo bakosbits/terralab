@@ -8,6 +8,21 @@ job "ollama" {
       port "http" { to = 8080 }
     }
 
+    volume "ollama" {
+      type            = "${storage_mode}"
+      source          = "ollama"
+      attachment_mode = "file-system"
+      access_mode     = "single-node-writer"
+    }
+
+    volume "open-webui" {
+      type            = "${storage_mode}"
+      source          = "open-webui"
+      attachment_mode = "file-system"
+      access_mode     = "single-node-writer"
+    }
+
+
     service {
       name = "ollama"
       port = "http"
@@ -30,10 +45,16 @@ job "ollama" {
       config {
         image = "ghcr.io/open-webui/open-webui:ollama"
         ports = ["http"]
-        volumes = [
-          "/mnt/volumes/open-webui:/app/backend/data",
-          "/mnt/volumes/ollama:/root/.ollama"
-        ]
+      }
+
+      volume_mount {
+        volume      = "ollama"
+        destination = "/root/.ollama"
+      }
+
+      volume_mount {
+        volume      = "open-webui"
+        destination = "/app/backend/data"
       }
 
       # CPU-Only Optimization
