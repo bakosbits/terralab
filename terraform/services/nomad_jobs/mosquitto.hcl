@@ -36,6 +36,15 @@ job "mosquitto" {
       }
     }
 
+    update {
+      canary       = 1 
+      auto_promote = true 
+      auto_revert  = true 
+      min_healthy_time  = "30s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
+    }  
+    
     task "mosquitto" {
       driver = "docker"
 

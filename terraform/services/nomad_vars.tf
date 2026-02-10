@@ -1,5 +1,5 @@
-# This resource reads nomad_vars map from nomad_vars.auto.tfvars and 
-# defines Nomad variables so they can be used in job environments
+# This resource reads the map defined in nomad_vars.auto.tfvars and 
+# defines Nomad variables for use in job environments
 
 resource "nomad_variable" "secrets" {
   for_each = var.nomad_vars

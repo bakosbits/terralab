@@ -3,6 +3,15 @@ job "vector" {
   type        = "system"
 
   group "vector" {
+
+    update {
+      max_parallel      = 1 
+      min_healthy_time  = "30s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
+      auto_revert       = true
+    }
+    
     task "vector" {
       driver = "docker"
       user   = "root"
@@ -13,7 +22,6 @@ job "vector" {
       }
 
       config {
-        # CHANGE: Using 'debian' instead of 'alpine' so journalctl works
         image = "timberio/vector:latest-debian"
         
         args = ["--config", "/local/vector.yaml"]
@@ -29,37 +37,10 @@ job "vector" {
         destination = "local/vector.yaml"
         left_delimiter  = "[["
         right_delimiter = "]]"
-        data = <<EOH
-sources:
-  proxmox_journal:
-    type: journald
-
-transforms:
-  process_logs:
-    type: remap
-    inputs: ["proxmox_journal"]
-    source: |
-      # Grab the hostname from the ENV var we injected above
-      .node_name = get_env_var!("PARENT_HOST")
-
-      .is_flap_event = "false"
-      if contains(string!(.message), "arp: moved") {
-          .is_flap_event = "true"
+        data        = <<-EOF
+        [[- key "terralab/vector/vector.yaml" ]]
+      EOF
       }
-
-sinks:
-  loki_out:
-    type: loki
-    inputs: ["process_logs"]
-    endpoint: "http://loki.service.consul:3100"
-    encoding:
-      codec: json
-    labels:
-      host: "{{ node_name }}"
-      source: "proxmox_host"
-      flap: "{{ is_flap_event }}"
-EOH
-      }
-    }
+    }  
   }
 }

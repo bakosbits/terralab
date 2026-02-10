@@ -5,6 +5,15 @@ job "keepalived" {
   group "keepalived" {
     count = 2
     
+    update {
+      canary       = 1 
+      auto_promote = true 
+      auto_revert  = true 
+      min_healthy_time  = "30s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
+    }  
+        
     task "keepalived" {
       driver = "docker"
 

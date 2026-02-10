@@ -1,3 +1,5 @@
+# This map defines the Consul KV resources that are consumed by consul_kv.tf
+
 consul_kv = {
 
   coredns = {

@@ -7,6 +7,12 @@ build {
     source      = "./scripts"
   }
 
+  # Copy provisioner up to tmp
+  provisioner "file" {
+    destination = "/tmp"
+    source      = "./configs"
+  }
+
   # Provision
   provisioner "shell" {
     inline_shebang  = "/bin/bash -e"

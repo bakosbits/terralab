@@ -4,6 +4,14 @@ job "traefik" {
 
   group "traefik" {
 
+    update {
+      max_parallel      = 1 
+      min_healthy_time  = "30s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
+      auto_revert       = true
+    }
+    
     network {
       port "http" { static = "80" }
       port "https" { static = "443" }
@@ -13,14 +21,14 @@ job "traefik" {
       type            = "${storage_mode}"
       source          = "certs"
       attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
+      access_mode     = "single-node-writer"
     }
 
     volume "traefik-logs" {
       type            = "${storage_mode}"
       source          = "traefik-logs"
       attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
+      access_mode     = "single-node-writer"
     }
 
     service {

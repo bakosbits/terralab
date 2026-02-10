@@ -8,30 +8,48 @@ This Terraform environment manages the lifecycle of services running on the Noma
 
 ### Service Deployment Order
 
-To ensure that dependencies are met, services are deployed in a specific order. This is defined in `nomad_jobs.tf` by creating dependencies between groups of services. The deployment order is as follows:
+To ensure that dependencies are met, services are deployed in a controlled manner using job groups. This is defined in [nomad_jobs.auto.tfvars](https://github.com/bakosbits/terralab/blob/main/terraform/services/examples/nomad_jobs.auto.tfvars.example) by creating dependencies between groups of services. Jobs can be group in one of the seven categories. This job grouping helps manage the velocity behind jobs being deployed:
 
-1.  **Storage Services**: Services that provide storage to other services.
+1.  **Initial Services**: Services that provide storage or other key services.
 2.  **Data Services**: Databases and other data-related services.
-3.  **Network Services**: Services related to networking, such as reverse proxies and DNS.
+3.  **Network Services**: Services related to networking, such as reverse proxies.
 4.  **Logging Services**: Services for log aggregation and analysis.
 5.  **Core Services**: Core infrastructure services.
 6.  **Media Services**: Services for media streaming and management.
-7.  **Standard Services**: All other services.
+7.  **Final Services**: All other services.
 
 ### Configuration Management
 
 Service configurations are managed using a combination of Terraform variables and Consul KV.
 
 - **Nomad Jobs**: The Nomad job files are located in the `nomad_jobs/` directory. They are written in HCL and are templated using Terraform's `templatefile` function. This allows for dynamic values to be inserted into the job files at runtime.
-- **Consul KV**: The configurations for the services themselves are stored in Consul KV. These configurations are also templated and are located in the `consul_kv/` directory. The Nomad jobs are configured to read their configuration from Consul KV, which allows for centralized configuration management and easy updates without redeploying the jobs.
+
+- **Consul KV**: The configurations for the services that require additional files are stored in Consul KV. These configurations are also templated and are located in the `consul_kv/` directory. The Nomad jobs are configured to read their configuration from Consul KV, which allows for centralized configuration management and easy updates without redeploying the jobs.
 
 ## Configuration
 
-All service definitions, configurations, and variables are managed through `.auto.tfvars` files in this directory. This allows for a modular and easily manageable approach to service deployment.
+All service definitions, configurations, and variables are managed through `*.auto.tfvars` files in this directory. This allows for a modular and easily manageable approach to service deployment. Complete working examples of tfvars are located in the [examples](https://github.com/bakosbits/terralab/tree/main/terraform/services/examples) directory
 
-### `services.auto.tfvars`
+### `*.auto.tfvars`
 
-This is the main file for defining your services. It contains the maps for `nomad_jobs`, `consul_kv`, `nomad_vars`, and `volumes`.
+There are a total of 5 tfvars files used to define services
+  1. services.auto.tfvars:   This holds variables used in terraform configuration and template vars
+  2. nomad_jobs.auto.tfvars: This holds a map that defines nomad jobs. It's consumed by resources in nomad_jobs.tf
+  3. consul_kv.auto.tfvars:  This hold a map that defines Consul key=value pairs. It's consumed by resources in consul_kv.tf
+  4. nomad_vars.auto.tfvars: This hold a map that defines Nomad Variables. It's consumed by resources in nomad_vars.tf
+  5. volumes.auto.tfvars:    This holds a map that defines CSI and Dynamic Host volumes. It's consumed by nomad_volumes.tf    
+
+These five files work together to define your deployment without having to alter the Terraform code. They give you the following capabilities:
+
+* Alter vm resources
+* Increase/decrease the size of the cluster
+* Choose from CSI or dynamic host volumes
+* Define the jobs that run in your lab
+* Manage job specifics such as Docker image version, cpu, ram, etc consumed by a job
+* Manage sensitive variables securely
+* Manage job assets without have to redeploy the job
+
+### `tfvars` snippets
 
 #### `nomad_jobs`
 
@@ -97,7 +115,7 @@ volumes = {
   "loki" = {
     volume_id   = "loki"
     external_id = "loki"
-    access_mode = "multi-node-multi-writer"
+    access_mode = "single-node-writer"
   }
 }
 ```
@@ -130,8 +148,9 @@ This will deploy all the services defined in your `services.auto.tfvars` file.
 
 1.  **Create a Nomad Job File**: In `nomad_jobs/`, create a new `.hcl` file for your service.
 2.  **Add Configuration to Consul KV (Optional)**: If your service needs configuration files, add them to a new subdirectory in `consul_kv/`.
-3.  **Define the Service in `services.auto.tfvars`**:
+3.  **Define the Service in `nomad_jobs.auto.tfvars`**:
     - Add your service to the appropriate group in the `nomad_jobs` map.
     - If you added Consul KV configs, create an entry in the `consul_kv` map.
     - If your service needs a volume, add it to the `volumes` map.
+    - If you need to store env or sensitive data, add it to the `nomad_vars` map.
 4.  **Deploy**: Run `make deploy-services`.

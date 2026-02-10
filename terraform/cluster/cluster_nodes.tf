@@ -8,7 +8,8 @@ locals {
 
   manager_nodes = [
     for i in range(var.env.manager.count) : {
-
+      
+      vmid        = var.env.start_vmid + i
       name        = format("${var.env.manager.name}%02d", i + 1)
       ip          = cidrhost(var.env.cidr, var.env.manager.offset + i)
       target_node = var.env.pve_nodes[i % length(var.env.pve_nodes)]
@@ -25,6 +26,7 @@ locals {
   worker_nodes = [
     for i in range(var.env.worker.count) : {
 
+      vmid        = var.env.start_vmid + var.env.manager.count + i
       name        = format("${var.env.worker.name}%02d", i + 1)
       ip          = cidrhost(var.env.cidr, var.env.worker.offset + i)
       target_node = var.env.pve_nodes[i % length(var.env.pve_nodes)]

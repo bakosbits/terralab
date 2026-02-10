@@ -1,10 +1,9 @@
 # This resource reads the map defeined in var.consul_kv.auto.tfvars 
 # and defines configuration files stored in Consul KV
 locals {
-  files         = "${path.module}/consul_kv"
-  template_vars = var.env
-
-   # This creates: "consul/path" => "local/file/path"
+  files = "${path.module}/consul_kv"
+  
+  # This creates: "consul/path" => "local/file/path"
   kv = merge([
     for job_key, data in var.consul_kv : {
       for filename in data.filenames :
@@ -21,6 +20,6 @@ resource "consul_keys" "consul_kv" {
   key {
     path  = each.key
     # This reaches into /service/consul_kv/<jobname>/file.ext
-    value = templatefile(each.value.source_path, local.template_vars)
+    value = templatefile(each.value.source_path, local.vars)
   }
 }

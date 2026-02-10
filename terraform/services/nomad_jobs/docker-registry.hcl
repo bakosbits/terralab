@@ -4,6 +4,15 @@ job docker_registry {
 
   group "docker_registry" {
 
+    update {
+      canary       = 1 
+      auto_promote = true 
+      auto_revert  = true 
+      min_healthy_time  = "30s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
+    }  
+    
     network {
       port "http" { static = "5000" }
     }
@@ -12,7 +21,7 @@ job docker_registry {
       type            = "${storage_mode}"
       source          = "docker_registry"
       attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
+      access_mode     = "single-node-writer"
     }
 
     service {

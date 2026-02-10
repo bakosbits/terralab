@@ -1,5 +1,4 @@
-# These vars feed nomad_vars.tf which in turn
-# populates Nomad Variables with env job vars
+# This map defines the Nomad Variables that are consumed by nomad_vars.tf       
 
 nomad_vars = {
   auth = {

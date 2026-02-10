@@ -3,12 +3,20 @@ job "storage-node" {
   type        = "system"
 
   group "node" {
+
+    update {
+      max_parallel      = 1 
+      min_healthy_time  = "30s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
+      auto_revert       = true
+    }
+
     task "node" {
       driver = "docker"
 
       config {
         image = "registry.gitlab.com/rocketduck/csi-plugin-nfs:1.1.0"
-
         args = [
           "--type=node",
           "--node-id=$${attr.unique.hostname}",

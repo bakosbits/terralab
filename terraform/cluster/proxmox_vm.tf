@@ -4,6 +4,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   for_each  = local.all_nodes
   name      = each.value.name
   node_name = each.value.target_node
+  vm_id     = each.value.vmid 
 
   # the cloning configuration
   clone {

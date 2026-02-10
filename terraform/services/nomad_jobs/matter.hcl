@@ -4,6 +4,15 @@ job "matter" {
 
   group "matter" {
 
+    update {
+      canary       = 1 
+      auto_promote = true 
+      auto_revert  = true 
+      min_healthy_time  = "30s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
+    }  
+    
     network {
       port "websocket" { static = 5580 }
 
@@ -13,7 +22,7 @@ job "matter" {
       type            = "${storage_mode}"
       source          = "matter"
       attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
+      access_mode     = "single-node-writer"
     }
 
     service {

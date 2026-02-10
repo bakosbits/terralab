@@ -1,5 +1,5 @@
-# Global vars that are used throughout the configuration
-# including job templates, consul_kv, provider configurations, etc
+# This map contains vars that are used in config definitions and template variables   
+
 env = {
   consul_domain   = "service.consul"
   datacenter      = "dc1"

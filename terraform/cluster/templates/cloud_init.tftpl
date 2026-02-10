@@ -1,0 +1,51 @@
+#cloud-config
+hostname: ${hostname}
+manage_etc_hosts: true
+users:
+  - default
+  - name: ${ciuser}
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh_authorized_keys:
+      - ${sshkey}
+
+chpasswd:
+  list: |
+    ${ciuser}:${cipassword}
+  expire: False
+
+package_update: true
+
+# Role-specific config (consul, nomad)
+write_files:
+  - path: /etc/consul.d/consul.hcl
+    content: |
+%{ if role == "manager" ~}
+${indent(6, "\n${consul_manager_hcl}")}
+%{ else ~}
+${indent(6, "\n${consul_worker_hcl}")}
+%{ endif ~}
+
+  - path: /etc/nomad.d/nomad.hcl
+    content: |
+%{ if role == "manager" ~}
+${indent(6, "\n${nomad_manager_hcl}")}
+%{ else ~}
+${indent(6, "\n${nomad_worker_hcl}")}
+%{ endif ~}
+
+runcmd:
+# We only want storage mounted on our worker nodes
+%{ if role == "worker" && use_host_storage ~}
+  - |
+    echo "${storage_mount}" >> /etc/fstab
+    MOUNT_POINT=$(echo '${storage_mount}' | awk '{print $2}')
+    mkdir -p "$MOUNT_POINT"
+    mount "$MOUNT_POINT"
+%{ endif ~}
+  - echo "nameserver ${dns1}" | sudo tee /etc/resolv.conf
+  - systemctl daemon-reload
+  - systemctl enable --now consul  
+  - systemctl enable --now nomad    
+  - echo "done" > /tmp/cloud-config.done

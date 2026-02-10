@@ -5,46 +5,23 @@ locals {
   # --- Template Injections ---
   retry_join_json = jsonencode([for m in local.manager_nodes : m.ip])
 
-  nomad_manager_hcl = templatefile("${path.module}/templates/nomad_manager.tpl", {
+  nomad_manager_hcl = templatefile("${path.module}/templates/nomad_manager.tftpl", {
     datacenter = var.env.datacenter
   })
 
-  nomad_worker_hcl  = templatefile("${path.module}/templates/nomad_worker.tpl", {
+  nomad_worker_hcl = templatefile("${path.module}/templates/nomad_worker.tftpl", {
     datacenter = var.env.datacenter
   })
 
-  consul_manager_hcl = templatefile("${path.module}/templates/consul_manager.tpl", {
+  consul_manager_hcl = templatefile("${path.module}/templates/consul_manager.tftpl", {
     retry_join_json = local.retry_join_json,
     datacenter      = var.env.datacenter
   })
 
-  consul_worker_hcl = templatefile("${path.module}/templates/consul_worker.tpl", {
+  consul_worker_hcl = templatefile("${path.module}/templates/consul_worker.tftpl", {
     retry_join_json = local.retry_join_json,
     datacenter      = var.env.datacenter
   })
-
-  # Role mapper (worker, manager)
-  role_mapper = {
-
-    manager = <<-EOT
-  - path: /etc/consul.d/consul.hcl
-    content: |
-      ${indent(6, local.consul_manager_hcl)}
-  - path: /etc/nomad.d/nomad.hcl
-    content: |
-      ${indent(6, local.nomad_manager_hcl)}
-EOT
-
-    worker = <<-EOT
-  - path: /etc/consul.d/consul.hcl
-    content: |
-      ${indent(6, local.consul_worker_hcl)}
-  - path: /etc/nomad.d/nomad.hcl
-    content: |
-      ${indent(6, local.nomad_worker_hcl)}
-EOT
-  }
-
 }
 
 # Cloud-init config for each host and role: (Manager, Worker)
@@ -58,34 +35,20 @@ resource "proxmox_virtual_environment_file" "cloud_init" {
 
   source_raw {
     file_name = "${each.value.name}-setup.yaml"
-    data      = <<-EOF
-#cloud-config
-hostname: ${each.value.name}
-manage_etc_hosts: true
-users:
-  - default # Adds the default user for the OS (optional)
-  - name: ${var.env.ciuser}
-    groups: sudo
-    shell: /bin/bash
-    sudo: ['ALL=(ALL) NOPASSWD:ALL']
-    ssh_authorized_keys:
-      - ${trimspace(var.env.sshkeys)}
-# Optional: Set the password for console access if SSH fails
-chpasswd:
-  list: |
-    ${var.env.ciuser}:${var.env.cipassword}
-  expire: False
-package_update: true
-write_files:
-  # Role-specific config (consul, nomad, coredns)
-${local.role_mapper[each.value.role]}
-runcmd:
-  - echo "nameserver ${var.env.dns1}" | sudo tee /etc/resolv.conf
-  - systemctl daemon-reload
-  - systemctl enable --now consul  
-  - systemctl enable --now nomad    
-  - echo "done" > /tmp/cloud-config.done
-EOF
+    data = templatefile("${path.module}/templates/cloud_init.tftpl", {
+      hostname           = each.value.name
+      role               = each.value.role
+      ciuser             = var.env.ciuser
+      cipassword         = var.env.cipassword
+      sshkey             = trimspace(var.env.sshkeys)
+      dns1               = var.env.dns1
+      use_host_storage   = var.env.use_host_storage
+      storage_mount      = var.env.storage_mount
+      consul_manager_hcl = local.consul_manager_hcl
+      consul_worker_hcl  = local.consul_worker_hcl
+      nomad_manager_hcl  = local.nomad_manager_hcl
+      nomad_worker_hcl   = local.nomad_worker_hcl
+    })
   }
 }
 

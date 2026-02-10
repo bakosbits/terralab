@@ -9,6 +9,7 @@
 .vscode
 .ssh/
 plans/
+hass/
+ceph/
 .roo/
-secrets.yaml
-service_account.json
+

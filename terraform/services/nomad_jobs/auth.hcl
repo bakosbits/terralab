@@ -3,6 +3,15 @@ job "auth" {
   type        = "service"
 
   group "auth" {
+    
+    update {
+      canary       = 1 
+      auto_promote = true 
+      auto_revert  = true 
+      min_healthy_time  = "30s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
+    }    
 
     network {
       port "http" { static = "4181" }

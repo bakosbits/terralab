@@ -1,0 +1,31 @@
+sources:
+  proxmox_journal:
+    type: journald
+
+transforms:
+  process_logs:
+    type: remap
+    inputs: ["proxmox_journal"]
+    source: |
+      .node_name = get_env_var!("PARENT_HOST")
+      .is_flap_event = "false"
+      if contains(string!(.message), "arp: moved") {
+          .is_flap_event = "true"
+      }
+
+sinks:
+  loki_out:
+    type: loki
+    inputs: ["process_logs"]
+    endpoint: "http://loki.service.consul:3100"
+    encoding:
+      codec: json
+    labels:
+      job:   "{{label.\"com.hashicorp.nomad.job_name\" }}"
+      task:  "{{label.\"com.hashicorp.nomad.task_name\" }}"
+      group: "{{label.\"com.hashicorp.nomad.task_group_name\" }}"
+      node:  "{{label.\"com.hashicorp.nomad.node_name\" }}"
+#      host: "{{ node_name }}"
+#      source: "proxmox_host"
+#      flap: "{{ is_flap_event }}"
+

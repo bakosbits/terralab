@@ -1,6 +1,5 @@
-# This job_goup map feeds nomad_jobs.tf. Jobs can be deployed all at once e.g. make deploy-services
-# or you can select to deploy and individual job_group e.g. make deploy-network_services
-# WARNING - if you create a new job_group here, you need to account for it in the MAKEFILE
+# This map defines the Nomad jobs map that is consumed by nomad_jobs.tf
+# Each job in the map can contain it's own template vars e.g. coredns = {version="x.x.x", cpu=250, ram=256}
 
 nomad_jobs = {
   storage_services = {

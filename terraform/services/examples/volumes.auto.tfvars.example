@@ -1,3 +1,5 @@
+# This map defines volumes that are consumed by nomad_volumes.tf  
+
 volumes = {
 
   arcade = {
@@ -153,31 +155,31 @@ volumes = {
   media = {
     volume_id   = "media"
     external_id = "media"
-    access_mode = "multi-node-multi-writer"
+    access_mode = "single-node-writer"
   }
 
   downloads = {
     volume_id   = "downloads"
     external_id = "media/downloads"
-    access_mode = "multi-node-multi-writer"
+    access_mode = "single-node-writer"
   }
 
   torrents = {
     volume_id   = "torrents"
     external_id = "media/downloads/torrents"
-    access_mode = "multi-node-multi-writer"
+    access_mode = "single-node-writer"
   }
 
   certs = {
     volume_id   = "certs"
     external_id = "certs"
-    access_mode = "multi-node-multi-writer"
+    access_mode = "single-node-writer"
   }
 
   traefik-logs = {
     volume_id   = "traefik-logs"
     external_id = "traefik/logs"
-    access_mode = "multi-node-multi-writer"
+    access_mode = "single-node-writer"
   }
 
   ollama = {

@@ -4,6 +4,15 @@ job "sabnzbd" {
 
   group "sabnzbd" {
 
+    update {
+      canary       = 1 
+      auto_promote = true 
+      auto_revert  = true 
+      min_healthy_time  = "30s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
+    }  
+    
     network {
       port "http" { to = "8080" }
     }
@@ -12,14 +21,14 @@ job "sabnzbd" {
       type            = "${storage_mode}"
       source          = "sabnzbd"
       attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
+      access_mode     = "single-node-writer"
     }
 
     volume "media" {
       type            = "${storage_mode}"
       source          = "media"
       attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
+      access_mode     = "single-node-writer"
     }
 
     service {

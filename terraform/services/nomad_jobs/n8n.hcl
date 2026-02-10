@@ -4,17 +4,24 @@ job "n8n" {
 
   group "n8n" {
 
+    update {
+      canary       = 1 
+      auto_promote = true 
+      auto_revert  = true 
+      min_healthy_time  = "30s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
+    }  
+
     network {
-      port "http" {
-        to = "5678"
-      }
+      port "http" { to = "5678" }
     }
 
     volume "n8n" {
       type            = "${storage_mode}"
       source          = "n8n"
       attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
+      access_mode     = "single-node-writer"
     }
 
     service {

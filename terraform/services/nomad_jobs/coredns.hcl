@@ -4,6 +4,14 @@ job "coredns" {
 
   group "coredns" {
 
+    update {
+      max_parallel      = 1 
+      min_healthy_time  = "30s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
+      auto_revert       = true
+    }
+
     network {
       mode = "host"
       port "dns" { static = 53 }
@@ -38,7 +46,7 @@ job "coredns" {
         destination = "local/Corefile"
         change_mode = "restart"
         data        = <<-EOF
-{{- key "terralab/coredns/corefile.tpl" }}
+{{- key "terralab/coredns/corefile.tftpl" }}
 EOF
       }
 
@@ -46,7 +54,7 @@ EOF
         destination = "local/zonefile"
         change_mode = "restart"
         data        = <<-EOF
-{{- key "terralab/coredns/zonefile.tpl" }} 
+{{- key "terralab/coredns/zonefile.tftpl" }} 
 EOF
       }
 

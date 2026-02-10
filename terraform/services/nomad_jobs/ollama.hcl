@@ -1,8 +1,17 @@
 job "ollama" {
   datacenters = ["${datacenter}"]
-  type        = "system"
+  type        = "service"
 
   group "ai" {
+
+    update {
+      canary       = 1 
+      auto_promote = true 
+      auto_revert  = true 
+      min_healthy_time  = "30s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
+    }  
 
     network {
       port "http" { to = 8080 }
@@ -64,8 +73,8 @@ job "ollama" {
       }
 
       resources {
-        cpu    = 10240
-        memory = 32768
+        cpu    = 8000
+        memory = 24576
       }
     }
   }

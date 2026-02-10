@@ -4,6 +4,15 @@ job "emulatorjs" {
 
   group "emulatorjs" {
 
+    update {
+      canary       = 1 
+      auto_promote = true 
+      auto_revert  = true 
+      min_healthy_time  = "30s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
+    }  
+    
     network {
       port "http" {
         to = 80
@@ -18,8 +27,16 @@ job "emulatorjs" {
       type            = "${storage_mode}"
       source          = "arcade"
       attachment_mode = "file-system"
-      access_mode     = "multi-node-multi-writer"
+      access_mode     = "single-node-writer"
     }
+
+    volume "arcade-config" {
+      type            = "${storage_mode}"
+      source          = "arcade-config"
+      attachment_mode = "file-system"
+      access_mode     = "single-node-writer"
+    }
+
 
     service {
       name = "arcade"
@@ -27,7 +44,7 @@ job "emulatorjs" {
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.arcade.entrypoints=websecure",
-        "traefik.http.routers.arcade.rule=Host(`arcade.bakos.me`)",
+        "traefik.http.routers.arcade.rule=Host(`arcade.${domain}`)",
         "traefik.http.routers.arcade.middlewares=auth@consulcatalog"
       ]
 
@@ -62,15 +79,16 @@ job "emulatorjs" {
       config {
         image = "linuxserver/emulatorjs:1.9.2"
         ports = ["http", "admin"]
-        volumes = [
-          "local/config:/config",
-          "local/data:/data"
-        ]
       }
 
       volume_mount {
         volume      = "arcade"
-        destination = "/local"
+        destination = "/data"
+      }
+
+      volume_mount {
+        volume      = "arcade-config"
+        destination = "/config"
       }
 
       env {
