@@ -11,7 +11,7 @@ job "vector" {
       progress_deadline = "10m"
       auto_revert       = true
     }
-    
+
     task "vector" {
       driver = "docker"
       user   = "root"
@@ -27,6 +27,7 @@ job "vector" {
         args = ["--config", "/local/vector.yaml"]
 
         volumes = [
+          "/var/run/docker.sock:/var/run/docker.sock:ro",
           "/var/log/journal:/var/log/journal:ro",
           "/run/log/journal:/run/log/journal:ro",
           "/etc/machine-id:/etc/machine-id:ro"

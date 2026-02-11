@@ -1,31 +1,58 @@
 sources:
   proxmox_journal:
     type: journald
+  
+  docker_logs:        # I renamed this to match your Nomad/Docker setup
+    type: docker_logs
 
 transforms:
-  process_logs:
+  # Process system logs from Journald
+  process_system_logs:
     type: remap
-    inputs: ["proxmox_journal"]
+    inputs: 
+      - proxmox_journal
     source: |
       .node_name = get_env_var!("PARENT_HOST")
       .is_flap_event = "false"
       if contains(string!(.message), "arp: moved") {
           .is_flap_event = "true"
       }
+      # Set defaults for labels used in the sink so it doesn't crash
+      .job = "system"
+      .task = "journald"
+      .group = "os"
+      .node = .node_name
+
+  # Process logs coming from Nomad Docker containers
+  process_nomad_logs:
+    type: remap
+    inputs:
+      - docker_logs
+    source: |
+      .node_name = get_env_var!("PARENT_HOST")
+      .node = .container_labels."com.hashicorp.nomad.node_name" || .node_name
+      .group = .container_labels."com.hashicorp.nomad.task_group_name" || "none"
+      .task = .container_labels."com.hashicorp.nomad.task_name" || "non-nomad"
+      .job = .container_labels."com.hashicorp.nomad.job_name" || "non-nomad"
+      .namespace = .container_labels."com.hashicorp.nomad.namespace" || "default"
+      .is_flap_event = "false"
+      del(.container_labels)
 
 sinks:
   loki_out:
     type: loki
-    inputs: ["process_logs"]
+    # IMPORTANT: Take inputs from BOTH processed streams
+    inputs: 
+      - process_system_logs
+      - process_nomad_logs
     endpoint: "http://loki.service.consul:3100"
     encoding:
       codec: json
     labels:
-      job:   "{{label.\"com.hashicorp.nomad.job_name\" }}"
-      task:  "{{label.\"com.hashicorp.nomad.task_name\" }}"
-      group: "{{label.\"com.hashicorp.nomad.task_group_name\" }}"
-      node:  "{{label.\"com.hashicorp.nomad.node_name\" }}"
-#      host: "{{ node_name }}"
-#      source: "proxmox_host"
-#      flap: "{{ is_flap_event }}"
-
+      job: "{{ job }}"
+      task: "{{ task }}"
+      group: "{{ group }}"
+      node: "{{ node }}"
+      host: "{{ node_name }}"
+      source: "proxmox_host"
+      flap: "{{ is_flap_event }}"
