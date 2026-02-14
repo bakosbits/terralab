@@ -5,24 +5,18 @@ locals {
   # --- Template Injections ---
   retry_join_json = jsonencode([for m in local.manager_nodes : m.ip])
 
-  nomad_manager_hcl = templatefile("${path.module}/templates/nomad_manager.tftpl", {
-    datacenter = var.env.datacenter
-  })
-
-  nomad_worker_hcl = templatefile("${path.module}/templates/nomad_worker.tftpl", {
-    datacenter = var.env.datacenter
-    priority   = local.keepalived_priority
-  })
-
-  consul_manager_hcl = templatefile("${path.module}/templates/consul_manager.tftpl", {
+  vars = {
     retry_join_json = local.retry_join_json,
-    datacenter      = var.env.datacenter
-  })
+    priority        = local.keepalived_priority    
+    datacenter      = env.var.datacenter,
+    region          = env.var.region,
+    consul_domain   = env.var.consul_domain
+  }
 
-  consul_worker_hcl = templatefile("${path.module}/templates/consul_worker.tftpl", {
-    retry_join_json = local.retry_join_json,
-    datacenter      = var.env.datacenter
-  })
+  nomad_manager_hcl  = templatefile("${path.module}/templates/nomad_manager.tftpl", local.vars)
+  nomad_worker_hcl   = templatefile("${path.module}/templates/nomad_worker.tftpl", local.vars)
+  consul_manager_hcl = templatefile("${path.module}/templates/consul_manager.tftpl", local.vars)
+  consul_worker_hcl  = templatefile("${path.module}/templates/consul_worker.tftpl", local.vars)
 }
 
 # Cloud-init config for each host and role: (Manager, Worker)

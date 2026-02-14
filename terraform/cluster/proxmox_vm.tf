@@ -9,7 +9,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   # the cloning configuration
   clone {
     vm_id     = each.value.clone_id
-    node_name = var.env.pve_nodes[2]
+    node_name = var.env.clone_node_name
     full      = var.env.vm.full_clone
   }
 

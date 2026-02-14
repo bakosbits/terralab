@@ -1,6 +1,6 @@
 # include .env
 
-PACKER_VARS  := packer/packer.pkrvars.hcl
+PACKER_VARS  := packer/var.packer.pkrvars
 CLUSTER_VARS := terraform/cluster/var.cluster.auto.tfvars
 SERVICE_VARS := terraform/services/var.services.auto.tfvars \
                 terraform/services/var.consul_kv.auto.tfvars \
@@ -68,14 +68,10 @@ deploy-services:##........Deploy all Nomad job groups sequentially
 
 .PHONY: build-%
 build-%:##...............Build an image with packer
-	@sops -e -i $(PACKER_VARS)
-	@trap 'sops -d -i $(PACKER_VARS)' EXIT; \
-		cd packer/$* && packer build -var-file=../packer.pkrvars.hcl .
+	cd packer/$* && packer build -var-file=../var.packer.pkrvars .
 
 .PHONY: build-all
 build-all:##.............Build all images with packer
-	@sops -e -i $(PACKER_VARS)
-	@trap 'sops -d -i $(PACKER_VARS)' EXIT; \
-		cd packer/base && packer build -var-file=../packer.pkrvars.hcl . && \
-		cd ../manager && packer build -var-file=../packer.pkrvars.hcl . && \
-		cd ../worker && packer build -var-file=../packer.pkrvars.hcl .
+	cd packer/base && packer build -var-file=../var.packer.pkrvars . && \
+	cd ../manager && packer build -var-file=../var.packer.pkrvars . && \
+	cd ../worker && packer build -var-file=../var.packer.pkrvars .

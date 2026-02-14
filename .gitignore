@@ -4,6 +4,7 @@
 *.secret
 *.keyring
 *.tfvars
+*.pkrvars
 .terraform/
 .vscode
 .ssh/
