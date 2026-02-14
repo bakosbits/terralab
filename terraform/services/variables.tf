@@ -44,13 +44,8 @@ variable "volumes" {
 
 variable "consul_kv" {
   type = map(object({
-<<<<<<< HEAD
-    filenames   = list(string)
-    vars        = optional(map(any), {}) 
-=======
     filenames = list(string)
     vars      = optional(map(any), {})
->>>>>>> feature/per-volume-node-targeting
   }))
   description = "Key-Value pairs for Consul's kv store"
 }
