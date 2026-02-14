@@ -33,11 +33,6 @@ job "code-server" {
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
-<<<<<<< HEAD
-    
-=======
-
->>>>>>> feature/per-volume-node-targeting
     service {
       name = "code-server"
       port = "http"
@@ -59,13 +54,8 @@ job "code-server" {
       driver = "docker"
 
       config {
-<<<<<<< HEAD
-        image        = "linuxserver/code-server:${version}"
-        ports        = ["http"]
-=======
         image = "linuxserver/code-server:${version}"
         ports = ["http"]
->>>>>>> feature/per-volume-node-targeting
       }
 
       volume_mount {

@@ -51,13 +51,8 @@ job "gitea" {
       driver = "docker"
 
       config {
-<<<<<<< HEAD
-        image        = "gitea/gitea:${version}"
-        ports        = ["http"]
-=======
         image = "gitea/gitea:${version}"
         ports = ["http"]
->>>>>>> feature/per-volume-node-targeting
       }
 
       volume_mount {

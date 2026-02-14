@@ -23,11 +23,6 @@ job "vector" {
 
       config {
         image = "timberio/vector:${version}"
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> feature/per-volume-node-targeting
         args = ["--config", "/local/vector.yaml"]
 
         volumes = [

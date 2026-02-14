@@ -37,13 +37,8 @@ job "cyberchef" {
       driver = "docker"
 
       config {
-<<<<<<< HEAD
-        image        = "ghcr.io/gchq/cyberchef:${version}"
-        ports        = ["http"]
-=======
         image = "ghcr.io/gchq/cyberchef:${version}"
         ports = ["http"]
->>>>>>> feature/per-volume-node-targeting
       }
 
       resources {

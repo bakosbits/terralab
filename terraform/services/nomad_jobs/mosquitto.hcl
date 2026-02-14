@@ -17,12 +17,21 @@ job "mosquitto" {
       access_mode     = "single-node-writer"
     }
 
-    volume "mosquitto-logs" {
+    volume "mosquitto-data" {
       type            = "${storage_type}"
-      source          = "mosquitto-logs"
+      source          = "mosquitto-data"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
+
+
+    volume "mosquitto-log" {
+      type            = "${storage_type}"
+      source          = "mosquitto-log"
+      attachment_mode = "file-system"
+      access_mode     = "single-node-writer"
+    }
+
 
     service {
       name = "mosquitto"
@@ -52,26 +61,24 @@ job "mosquitto" {
         image = "eclipse-mosquitto:${version}"
         ports = ["mqtt", "websocket"]
         volumes = [
-          "secrets/password.txt:/config/password.txt",
-          "local/config/mosquitto.conf:/config/mosquitto.conf"
+          "secrets/password.txt:/mosquitto/config/password.txt",
+          "local/mosquitto.conf:/mosquitto/config/mosquitto.conf"
         ]
       }
 
       volume_mount {
         volume      = "mosquitto"
-        destination = "/data"
+        destination = "/mosquitto/config"
       }
 
       volume_mount {
-        volume      = "mosquitto-logs"
-        destination = "/logs"
+        volume      = "mosquitto-data"
+        destination = "/mosquitto/data"
       }
 
-
-      env {
-        PUID = "${uid}"
-        PGID = "${gid}"
-        TZ   = "${timezone}"
+      volume_mount {
+        volume      = "mosquitto-log"
+        destination = "/mosquitto/log"
       }
 
       resources {
@@ -81,7 +88,7 @@ job "mosquitto" {
 
 
       template {
-        destination = "local/config/mosquitto.conf"
+        destination = "local/mosquitto.conf"
         data        = <<-EOF
         {{- key "${lab_name}/mqtt/mosquitto.conf" }}
         EOF

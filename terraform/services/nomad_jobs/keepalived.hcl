@@ -5,21 +5,12 @@ job "keepalived" {
   group "keepalived" {
 
     update {
-<<<<<<< HEAD
-      max_parallel      = 1 
-=======
       max_parallel      = 1
->>>>>>> feature/per-volume-node-targeting
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
       auto_revert       = true
     }
-<<<<<<< HEAD
-        
-=======
-
->>>>>>> feature/per-volume-node-targeting
     task "keepalived" {
       driver = "docker"
 
