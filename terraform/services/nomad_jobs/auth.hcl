@@ -3,15 +3,15 @@ job "auth" {
   type        = "service"
 
   group "auth" {
-    
+
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }    
+    }
 
     network {
       port "http" { static = "4181" }
@@ -41,7 +41,7 @@ job "auth" {
       driver = "docker"
 
       config {
-        image = "thomseddon/traefik-forward-auth:2.2.0"
+        image = "thomseddon/traefik-forward-auth:${version}"
         ports = ["http"]
       }
 
@@ -59,7 +59,7 @@ job "auth" {
 
       resources {
         cpu    = 200
-        memory = 256
+        memory = 200
       }
     }
   }

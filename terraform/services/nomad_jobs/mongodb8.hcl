@@ -5,20 +5,20 @@ job "mongo" {
   group "mongo" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
-    
+    }
+
     network {
       port "mongo" { static = "27017" }
     }
 
     volume "mongo" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "mongo"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
@@ -33,7 +33,7 @@ job "mongo" {
       driver = "docker"
 
       config {
-        image        = "mongo:8.0.14"
+        image        = "mongo:${version}"
         network_mode = "host"
         ports        = ["mongo"]
         volumes = [

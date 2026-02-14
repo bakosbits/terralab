@@ -6,5 +6,38 @@ variable "env" {
     proxmox_node     = string
     ssh_username     = string
     ssh_password     = string
+
+    os              = string
+    cpu_type        = string
+    sockets         = number
+    cores           = number
+    memory          = number
+    machine         = string
+    scsi_controller = string
+    qemu_agent      = bool
+
+    cloud_init              = bool
+    cloud_init_storage_pool = string
+
+    vga = object({
+      type = string
+    })
+
+    network_adapters = object({
+      model  = string
+      bridge = string
+    })
+
+    disks = object({
+      disk_size    = string
+      storage_pool = string
+      type         = string
+    })
+
+    boot = object({
+      type    = string
+      iso     = string
+      unmount = bool
+    })
   })
 }

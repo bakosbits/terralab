@@ -8,15 +8,11 @@ This Terraform environment manages the lifecycle of services running on the Noma
 
 ### Service Deployment Order
 
-To ensure that dependencies are met, services are deployed in a controlled manner using job groups. This is defined in [nomad_jobs.auto.tfvars](https://github.com/bakosbits/terralab/blob/main/terraform/services/examples/nomad_jobs.auto.tfvars.example) by creating dependencies between groups of services. Jobs can be group in one of the seven categories. This job grouping helps manage the velocity behind jobs being deployed:
+To ensure that dependencies are met, services are deployed in a controlled manner using job groups. This is defined in `nomad_jobs.auto.tfvars` by creating dependencies between groups of services. Jobs are grouped in three deployment tiers:
 
-1.  **Initial Services**: Services that provide storage or other key services.
-2.  **Data Services**: Databases and other data-related services.
-3.  **Network Services**: Services related to networking, such as reverse proxies.
-4.  **Logging Services**: Services for log aggregation and analysis.
-5.  **Core Services**: Core infrastructure services.
-6.  **Media Services**: Services for media streaming and management.
-7.  **Final Services**: All other services.
+1.  **Primary**: Core infrastructure services that other services depend on (storage, databases, networking).
+2.  **Secondary**: Services that depend on primary services but are dependencies for other services.
+3.  **Tertiary**: Application services that depend on primary and secondary services.
 
 ### Configuration Management
 
@@ -28,16 +24,16 @@ Service configurations are managed using a combination of Terraform variables an
 
 ## Configuration
 
-All service definitions, configurations, and variables are managed through `*.auto.tfvars` files in this directory. This allows for a modular and easily manageable approach to service deployment. Complete working examples of tfvars are located in the [examples](https://github.com/bakosbits/terralab/tree/main/terraform/services/examples) directory
+All service definitions, configurations, and variables are managed through `*.auto.tfvars` files in this directory. This allows for a modular and easily manageable approach to service deployment. Complete working examples are located in the `examples/` directory.
 
 ### `*.auto.tfvars`
 
-There are a total of 5 tfvars files used to define services
-  1. services.auto.tfvars:   This holds variables used in terraform configuration and template vars
-  2. nomad_jobs.auto.tfvars: This holds a map that defines nomad jobs. It's consumed by resources in nomad_jobs.tf
-  3. consul_kv.auto.tfvars:  This hold a map that defines Consul key=value pairs. It's consumed by resources in consul_kv.tf
-  4. nomad_vars.auto.tfvars: This hold a map that defines Nomad Variables. It's consumed by resources in nomad_vars.tf
-  5. volumes.auto.tfvars:    This holds a map that defines CSI and Dynamic Host volumes. It's consumed by nomad_volumes.tf    
+There are a total of 5 tfvars files used to define services:
+  1. **auto.tfvars**: General environment variables and template variables
+  2. **nomad_jobs.auto.tfvars**: Defines nomad jobs grouped by deployment tier (primary, secondary, tertiary)
+  3. **consul_kv.auto.tfvars**: Defines Consul key-value configuration files
+  4. **nomad_vars.auto.tfvars**: Defines Nomad Variables (secrets, environment variables)
+  5. **volumes.auto.tfvars**: Defines CSI and Dynamic Host volumes    
 
 These five files work together to define your deployment without having to alter the Terraform code. They give you the following capabilities:
 
@@ -57,21 +53,30 @@ This map defines the Nomad jobs to be deployed. The jobs are grouped into catego
 
 ```hcl
 nomad_jobs = {
-  storage_services = {
-    "minio" = {
-      version = "latest"
-      cpu     = 500
-      ram     = 512
+  primary = {
+    jobs = {
+      "storage-controller" = {
+        version = "latest"
+        cpu     = 500
+        ram     = 512
+      }
+      "influxdb" = {
+        version = "2.7"
+        cpu     = 500
+        ram     = 1024
+      }
     }
   }
-  data_services = {
-    "influxdb" = {
-      version = "2.7"
-      cpu     = 500
-      ram     = 1024
+  secondary = {
+    jobs = {
+      "traefik" = {
+        version = "3.0"
+        cpu     = 250
+        ram     = 256
+      }
     }
   }
-  # ... other service groups
+  # ... other deployment tiers
 }
 ```
 
@@ -82,11 +87,9 @@ This map defines the configuration files to be stored in Consul KV.
 ```hcl
 consul_kv = {
   "traefik" = {
-    path_prefix = "terralab/traefik/"
     filenames   = ["traefik.yaml", "dynamic.yaml"]
   }
   "loki" = {
-    path_prefix = "terralab/loki/"
     filenames   = ["loki.yaml"]
   }
 }
@@ -149,8 +152,8 @@ This will deploy all the services defined in your `services.auto.tfvars` file.
 1.  **Create a Nomad Job File**: In `nomad_jobs/`, create a new `.hcl` file for your service.
 2.  **Add Configuration to Consul KV (Optional)**: If your service needs configuration files, add them to a new subdirectory in `consul_kv/`.
 3.  **Define the Service in `nomad_jobs.auto.tfvars`**:
-    - Add your service to the appropriate group in the `nomad_jobs` map.
-    - If you added Consul KV configs, create an entry in the `consul_kv` map.
-    - If your service needs a volume, add it to the `volumes` map.
-    - If you need to store env or sensitive data, add it to the `nomad_vars` map.
+    - Add your service to the appropriate deployment tier (primary, secondary, or tertiary) in the `nomad_jobs` map.
+    - If you added Consul KV configs, create an entry in the `consul_kv.auto.tfvars` map.
+    - If your service needs a volume, add it to the `volumes.auto.tfvars` map.
+    - If you need to store env or sensitive data, add it to the `nomad_vars.auto.tfvars` map.
 4.  **Deploy**: Run `make deploy-services`.

@@ -4,44 +4,45 @@ source "proxmox-iso" "base" {
   username    = var.env.proxmox_user
   password    = var.env.proxmox_password
   node        = var.env.proxmox_node
-  
+
   insecure_skip_tls_verify = true
 
   vm_id                = 9000
   vm_name              = "base-tpl"
   template_description = "Base VM template"
 
-  os              = "l26"
-  cpu_type        = "host"
-  sockets         = 1
-  cores           = 2
-  memory          = 2048
-  machine         = "pc"
-  scsi_controller = "virtio-scsi-single"
-  qemu_agent      = true
+  os              = var.env.os
+  cpu_type        = var.env.cpu_type
+  sockets         = var.env.sockets
+  cores           = var.env.cores
+  memory          = var.env.memory
+  machine         = var.env.machine
+  scsi_controller = var.env.scsi_controller
+  qemu_agent      = var.env.qemu_agent
   
-  cloud_init              = true
-  cloud_init_storage_pool = "rbd"
+  cloud_init              = var.env.cloud_init
+  cloud_init_storage_pool = var.env.cloud_init_storage_pool
 
   vga {
-    type = "std"
+    type = var.env.vga.type
   }
 
   network_adapters {
-    model    = "virtio"    
-    bridge   = "vmbr2"
+    model    = var.env.network_adapters.model
+    bridge   = var.env.network_adapters.bridge
   }
 
   disks {
-    disk_size         = "6G"
-    storage_pool      = "rbd"
-    type              = "scsi"
+    disk_size         = var.env.disks.disk_size
+    disk_type         = var.env.disks.disk_type
+    storage_pool      = var.env.disks.storage_pool
+    type              = var.env.disks.storage_pool_type
   }
 
   boot_iso {
-    type     = "scsi"
-    iso_file = "local:iso/debian-13.3.0-amd64-netinst.iso"
-    unmount  = true
+    type     = var.env.boot.type
+    iso_file = var.env.boot.iso
+    unmount  = var.env.boot.unmount
   }
 
   

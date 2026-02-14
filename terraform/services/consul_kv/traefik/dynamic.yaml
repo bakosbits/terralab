@@ -49,24 +49,24 @@ http:
     nomad:
       loadbalancer:
         servers:
-          - url: ${nomad_url} 
+          - url: ${nomad_addr} 
 
     consul:
       loadbalancer:
         servers:
-          - url: ${consul_url}
+          - url: ${consul_addr}
 
     pfsense:
       loadbalancer:
         servers:
-          - url: ${pfsense_url}
+          - url: ${pfsense_addr}
 
     proxmox:
       loadbalancer:
         servers:
-          - url: ${pve_url}
+          - url: ${pve_addr}
 
     backup:
       loadbalancer:
         servers:
-          - url: ${pve_backup_url}
+          - url: ${pve_backup_addr}

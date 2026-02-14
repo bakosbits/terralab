@@ -12,11 +12,11 @@ terraform {
 }
 
 provider "nomad" {
-  address   = var.env.nomad_url
+  address   = var.env.nomad_addr
   secret_id = var.env.secret_id
 }
 
 provider "consul" {
-  address = var.env.consul_url
+  address = var.env.consul_addr
 }
 

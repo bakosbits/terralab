@@ -5,14 +5,14 @@ job "transmission" {
   group "transmission" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
-    
+    }
+
     network {
       mode = "host"
       port "http" {
@@ -22,26 +22,18 @@ job "transmission" {
     }
 
     volume "transmission" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "transmission"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
 
     volume "downloads" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "downloads"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
-
-    volume "torrents" {
-      type            = "${storage_mode}"
-      source          = "torrents"
-      attachment_mode = "file-system"
-      access_mode     = "single-node-writer"
-    }
-
 
     service {
       name = "transmission"
@@ -63,7 +55,7 @@ job "transmission" {
       driver = "docker"
 
       config {
-        image = "lscr.io/linuxserver/transmission:4.0.6"
+        image = "lscr.io/linuxserver/transmission:${version}"
         ports = ["http"]
       }
 
@@ -77,16 +69,10 @@ job "transmission" {
         destination = "/downloads"
       }
 
-      volume_mount {
-        volume      = "torrents"
-        destination = "/watch"
-      }
-
-
       env {
-        PUID = 1010
-        PGID = 1010
-        TZ   = "America/Denver"
+        PUID = "${uid}"
+        PGID = "${gid}"
+        TZ   = "${timezone}"
       }
 
       resources {

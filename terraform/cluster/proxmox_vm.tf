@@ -4,7 +4,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   for_each  = local.all_nodes
   name      = each.value.name
   node_name = each.value.target_node
-  vm_id     = each.value.vmid 
+  vm_id     = each.value.vmid
 
   # the cloning configuration
   clone {
@@ -27,13 +27,13 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   network_device {
-    bridge = var.env.vm.bridge
-    model  = var.env.vm.network_model
-    # vlan_id = var.env.vm.vlan_id 
+    bridge  = var.env.vm.bridge
+    model   = var.env.vm.network_model
+    vlan_id = var.env.vm.vlan_id
   }
 
   disk {
-    datastore_id = var.env.vm.storage
+    datastore_id = var.env.vm.vm_storage
     interface    = var.env.vm.disk_interface
     size         = each.value.disk_size
     iothread     = var.env.vm.disk_iothread
@@ -44,7 +44,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
 
   initialization {
 
-    datastore_id = var.env.vm.storage
+    datastore_id = var.env.vm.vm_storage
     interface    = var.env.vm.cloudinit_interface
 
     user_account {
@@ -54,8 +54,8 @@ resource "proxmox_virtual_environment_vm" "vm" {
     }
 
     dns {
-      servers = [each.value.dns1]
-      domain  = var.env.internal_domain
+      servers = [each.value.dns]
+      domain  = var.env.domain
     }
 
     ip_config {

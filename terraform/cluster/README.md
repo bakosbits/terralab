@@ -20,20 +20,20 @@ The provisioning process is as follows:
 
 ## Configuration
 
-Configuration of the cluster is managed `cluster.auto.tfvars`. This file should not be checked into version control as it contains sensitive information. 
+Configuration of the cluster is managed in `cluster.auto.tfvars`. This file should not be checked into version control as it contains sensitive information. 
 
 ### `cluster.auto.tfvars`
 
-This file should contain a single `env` variable of type `map(any)`. There is a complete example with placeholder values [HERE](https://github.com/bakosbits/terralab/blob/main/terraform/cluster/examples/cluster.auto.tfvars.example)
+This file should contain a single `env` variable of type `map(any)`. There is a complete example with placeholder values in the `examples/cluster.auto.tfvars.example` file.
 
 
 ### Node Definitions
 
-The cluster nodes (managers and workers) are defined in `cluster_nodes.tf'. Cluster.auto.tfvars contains a map that holds values needed by cluster_nodes.tf You can customize the number of nodes, their roles, and their resources (CPU, memory, disk) by modifying tfvars. This allows you to easily make changes to teh cluster without changing any of the Terraform code.
+The cluster nodes (managers and workers) are defined in `cluster_nodes.tf`. The `cluster.auto.tfvars` contains a map that holds values needed by cluster_nodes.tf. You can customize the number of nodes, their roles, and their resources (CPU, memory, disk) by modifying the tfvars file. This allows you to easily make changes to the cluster without changing any of the Terraform code.
 
 ## Deployment
 
-You can use the [`Makefile`](https://github.com/bakosbits/terralab/blob/main/Makefile), located in the root of the project to deploy the cluster.
+You can use the `Makefile` located in the root of the project to deploy the cluster.
 
 1.  **Initialize Terraform:**
 

@@ -1,25 +1,22 @@
 env = {
-  registry_mirror = "http://registry.example.lan"
   datacenter      = "dc1"
-  cidr            = "192.168.1.0/24"
-  ciuser          = "ci-user"
-  cipassword      = "<REDACTED>"
-  sshkeys         = "ssh-rsa AAAA...REDACTED... user@example"
-  external_domain = "example.com"
-  internal_domain = "example.lan"
-  dns1            = "192.168.1.1"
-  dns2            = "192.168.1.2"
+  region          = "global"  
+  cidr            = "192.168.X.0/24"
+  ciuser          = "CHANGEME"
+  cipassword      = "CHANGEME"
+  sshkeys         = "ssh-rsa AAAA... user@host"
+  domain          = "example.com"
+  dns             = "192.168.X.X"
   pve_nodes       = ["pve01", "pve02", "pve03"]
 
   provider = {
-    url      = "https://192.168.1.203:8006"
+    url      = "https://192.168.X.X:8006"
     user     = "root@pam"
-    password = "<REDACTED>"
+    password = "CHANGEME"
   }
 
   worker = {
-    name      = "worker"
-    role      = "worker"
+
     clone     = "worker-tpl"
     clone_id  = 9002
     disk_size = 30
@@ -30,8 +27,6 @@ env = {
   }
 
   manager = {
-    name      = "manager"
-    role      = "manager"
     clone     = "manager-tpl"
     clone_id  = 9001
     disk_size = 8

@@ -5,14 +5,14 @@ job "emulatorjs" {
   group "emulatorjs" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
-    
+    }
+
     network {
       port "http" {
         to = 80
@@ -24,14 +24,14 @@ job "emulatorjs" {
     }
 
     volume "arcade" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "arcade"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
 
     volume "arcade-config" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "arcade-config"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
@@ -77,7 +77,7 @@ job "emulatorjs" {
       driver = "docker"
 
       config {
-        image = "linuxserver/emulatorjs:1.9.2"
+        image = "linuxserver/emulatorjs:${version}"
         ports = ["http", "admin"]
       }
 

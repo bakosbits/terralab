@@ -5,20 +5,20 @@ job "grafana" {
   group "grafana" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
-    
+    }
+
     network {
       port "http" { to = 3000 }
     }
 
     volume "grafana" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "grafana"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
@@ -30,7 +30,6 @@ job "grafana" {
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.grafana.entrypoints=websecure",
-        "traefik.http.routers.grafana.rule=Host(`grafana.bakos.me`)",
       ]
 
       check {
@@ -46,7 +45,7 @@ job "grafana" {
       user   = "root"
 
       config {
-        image = "grafana/grafana-oss:11.1.3"
+        image = "grafana/grafana-oss:${version}"
         ports = ["http"]
       }
 

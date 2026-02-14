@@ -11,6 +11,7 @@ locals {
 
   nomad_worker_hcl = templatefile("${path.module}/templates/nomad_worker.tftpl", {
     datacenter = var.env.datacenter
+    priority   = local.keepalived_priority
   })
 
   consul_manager_hcl = templatefile("${path.module}/templates/consul_manager.tftpl", {
@@ -41,7 +42,7 @@ resource "proxmox_virtual_environment_file" "cloud_init" {
       ciuser             = var.env.ciuser
       cipassword         = var.env.cipassword
       sshkey             = trimspace(var.env.sshkeys)
-      dns1               = var.env.dns1
+      dns                = var.env.dns
       use_host_storage   = var.env.use_host_storage
       storage_mount      = var.env.storage_mount
       consul_manager_hcl = local.consul_manager_hcl

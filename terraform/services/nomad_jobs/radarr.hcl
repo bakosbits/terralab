@@ -5,34 +5,34 @@ job "radarr" {
   group "radarr" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
-    
+    }
+
     network {
       port "http" { to = 7878 }
     }
 
     volume "radarr" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "radarr"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
 
     volume "media" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "media"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
 
     volume "downloads" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "downloads"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
@@ -58,7 +58,7 @@ job "radarr" {
       driver = "docker"
 
       config {
-        image = "linuxserver/radarr:6.0.4"
+        image = "linuxserver/radarr:${version}"
         ports = ["http"]
       }
 

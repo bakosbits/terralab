@@ -95,9 +95,12 @@ A `Makefile` is provided at the root of the project to simplify common tasks.
 - `make build-all`: Build all Packer images.
 - `make build-<name>`: Build a specific Packer image (e.g., `make build-base`).
 - `make init-cluster`: Initialize Terraform for the cluster.
+- `make init-upgrade-cluster`: Upgrade Terraform cluster providers.
 - `make plan-cluster`: Create a Terraform plan for the cluster.
 - `make deploy-cluster`: Deploy the cluster.
 - `make init-services`: Initialize Terraform for the services.
+- `make init-upgrade-services`: Upgrade Terraform services providers.
 - `make plan-services`: Create a Terraform plan for the services.
 - `make deploy-services`: Deploy the services.
 - `make format`: Format all Terraform and Nomad files.
+

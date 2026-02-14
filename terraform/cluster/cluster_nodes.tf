@@ -2,24 +2,25 @@
 
 locals {
 
+  keepalived_priority = 50
   all_nodes = {
     for node in concat(local.manager_nodes, local.worker_nodes) : node.name => node
   }
 
   manager_nodes = [
     for i in range(var.env.manager.count) : {
-      
+
       vmid        = var.env.start_vmid + i
       name        = format("${var.env.manager.name}%02d", i + 1)
       ip          = cidrhost(var.env.cidr, var.env.manager.offset + i)
       target_node = var.env.pve_nodes[i % length(var.env.pve_nodes)]
-      role        = var.env.manager.role
+      role        = "manager"
       clone       = var.env.manager.clone
       clone_id    = var.env.manager.clone_id
       disk_size   = var.env.manager.disk_size
       cores       = var.env.manager.cores
       memory      = var.env.manager.memory
-      dns1        = var.env.dns1
+      dns         = var.env.dns
     }
   ]
 
@@ -30,13 +31,15 @@ locals {
       name        = format("${var.env.worker.name}%02d", i + 1)
       ip          = cidrhost(var.env.cidr, var.env.worker.offset + i)
       target_node = var.env.pve_nodes[i % length(var.env.pve_nodes)]
-      role        = var.env.worker.role
+      role        = "worker"
       clone       = var.env.worker.clone
       clone_id    = var.env.worker.clone_id
       disk_size   = var.env.worker.disk_size
       cores       = var.env.worker.cores
       memory      = var.env.worker.memory
-      dns1        = var.env.dns1
+      dns         = var.env.dns
+
+      keepalived_priority = local.keepalived_priority + 25
     }
   ]
 }

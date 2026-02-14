@@ -5,27 +5,27 @@ job "jellyfin" {
   group "jellyfin" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
-    
+    }
+
     network {
       port "http" { static = 8096 }
     }
 
     volume "jellyfin" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "jellyfin"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
 
     volume "media" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "media"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
@@ -51,7 +51,7 @@ job "jellyfin" {
       driver = "docker"
 
       config {
-        image = "linuxserver/jellyfin:10.9.8"
+        image = "linuxserver/jellyfin:${version}"
         ports = ["http"]
       }
 

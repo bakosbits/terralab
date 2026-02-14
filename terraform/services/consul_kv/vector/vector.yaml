@@ -2,7 +2,7 @@ sources:
   proxmox_journal:
     type: journald
   
-  docker_logs:        # I renamed this to match your Nomad/Docker setup
+  docker_logs:
     type: docker_logs
 
 transforms:
@@ -30,21 +30,32 @@ transforms:
       - docker_logs
     source: |
       .node_name = get_env_var!("PARENT_HOST")
-      .node = .container_labels."com.hashicorp.nomad.node_name" || .node_name
-      .group = .container_labels."com.hashicorp.nomad.task_group_name" || "none"
-      .task = .container_labels."com.hashicorp.nomad.task_name" || "non-nomad"
-      .job = .container_labels."com.hashicorp.nomad.job_name" || "non-nomad"
-      .namespace = .container_labels."com.hashicorp.nomad.namespace" || "default"
-      .is_flap_event = "false"
-      del(.container_labels)
+      .node = .label."com.hashicorp.nomad.node_name"
+      .group = .label."com.hashicorp.nomad.task_group_name"
+      .task = .label."com.hashicorp.nomad.task_name"
+      .job = .label."com.hashicorp.nomad.job_name"
+
+      .ClientHost = "-"
+      .RequestAddr = "-"
+      .RequestMethod = "-"
+      .RequestPath = "-"
+      .DownstreamStatus = "-"
+
+      if .job == "traefik" {
+          parsed, err = parse_json(string!(.message))
+          if err == null {
+              . = merge!(., parsed)
+              del(.message)
+          }
+      }
+      
+      del(.label)
 
 sinks:
-  loki_out:
+  loki_system_logs:
     type: loki
-    # IMPORTANT: Take inputs from BOTH processed streams
     inputs: 
       - process_system_logs
-      - process_nomad_logs
     endpoint: "http://loki.service.consul:3100"
     encoding:
       codec: json
@@ -56,3 +67,23 @@ sinks:
       host: "{{ node_name }}"
       source: "proxmox_host"
       flap: "{{ is_flap_event }}"
+
+  loki_nomad_logs:
+    type: loki
+    inputs: 
+      - process_nomad_logs
+    endpoint: "http://loki.service.consul:3100"
+    encoding:
+      codec: json
+    labels:
+      job: "{{ job }}"
+      task: "{{ task }}"
+      group: "{{ group }}"
+      node: "{{ node }}"
+      host: "{{ node_name }}"
+      client_host: "{{ ClientHost }}"
+      request_address: "{{ RequestAddr }}"
+      request_method: "{{ RequestMethod }}"
+      request_path: "{{ RequestPath }}"
+      http_status: "{{ DownstreamStatus }}"
+      source: "nomad_host"

@@ -7,13 +7,13 @@ job "nginx" {
   group "nginx" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
+    }
 
     network {
       port "http" { to = 80 }
@@ -33,7 +33,7 @@ job "nginx" {
       driver = "docker"
 
       config {
-        image = "linuxserver/nginx:latest"
+        image = "linuxserver/nginx:${version}"
         ports = ["http"]
         volumes = [
           "/mnt/volumes/nginx/config:/config",
@@ -41,9 +41,9 @@ job "nginx" {
       }
 
       env {
-        PUID = "1010"
-        PGID = "1010"
-        TZ   = "Etc/UTC"
+        PUID = "${uid}"
+        PGID = "${gid}"
+        TZ   = "${timezone}"
       }
 
       resources {

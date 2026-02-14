@@ -11,14 +11,14 @@ job "mosquitto" {
     }
 
     volume "mosquitto" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "mosquitto"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
 
     volume "mosquitto-logs" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "mosquitto-logs"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
@@ -37,19 +37,19 @@ job "mosquitto" {
     }
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
-    
+    }
+
     task "mosquitto" {
       driver = "docker"
 
       config {
-        image = "eclipse-mosquitto"
+        image = "eclipse-mosquitto:${version}"
         ports = ["mqtt", "websocket"]
         volumes = [
           "secrets/password.txt:/config/password.txt",
@@ -83,7 +83,7 @@ job "mosquitto" {
       template {
         destination = "local/config/mosquitto.conf"
         data        = <<-EOF
-        {{- key "terralab/mqtt/mosquitto.conf" }}
+        {{- key "${lab_name}/mqtt/mosquitto.conf" }}
         EOF
       }
 

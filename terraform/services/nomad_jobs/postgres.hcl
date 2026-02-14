@@ -5,20 +5,20 @@ job "postgres" {
   group "postgres" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
-    
+    }
+
     network {
       port "postgres" { to = "5432" }
     }
 
     volume "postgres" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "postgres"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
@@ -46,13 +46,13 @@ job "postgres" {
       driver = "docker"
 
       config {
-        image = "postgres:18.1"
+        image = "postgres:${version}"
         ports = ["postgres"]
       }
 
       volume_mount {
         volume      = "postgres"
-        destination = "/var/lib/pgsql/data"
+        destination = "/var/lib/postgresql"
       }
 
       resources {

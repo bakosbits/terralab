@@ -5,27 +5,27 @@ job "traefik" {
   group "traefik" {
 
     update {
-      max_parallel      = 1 
+      max_parallel      = 1
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
       auto_revert       = true
     }
-    
+
     network {
       port "http" { static = "80" }
       port "https" { static = "443" }
     }
 
     volume "certs" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "certs"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
 
     volume "traefik-logs" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "traefik-logs"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
@@ -38,7 +38,6 @@ job "traefik" {
         "traefik.enable=true",
         "traefik.http.routers.api.entrypoints=websecure",
         "traefik.http.routers.api.service=api@internal",
-        "traefik.http.routers.api.rule=Host(`traefik.bakos.me`)",
         "traefik.http.services.dummy.loadbalancer.server.port=9000",
         "traefik.http.routers.api.middlewares=auth@consulcatalog",
       ]
@@ -55,7 +54,7 @@ job "traefik" {
       driver = "docker"
 
       config {
-        image        = "traefik:3.6.6"
+        image        = "traefik:${version}"
         ports        = ["http", "https"]
         network_mode = "host"
         volumes = [
@@ -82,14 +81,14 @@ job "traefik" {
       template {
         destination = "local/traefik.yaml"
         data        = <<-EOF
-        {{- key "terralab/traefik/traefik.yaml" }}
+        {{- key "${lab_name}/traefik/traefik.yaml" }}
         EOF
       }
 
       template {
         destination = "local/dynamic.yaml"
         data        = <<-EOF
-        {{- key "terralab/traefik/dynamic.yaml" }}
+        {{- key "${lab_name}/traefik/dynamic.yaml" }}
         EOF
       }
     }

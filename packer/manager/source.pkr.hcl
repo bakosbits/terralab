@@ -12,27 +12,15 @@ source "proxmox-clone" "server" {
   vm_name              = "manager-tpl"
   template_description = "nomad server template"
   
-  os              = "l26"
-  cpu_type        = "host"
-  sockets         = 1
-  cores           = 2
-  memory          = 2048
-  machine         = "pc"
-  scsi_controller = "virtio-scsi-single"
-  qemu_agent      = true
-  
-  cloud_init              = true
-  cloud_init_storage_pool = "rbd"
+  os              = var.env.os
+  cpu_type        = var.env.cpu_type
+  sockets         = var.env.sockets
+  cores           = var.env.cores
+  memory          = var.env.memory
+  machine         = var.env.machine
+  scsi_controller = var.env.scsi_controller
+  qemu_agent      = var.env.qemu_agent
 
-  vga {
-    type = "std"
-  }
-
-  network_adapters {
-    model    = "virtio"    
-    bridge   = "vmbr2"
-  }
-  
   ssh_username = var.env.ssh_username
   ssh_password = var.env.ssh_password
   ssh_timeout  = "20m"

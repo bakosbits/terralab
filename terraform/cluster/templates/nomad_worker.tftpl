@@ -5,7 +5,10 @@ datacenter = "${datacenter}"
 log_level = "warn"
 
 client {
-    enabled = true   
+    enabled = true
+    meta {
+        keepalived_priority = "${priority}"
+    }       
     options = {
         docker.privileged.enabled = true
         docker.volumes.enabled = true

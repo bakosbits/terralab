@@ -26,15 +26,13 @@ The build process for each image is defined in its respective directory (`base/`
 - A `packer.pkrvars.hcl` file in this directory with the following variables:
 
 ```hcl
-variable "env" {
-  type = object({
-    proxmox_url      = string
-    proxmox_user     = string
-    proxmox_password = string
-    proxmox_node     = string
-    ssh_username     = string
-    ssh_password     = string
-  })
+env = {
+  proxmox_url      = "https://proxmox.example.com:8006/api2/json"
+  proxmox_user     = "user@pam"
+  proxmox_password = "password"
+  proxmox_node     = "node01"
+  ssh_username     = "your_user"
+  ssh_password     = "your_password"
 }
 ```
 

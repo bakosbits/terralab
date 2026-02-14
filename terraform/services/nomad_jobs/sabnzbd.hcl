@@ -5,27 +5,27 @@ job "sabnzbd" {
   group "sabnzbd" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
-    
+    }
+
     network {
       port "http" { to = "8080" }
     }
 
     volume "sabnzbd" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "sabnzbd"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
 
     volume "media" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "media"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
@@ -51,7 +51,7 @@ job "sabnzbd" {
       driver = "docker"
 
       config {
-        image = "linuxserver/sabnzbd:4.3.2"
+        image = "linuxserver/sabnzbd:${version}"
         ports = ["http"]
       }
 

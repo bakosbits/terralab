@@ -4,20 +4,20 @@ job "wikijs" {
   group "wikijs" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
-    
+    }
+
     network {
       port "http" { to = 3000 }
     }
 
     volume "wikijs" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "wikijs"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
@@ -43,7 +43,7 @@ job "wikijs" {
       driver = "docker"
 
       config {
-        image = "linuxserver/wikijs:2.5.303"
+        image = "linuxserver/wikijs:${version}"
         ports = ["http"]
       }
 

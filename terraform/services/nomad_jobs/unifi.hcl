@@ -5,20 +5,20 @@ job "unifi" {
   group "unifi" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
-    
+    }
+
     network {
       port "http" { static = 8443 }
     }
 
     volume "unifi" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "unifi"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
@@ -46,7 +46,7 @@ job "unifi" {
 
       config {
         network_mode = "host"
-        image        = "linuxserver/unifi-network-application:10.0.162"
+        image        = "linuxserver/unifi-network-application:${version}"
         ports        = ["http"]
       }
 

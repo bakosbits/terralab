@@ -5,7 +5,7 @@ job "vector" {
   group "vector" {
 
     update {
-      max_parallel      = 1 
+      max_parallel      = 1
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
@@ -22,8 +22,12 @@ job "vector" {
       }
 
       config {
-        image = "timberio/vector:latest-debian"
+        image = "timberio/vector:${version}"
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> feature/per-volume-node-targeting
         args = ["--config", "/local/vector.yaml"]
 
         volumes = [
@@ -34,14 +38,19 @@ job "vector" {
         ]
       }
 
+      resources {
+        cpu    = "200"
+        memory = "256"
+      }
+
       template {
-        destination = "local/vector.yaml"
+        destination     = "local/vector.yaml"
         left_delimiter  = "[["
         right_delimiter = "]]"
-        data        = <<-EOF
-        [[- key "terralab/vector/vector.yaml" ]]
+        data            = <<-EOF
+        [[- key "${lab_name}/vector/vector.yaml" ]]
       EOF
       }
-    }  
+    }
   }
 }

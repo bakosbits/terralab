@@ -5,31 +5,31 @@ job "influxdb" {
   group "influxdb" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
-    
+    }
+
     network {
       port "http" { to = "8086" }
     }
 
     volume "influxdb" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "influxdb"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
 
     volume "influxdb-config" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "influxdb-config"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
-    }    
+    }
 
     service {
       name = "influxdb"
@@ -51,7 +51,7 @@ job "influxdb" {
       driver = "docker"
 
       config {
-        image = "influxdb:2.7.8-alpine"
+        image = "influxdb:${version}"
         ports = ["http"]
       }
 

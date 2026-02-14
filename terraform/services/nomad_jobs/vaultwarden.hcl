@@ -5,20 +5,20 @@ job "vaultwarden" {
   group "vaultwarden" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
-    
+    }
+
     network {
       port "http" { to = 8089 }
     }
 
     volume "vaultwarden" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "vaultwarden"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
@@ -44,7 +44,7 @@ job "vaultwarden" {
       driver = "docker"
 
       config {
-        image = "vaultwarden/server:1.31.0"
+        image = "vaultwarden/server:${version}"
         ports = ["http"]
       }
 

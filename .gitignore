@@ -1,8 +1,6 @@
 *.tfplan
 *.tfstate
-*.auto.tfvars
 *.backup
-*.pkrvars*
 *.secret
 *.keyring
 .terraform/
@@ -11,5 +9,9 @@
 plans/
 hass/
 ceph/
+<<<<<<< HEAD
 .roo/
+=======
+>>>>>>> feature/per-volume-node-targeting
+CLAUDE.md
 

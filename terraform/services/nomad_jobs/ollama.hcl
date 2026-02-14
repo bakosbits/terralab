@@ -2,30 +2,30 @@ job "ollama" {
   datacenters = ["${datacenter}"]
   type        = "service"
 
-  group "ai" {
+  group "ollama" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
+    }
 
     network {
       port "http" { to = 8080 }
     }
 
     volume "ollama" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "ollama"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
 
     volume "open-webui" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "open-webui"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
@@ -52,7 +52,7 @@ job "ollama" {
       driver = "docker"
 
       config {
-        image = "ghcr.io/open-webui/open-webui:ollama"
+        image = "ghcr.io/open-webui/open-webui:${version}"
         ports = ["http"]
       }
 
@@ -74,7 +74,7 @@ job "ollama" {
 
       resources {
         cpu    = 8000
-        memory = 24576
+        memory = 12288
       }
     }
   }

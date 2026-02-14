@@ -1,0 +1,5 @@
+creation_rules:
+  - path_regex: \.auto\.tfvars$
+    age: "age1hk0xwk0q7er40hltw0tvzk9avzae48s0dcf839t5stdnkyke5a3swv3qhc"
+  - path_regex: \.pkrvars\.hcl$
+    age: "age1hk0xwk0q7er40hltw0tvzk9avzae48s0dcf839t5stdnkyke5a3swv3qhc"

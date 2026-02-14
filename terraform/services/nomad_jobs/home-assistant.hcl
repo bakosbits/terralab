@@ -5,20 +5,20 @@ job "hass" {
   group "hass" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
-    
+    }
+
     network {
       port "http" { static = "8123" }
     }
 
     volume "hass" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "hass"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
@@ -70,102 +70,102 @@ job "hass" {
       }
 
       env {
-        TZ = "America/Denver"
+        TZ = "${timezone}"
       }
 
       resources {
         cpu    = 1000
         memory = 1024
       }
-
+      
       template {
         destination = "local/automations.yaml"
         data        = <<-EOF
-        {{- key "terralab/hass/automations.yaml" }}
+        {{- key "${lab_name}/hass/automations.yaml" }}
         EOF
       }
 
       template {
         destination = "local/binary_sensors.yaml"
         data        = <<-EOF
-        {{- key "terralab/hass/binary_sensors.yaml" }}
+        {{- key "${lab_name}/hass/binary_sensors.yaml" }}
         EOF
       }
 
       template {
         destination = "local/configuration.yaml"
         data        = <<-EOF
-        {{- key "terralab/hass/configuration.yaml" }}
+        {{- key "${lab_name}/hass/configuration.yaml" }}
         EOF
       }
 
       template {
         destination = "local/covers.yaml"
         data        = <<-EOF
-        {{- key "terralab/hass/covers.yaml" }}
+        {{- key "${lab_name}/hass/covers.yaml" }}
         EOF
       }
 
       template {
         destination = "local/customize.yaml"
         data        = <<-EOF
-        {{- key "terralab/hass/customize.yaml" }}
+        {{- key "${lab_name}/hass/customize.yaml" }}
         EOF
       }
 
       template {
         destination = "local/fans.yaml"
         data        = <<-EOF
-        {{- key "terralab/hass/fans.yaml" }}
+        {{- key "${lab_name}/hass/fans.yaml" }}
         EOF
       }
 
       template {
         destination = "local/lights.yaml"
         data        = <<-EOF
-        {{- key "terralab/hass/lights.yaml" }}
+        {{- key "${lab_name}/hass/lights.yaml" }}
         EOF
       }
 
       template {
         destination = "local/google_assistant.yaml"
         data        = <<-EOF
-        {{- key "terralab/hass/google_assistant.yaml" }}
+        {{- key "${lab_name}/hass/google_assistant.yaml" }}
         EOF
       }
 
       template {
         destination = "local/scripts.yaml"
         data        = <<-EOF
-        {{- key "terralab/hass/scripts.yaml" }}
+        {{- key "${lab_name}/hass/scripts.yaml" }}
         EOF
       }
 
       template {
         destination = "local/secrets.yaml"
         data        = <<-EOF
-        {{- key "terralab/hass/secrets.yaml" }}
+        {{- key "${lab_name}/hass/secrets.yaml" }}
         EOF
       }
 
       template {
         destination = "local/service_account.json"
         data        = <<-EOF
-        {{- key "terralab/hass/service_account.json" }}
+        {{- key "${lab_name}/hass/service_account.json" }}
         EOF
       }
 
       template {
         destination = "local/switches.yaml"
         data        = <<-EOF
-        {{- key "terralab/hass/switches.yaml" }}
+        {{- key "${lab_name}/hass/switches.yaml" }}
         EOF
       }
 
       template {
         destination = "local/trusted_proxies.yaml"
         data        = <<-EOF
-        {{- key "terralab/hass/trusted_proxies.yaml" }}
+        {{- key "${lab_name}/hass/trusted_proxies.yaml" }}
         EOF
       }
     }

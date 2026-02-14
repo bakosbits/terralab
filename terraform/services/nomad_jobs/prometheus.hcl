@@ -1,16 +1,16 @@
 job "prometheus" {
   datacenters = ["dc1"]
-  
+
   group "prometheus" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
+    }
 
     network {
       port "http" { static = 9090 }
@@ -24,7 +24,7 @@ job "prometheus" {
     task "prometheus" {
       driver = "docker"
       config {
-        image = "prom/prometheus:latest"
+        image = "prom/prometheus:${version}"
         ports = ["http"]
         args = [
           "--config.file=/etc/prometheus/prometheus.yml",
@@ -32,8 +32,12 @@ job "prometheus" {
         ]
       }
 
+      resources {
+        cpu    = 500
+        memory = 512
+      }
       template {
-        data = <<EOH
+        data        = <<EOH
 global:
   scrape_interval: 15s
 scrape_configs:

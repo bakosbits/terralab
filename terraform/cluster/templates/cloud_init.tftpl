@@ -15,7 +15,7 @@ chpasswd:
     ${ciuser}:${cipassword}
   expire: False
 
-package_update: true
+package_update: false
 
 # Role-specific config (consul, nomad)
 write_files:
@@ -38,14 +38,11 @@ ${indent(6, "\n${nomad_worker_hcl}")}
 runcmd:
 # We only want storage mounted on our worker nodes
 %{ if role == "worker" && use_host_storage ~}
-  - |
-    echo "${storage_mount}" >> /etc/fstab
-    MOUNT_POINT=$(echo '${storage_mount}' | awk '{print $2}')
-    mkdir -p "$MOUNT_POINT"
-    mount "$MOUNT_POINT"
+  -  echo "${storage_mount}" >> /etc/fstab
 %{ endif ~}
-  - echo "nameserver ${dns1}" | sudo tee /etc/resolv.conf
+  - echo "nameserver ${dns}" | sudo tee /etc/resolv.conf
   - systemctl daemon-reload
+  - apt-get update && apt-get upgrade -y
   - systemctl enable --now consul  
-  - systemctl enable --now nomad    
-  - echo "done" > /tmp/cloud-config.done
+  - systemctl enable --now nomad
+  - reboot

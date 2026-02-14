@@ -1,4 +1,6 @@
 variable "env" {
-  type = any 
+  type        = any
+  default     = {}
   description = "A map of all environment variables"
 }
+

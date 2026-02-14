@@ -5,13 +5,13 @@ job "cannery" {
   group "cannery" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }      
+    }
 
     network {
       port "http" { static = "4000" }
@@ -37,13 +37,13 @@ job "cannery" {
       driver = "docker"
 
       config {
-        image = "shibaobun/cannery:latest"
+        image = "shibaobun/cannery:${version}"
         ports = ["http"]
       }
 
       resources {
-        cpu    = 200
-        memory = 256
+        cpu    = 500
+        memory = 512
       }
 
       template {

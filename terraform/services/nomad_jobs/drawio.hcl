@@ -5,14 +5,14 @@ job "drawio" {
   group "drawio" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
-    
+    }
+
     network {
       port "http" { to = 8080 }
     }
@@ -37,7 +37,7 @@ job "drawio" {
       driver = "docker"
 
       config {
-        image = "jgraph/drawio:latest"
+        image = "jgraph/drawio:${version}"
         ports = ["http"]
       }
 

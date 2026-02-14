@@ -5,27 +5,27 @@ job "sonarr" {
   group "sonarr" {
 
     update {
-      canary       = 1 
-      auto_promote = true 
-      auto_revert  = true 
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
       min_healthy_time  = "30s"
       healthy_deadline  = "5m"
       progress_deadline = "10m"
-    }  
-    
+    }
+
     network {
       port "http" { to = 8989 }
     }
 
     volume "sonarr" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "sonarr"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
 
     volume "media" {
-      type            = "${storage_mode}"
+      type            = "${storage_type}"
       source          = "media"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
@@ -51,7 +51,7 @@ job "sonarr" {
       driver = "docker"
 
       config {
-        image = "linuxserver/sonarr:4.0.14"
+        image = "linuxserver/sonarr:${version}"
         ports = ["http"]
       }
 

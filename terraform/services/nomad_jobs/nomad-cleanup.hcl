@@ -13,7 +13,7 @@ job "nomad-cleanup" {
 
       config {
         command = "nomad"
-        args    = ["system", "gc", "--address", "${nomad_url}"]
+        args    = ["system", "gc", "--address", "${nomad_addr}"]
       }
     }
   }
