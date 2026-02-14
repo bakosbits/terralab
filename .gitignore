@@ -3,7 +3,7 @@
 *.backup
 *.secret
 *.keyring
-*.tfvars
+*auto.tfvars
 *.pkrvars
 .terraform/
 .vscode

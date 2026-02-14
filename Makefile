@@ -22,9 +22,9 @@ format:##................Format both terraform and nomad job files
 	cd terraform/services/consul_kv && nomad fmt -recursive -write
 	cd terraform/services/nomad_vars && nomad fmt -recursive -write
 
-.PHONY: generate-tfvars
-generate-tfvars:##.......Generate skeleton tfvars templates from the project
-	@bash scripts/generate-tfvars.sh
+.PHONY: generate-vars
+generate-vars:##.......Generate skeleton tfvars templates from the project
+	@bash scripts/generate-vars.sh
 
 .PHONY: encrypt-tfvars
 encrypt-tfvars:##..........Encrypt tfvars on disk
