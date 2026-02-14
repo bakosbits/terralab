@@ -3,15 +3,12 @@
 *.backup
 *.secret
 *.keyring
+*.tfvars
 .terraform/
 .vscode
 .ssh/
 plans/
 hass/
 ceph/
-<<<<<<< HEAD
-.roo/
-=======
->>>>>>> feature/per-volume-node-targeting
 CLAUDE.md
 

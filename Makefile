@@ -1,12 +1,12 @@
 # include .env
 
 PACKER_VARS  := packer/packer.pkrvars.hcl
-CLUSTER_VARS := terraform/cluster/cluster.auto.tfvars
-SERVICE_VARS := terraform/services/services.auto.tfvars \
-                terraform/services/consul_kv.auto.tfvars \
-                terraform/services/nomad_jobs.auto.tfvars \
-                terraform/services/nomad_vars.auto.tfvars \
-                terraform/services/volumes.auto.tfvars
+CLUSTER_VARS := terraform/cluster/var.cluster.auto.tfvars
+SERVICE_VARS := terraform/services/var.services.auto.tfvars \
+                terraform/services/var.consul_kv.auto.tfvars \
+                terraform/services/var.nomad_jobs.auto.tfvars \
+                terraform/services/var.nomad_vars.auto.tfvars \
+                terraform/services/var.volumes.auto.tfvars
 
 help:##..................Show the help
 	@e=cho ""

@@ -26,7 +26,7 @@ log() { echo "  → $1"; }
 # ─── 1. Generate nomad_jobs.auto.tfvars ──────────────────────────────────────
 
 generate_nomad_jobs() {
-  local out="$SERVICES_TFVARS/nomad_jobs.auto.tfvars"
+  local out="$SERVICES_TFVARS/var.nomad_jobs.auto.tfvars"
   log "Scanning $JOBS_DIR for job definitions..."
 
   # Collect all job filenames (without extension)
@@ -79,7 +79,7 @@ FOOTER
 # ─── 2. Generate consul_kv.auto.tfvars ──────────────────────────────────────
 
 generate_consul_kv() {
-  local out="$SERVICES_TFVARS/consul_kv.auto.tfvars"
+  local out="$SERVICES_TFVARS/var.consul_kv.auto.tfvars"
   log "Scanning $CONSUL_KV_DIR for configuration templates..."
 
   cat > "$out" <<'HEADER'
@@ -125,7 +125,7 @@ HEADER
 # ─── 3. Generate volumes.auto.tfvars ────────────────────────────────────────
 
 generate_volumes() {
-  local out="$SERVICES_TFVARS/volumes.auto.tfvars"
+  local out="$SERVICES_TFVARS/var.volumes.auto.tfvars"
   log "Scanning $JOBS_DIR for volume declarations..."
 
   # Extract unique volume names from all job files
@@ -162,7 +162,7 @@ EOF
 # ─── 4. Generate nomad_vars.auto.tfvars ─────────────────────────────────────
 
 generate_nomad_vars() {
-  local out="$SERVICES_TFVARS/nomad_vars.auto.tfvars"
+  local out="$SERVICES_TFVARS/var.nomad_vars.auto.tfvars"
   log "Scanning $JOBS_DIR for nomadVar references..."
 
   # Extract unique nomadVar path segments from all job files
@@ -198,7 +198,7 @@ EOF
 # ─── 5. Generate services.auto.tfvars ─────────────────────────────────────────────
 
 generate_env() {
-  local out="$SERVICES_TFVARS/services.auto.tfvars"
+  local out="$SERVICES_TFVARS/var.services.auto.tfvars"
   log "Generating environment variable template..."
 
   cat > "$out" <<'EOF'
@@ -234,7 +234,7 @@ EOF
 # ─── 6. Generate cluster.auto.tfvars ────────────────────────────────────────
 
 generate_cluster() {
-  local out="$CLUSTER_TFVARS/cluster.auto.tfvars"
+  local out="$CLUSTER_TFVARS/var.cluster.auto.tfvars"
   log "Generating cluster variable template..."
 
   cat > "$out" <<'EOF'
