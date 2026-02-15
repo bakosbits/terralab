@@ -52,6 +52,7 @@ job "ollama" {
       driver = "docker"
 
       config {
+        network_mode = "host"
         image = "ghcr.io/open-webui/open-webui:${version}"
         ports = ["http"]
       }
@@ -73,8 +74,8 @@ job "ollama" {
       }
 
       resources {
-        cpu    = 8000
-        memory = 12288
+        cpu    = 16000
+        memory = 24576
       }
     }
   }

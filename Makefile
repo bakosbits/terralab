@@ -26,12 +26,12 @@ format:##................Format both terraform and nomad job files
 generate-vars:##.......Generate skeleton tfvars templates from the project
 	@bash scripts/generate-vars.sh
 
-.PHONY: encrypt-tfvars
-encrypt-tfvars:##..........Encrypt tfvars on disk
+.PHONY: encrypt-vars
+encrypt-vars:##..........Encrypt tfvars on disk
 	@for f in $(PACKER_VARS) $(CLUSTER_VARS) $(SERVICE_VARS); do sops -e -i $$f; done
 
-.PHONY: decrypt-tfvars
-decrypt-tfvars:##..........Decrypt tfvars on disk
+.PHONY: decrypt-vars
+decrypt-vars:##..........Decrypt tfvars on disk
 	@for f in $(PACKER_VARS) $(CLUSTER_VARS) $(SERVICE_VARS); do sops -d -i $$f; done
 
 .PHONY: init-cluster

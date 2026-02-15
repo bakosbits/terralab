@@ -17,9 +17,9 @@ job "samba" {
       port "http" { static = "445" }
     }
 
-    volume "media" {
+    volume "projects" {
       type            = "${storage_type}"
-      source          = "media"
+      source          = "projects"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
@@ -44,7 +44,7 @@ job "samba" {
       }
 
       volume_mount {
-        volume      = "media"
+        volume      = "projects"
         destination = "/storage"
       }
 
