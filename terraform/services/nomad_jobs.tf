@@ -8,7 +8,7 @@ locals {
 
 resource "nomad_job" "primary" {
   for_each = var.nomad_jobs.primary.jobs
-  jobspec  = templatefile("${local.jobs}/${each.key}.${local.vars.nomad_job_ext}", merge(local.vars, each.value))
+  jobspec  = templatefile("${local.jobs}/${each.key}.hcl", merge(local.vars, each.value))
   detach   = false
   depends_on = [
     nomad_dynamic_host_volume_registration.dynamic_volumes,
@@ -24,7 +24,7 @@ resource "nomad_job" "primary" {
 
 resource "nomad_job" "secondary" {
   for_each   = var.nomad_jobs.secondary.jobs
-  jobspec    = templatefile("${local.jobs}/${each.key}.${local.vars.nomad_job_ext}", merge(local.vars, each.value))
+  jobspec    = templatefile("${local.jobs}/${each.key}.hcl", merge(local.vars, each.value))
   detach     = false
   depends_on = [nomad_job.primary]
   timeouts {
@@ -35,7 +35,7 @@ resource "nomad_job" "secondary" {
 
 resource "nomad_job" "tertiary" {
   for_each   = var.nomad_jobs.tertiary.jobs
-  jobspec    = templatefile("${local.jobs}/${each.key}.${local.vars.nomad_job_ext}", merge(local.vars, each.value))
+  jobspec    = templatefile("${local.jobs}/${each.key}.hcl", merge(local.vars, each.value))
   detach     = true
   depends_on = [nomad_job.secondary]
   timeouts {

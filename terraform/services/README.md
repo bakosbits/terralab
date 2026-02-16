@@ -24,26 +24,31 @@ Service configurations are managed using a combination of Terraform variables an
 
 ## Configuration
 
-All service definitions, configurations, and variables are managed through `*.auto.tfvars` files in this directory. This allows for a modular and easily manageable approach to service deployment. Complete working examples are located in the `examples/` directory.
+Service definitions are managed through a combination of `*.auto.tfvars` files and auto-discovered directory structures. Complete working examples are located in the `examples/` directory.
 
 ### `*.auto.tfvars`
 
-There are a total of 5 tfvars files used to define services:
+There are 3 tfvars files used to define services:
   1. **auto.tfvars**: General environment variables and template variables
   2. **nomad_jobs.auto.tfvars**: Defines nomad jobs grouped by deployment tier (primary, secondary, tertiary)
-  3. **consul_kv.auto.tfvars**: Defines Consul key-value configuration files
-  4. **nomad_vars.auto.tfvars**: Defines Nomad Variables (secrets, environment variables)
-  5. **volumes.auto.tfvars**: Defines CSI and Dynamic Host volumes    
+  3. **volumes.auto.tfvars**: Defines CSI and Dynamic Host volumes
 
-These five files work together to define your deployment without having to alter the Terraform code. They give you the following capabilities:
+### Auto-Discovered Directories
+
+Two directories are auto-discovered by Terraform using `fileset()` — no tfvars entries are needed:
+
+  - **`consul_kv/{service}/{file}`**: Configuration files stored in Consul KV. All files in each service subdirectory are automatically discovered and templated with `local.vars`.
+  - **`nomad_vars/{service}.tftpl`**: Nomad variables (secrets, environment variables). Each `.tftpl` file uses a `KEY : VALUE` line format and is templated with `local.vars`.
+
+Together these give you the following capabilities:
 
 * Alter vm resources
 * Increase/decrease the size of the cluster
 * Choose from CSI or dynamic host volumes
 * Define the jobs that run in your lab
 * Manage job specifics such as Docker image version, cpu, ram, etc consumed by a job
-* Manage sensitive variables securely
-* Manage job assets without have to redeploy the job
+* Manage sensitive variables securely via templated nomad_vars
+* Manage job assets without having to redeploy the job
 
 ### `tfvars` snippets
 
@@ -80,33 +85,37 @@ nomad_jobs = {
 }
 ```
 
-#### `consul_kv`
+#### `consul_kv/` directory
 
-This map defines the configuration files to be stored in Consul KV.
+Configuration files for Consul KV are auto-discovered from the `consul_kv/` directory. Create a subdirectory per service and place config files inside:
 
-```hcl
-consul_kv = {
-  "traefik" = {
-    filenames   = ["traefik.yaml", "dynamic.yaml"]
-  }
-  "loki" = {
-    filenames   = ["loki.yaml"]
-  }
-}
+```
+consul_kv/
+  traefik/
+    traefik.yaml
+    dynamic.yaml
+  loki/
+    loki.yaml
 ```
 
-#### `nomad_vars`
+Files are processed with `templatefile()` and can use variables from `local.vars` (e.g. `${domain}`).
 
-This map is used for Nomad variables, such as secrets.
+#### `nomad_vars/` directory
 
-```hcl
-nomad_vars = {
-  "secrets" = {
-    vars = {
-      "my_secret" = "super-secret-value"
-    }
-  }
-}
+Nomad variables (secrets, environment variables) are auto-discovered from `.tftpl` files in the `nomad_vars/` directory. Each file maps to a Nomad variable path at `nomad/jobs/{filename}`:
+
+```
+nomad_vars/
+  postgres.tftpl
+  grafana.tftpl
+```
+
+Files use a `KEY : VALUE` line format and are templated with `local.vars`:
+
+```
+POSTGRES_USER     : postgres
+POSTGRES_PASSWORD : ${postgres_password}
+POSTGRES_DB       : postgres
 ```
 
 #### `volumes`
@@ -151,9 +160,7 @@ This will deploy all the services defined in your `services.auto.tfvars` file.
 
 1.  **Create a Nomad Job File**: In `nomad_jobs/`, create a new `.hcl` file for your service.
 2.  **Add Configuration to Consul KV (Optional)**: If your service needs configuration files, add them to a new subdirectory in `consul_kv/`.
-3.  **Define the Service in `nomad_jobs.auto.tfvars`**:
-    - Add your service to the appropriate deployment tier (primary, secondary, or tertiary) in the `nomad_jobs` map.
-    - If you added Consul KV configs, create an entry in the `consul_kv.auto.tfvars` map.
-    - If your service needs a volume, add it to the `volumes.auto.tfvars` map.
-    - If you need to store env or sensitive data, add it to the `nomad_vars.auto.tfvars` map.
-4.  **Deploy**: Run `make deploy-services`.
+3.  **Define the Service in `nomad_jobs.auto.tfvars`**: Add your service to the appropriate deployment tier (primary, secondary, or tertiary) in the `nomad_jobs` map.
+4.  **Add Nomad Variables (Optional)**: If your service needs secrets or environment variables, create a `nomad_vars/{service}.tftpl` file.
+5.  **Add Volumes (Optional)**: If your service needs a volume, add it to the `volumes.auto.tfvars` map.
+6.  **Deploy**: Run `make deploy-services`.

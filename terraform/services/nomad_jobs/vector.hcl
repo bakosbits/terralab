@@ -23,7 +23,7 @@ job "vector" {
 
       config {
         image = "timberio/vector:${version}"
-        args = ["--config", "/local/vector.yaml"]
+        args  = ["--config", "/local/vector.yaml"]
 
         volumes = [
           "/var/run/docker.sock:/var/run/docker.sock:ro",

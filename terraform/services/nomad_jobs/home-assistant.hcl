@@ -77,7 +77,7 @@ job "hass" {
         cpu    = 1000
         memory = 1024
       }
-      
+
       template {
         destination = "local/automations.yaml"
         data        = <<-EOF

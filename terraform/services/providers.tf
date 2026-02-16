@@ -13,7 +13,7 @@ terraform {
 
 provider "nomad" {
   address   = var.env.nomad_addr
-  secret_id = var.env.secret_id
+  secret_id = var.env.nomad_secret_id
 }
 
 provider "consul" {

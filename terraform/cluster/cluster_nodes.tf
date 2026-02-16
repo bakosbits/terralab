@@ -3,7 +3,7 @@
 locals {
 
   keepalived_priority = 100
-  
+
   all_nodes = {
     for node in concat(local.manager_nodes, local.worker_nodes) : node.name => node
   }

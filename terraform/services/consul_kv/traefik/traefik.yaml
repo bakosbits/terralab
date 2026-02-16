@@ -19,6 +19,17 @@ entryPoints:
   postgres:
     address: :5432
 
+# uncomment and populate if using LetsEncrypt
+# certificatesResolvers:
+#   myresolver:
+#     acme:
+#       email: "your-email@example.com"
+#       storage: "/letsencrypt/acme.json"
+#       dnsChallenge:
+#         provider: "cloudflare"
+#         resolvers:
+#           - "1.1.1.1:53"
+
 providers:
   file:
     directory: /etc/traefik/dynamic
@@ -42,6 +53,7 @@ api:
   debug: false
   disabledashboardad: true
 
+# logs are sent to loki
 log:
   level: INFO
 #  filePath: "/etc/traefik/logs/traefik.log"
@@ -54,3 +66,4 @@ accessLog:
       - 200
       - 300-302
       - 400-404
+      - 500

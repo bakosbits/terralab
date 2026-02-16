@@ -34,7 +34,7 @@ job "keepalived" {
         data        = <<-EOH
           KEEPALIVED_ROUTER_ID: 75
           KEEPALIVED_VIRTUAL_IPS:
-            - ${virtual_ip}/24
+            - ${keepalived_vip}/24
           KEEPALIVED_UNICAST_PEERS:
           {{- range service "coredns" }}
             {{- if ne .Address (env "attr.unique.network.ip-address") }}
@@ -42,7 +42,7 @@ job "keepalived" {
             {{- end }}
           {{- end }}
           KEEPALIVED_PRIORITY: {{ env "PRIORITY" }}
-          KEEPALIVED_INTERFACE: {{ sockaddr "GetPrivateInterfaces | include \"network\" \"${cidr}\" | attr \"name\"" }}
+          KEEPALIVED_INTERFACE: {{ sockaddr "GetDefaultInterfaces | attr \"name\"" }}
         EOH
       }
     }

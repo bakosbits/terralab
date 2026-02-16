@@ -31,18 +31,18 @@ job "ollama" {
       access_mode     = "single-node-writer"
     }
 
-
     service {
-      name = "ollama"
+      name = "open-webui"
       port = "http"
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.open-webui.entrypoints=websecure",
+        "traefik.http.routers.open-webui.rule=Host(`ai.${domain}`)",        
       ]
 
       check {
         type     = "http"
-        path     = "/health"
+        path     = "/"
         interval = "20s"
         timeout  = "5s"
       }
@@ -52,7 +52,6 @@ job "ollama" {
       driver = "docker"
 
       config {
-        network_mode = "host"
         image = "ghcr.io/open-webui/open-webui:${version}"
         ports = ["http"]
       }
@@ -74,8 +73,8 @@ job "ollama" {
       }
 
       resources {
-        cpu    = 16000
-        memory = 24576
+        cpu    = 10000
+        memory = 12288
       }
     }
   }

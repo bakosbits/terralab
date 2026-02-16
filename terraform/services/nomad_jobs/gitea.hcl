@@ -36,7 +36,7 @@ job "gitea" {
       port = "http"
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.gitea.entrypoints=websecure",
+        "traefik.http.routers.gitea.entrypoints=websecure"
       ]
 
       check {

@@ -14,7 +14,7 @@ job "privatebin" {
     }
 
     network {
-      port "http" { static = 32400 }
+      port "http" { to = 8080}
     }
 
     volume "privatebin" {
@@ -30,6 +30,7 @@ job "privatebin" {
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.privatebin.entrypoints=websecure",
+        "traefik.http.routers.privatebin.rule=Host(`bin.${domain}`)",        
       ]
 
       check {
@@ -45,7 +46,6 @@ job "privatebin" {
 
       config {
         image        = "privatebin/fs:${version}"
-        network_mode = "host"
         ports        = ["http"]
       }
 

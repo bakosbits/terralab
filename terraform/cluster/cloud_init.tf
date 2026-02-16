@@ -7,7 +7,7 @@ locals {
 
   vars = {
     retry_join_json = local.retry_join_json,
-    priority        = local.keepalived_priority    
+    priority        = local.keepalived_priority
     datacenter      = env.var.datacenter,
     region          = env.var.region,
     consul_domain   = env.var.consul_domain

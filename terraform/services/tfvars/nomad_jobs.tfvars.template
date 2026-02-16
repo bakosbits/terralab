@@ -12,13 +12,16 @@ nomad_jobs = {
       code-server = { version = "latest" }
       coredns = { version = "latest" }
       cyberchef = { version = "latest" }
+      data-node = {}
       deluge = { version = "latest" }
       docker-cleanup = {}
+      docker-registry = {}
       drawio = { version = "latest" }
       emulatorjs = { version = "latest" }
       flaresolverr = { version = "latest" }
       gitea = { version = "latest" }
       grafana = { version = "latest" }
+      graylog = {}
       home-assistant = {}
       influxdb = { version = "latest" }
       jellyfin = { version = "latest" }
@@ -26,7 +29,9 @@ nomad_jobs = {
       keepalived = {}
       loki = { version = "latest" }
       matter = { version = "latest" }
-      mongodb8 = { version = "latest" }
+      mongodb6 = {}
+      mongodb7 = {}
+      mongodb = { version = "latest" }
       mosquitto = { version = "latest" }
       motioneye = { version = "latest" }
       n8n = { version = "latest" }

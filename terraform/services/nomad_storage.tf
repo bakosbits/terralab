@@ -30,7 +30,7 @@ locals {
   # If a volume specifies nodes, only register on those nodes.
   # Otherwise, register on all worker nodes.
   host_volumes = merge([
-    for vol_key, vol_value in var.volumes : {
+    for vol_key, vol_value in var.storage.volumes : {
       for node_id in(
         vol_value.nodes != null
         ? [for n in vol_value.nodes : local.nomad_node_id_by_name[n] if contains(keys(local.nomad_node_id_by_name), n)]
@@ -39,7 +39,7 @@ locals {
       "${node_id}-${vol_key}" => {
         node_id     = node_id
         name        = vol_key
-        host_path   = "${var.env.host_storage_path}/${vol_value.external_id}"
+        host_path   = "${var.storage.mount_point}/${vol_value.external_id}"
         access_mode = vol_value.access_mode
       }
     }
@@ -47,8 +47,8 @@ locals {
 }
 
 resource "nomad_dynamic_host_volume_registration" "dynamic_volumes" {
-  # Only run this if our storage mode is != NFS
-  for_each = var.env.storage_type == "host" ? local.host_volumes : {}
+  # Only run this if our storage mode is != csi
+  for_each = var.storage.type == "host" ? local.host_volumes : {}
 
   node_id   = each.value.node_id
   name      = each.value.name
@@ -65,10 +65,10 @@ resource "nomad_dynamic_host_volume_registration" "dynamic_volumes" {
 
 
 resource "nomad_csi_volume_registration" "nfs_volumes" {
-  for_each    = var.env.storage_type == "csi" ? var.volumes : {}
+  for_each    = var.storage.type == "csi" ? var.storage.volumes : {}
   plugin_id   = "nfs"
   name        = each.key
-  volume_id   = each.value.volume_id
+  volume_id   = each.key
   external_id = each.value.external_id
 
   capability {
