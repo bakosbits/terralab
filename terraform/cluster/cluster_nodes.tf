@@ -40,7 +40,8 @@ locals {
       memory      = var.env.worker.memory
       dns         = var.env.dns
 
-      keepalived_priority = local.keepalived_priority + 25
+      keepalived_priority = 100 + (i * 25)
+    
     }
   ]
 }

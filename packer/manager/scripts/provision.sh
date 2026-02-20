@@ -12,9 +12,6 @@ sudo apt-get install -y consul nomad
 sudo rm /etc/consul.d/* /etc/nomad.d/*
 sudo systemctl disable consul nomad
 
-# Enable cloud-init
-sudo rm -f /etc/cloud/cloud-init.disabled
-
 # Disable root
 sudo /usr/bin/passwd -l root
 sudo sed -e 's/PermitRootLogin yes/#PermitRootLogin prohibit-password/' -i /etc/ssh/sshd_config
@@ -24,6 +21,10 @@ sudo truncate -s 0 /etc/hostname
 sudo truncate -s 0 /etc/machine-id
 [ -f /var/lib/dbus/machine-id ] && sudo rm -f /var/lib/dbus/machine-id
 sudo ln -s /etc/machine-id /var/lib/dbus/machine-id
+
+# Clean cloud-init state and re-enable for first VM boot
+sudo cloud-init clean
+sudo rm -f /etc/cloud/cloud-init.disabled
 
 # Cleanup tmp
 sudo find /tmp -type f -atime +10 -delete

@@ -1,4 +1,3 @@
-# Comment out or remove this tls section if using LetsEncrypt
 tls:
   certificates:
     - certFile: "/etc/traefik/certs/${domain}.fullchain"
@@ -8,6 +7,7 @@ tls:
       defaultCertificate:
         certFile: "/etc/traefik/certs/${domain}.fullchain"
         keyFile: "/etc/traefik/certs/${domain}.key"
+
 
 http:
   routers:

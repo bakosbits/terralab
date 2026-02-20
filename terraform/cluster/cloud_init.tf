@@ -8,9 +8,8 @@ locals {
   vars = {
     retry_join_json = local.retry_join_json,
     priority        = local.keepalived_priority
-    datacenter      = env.var.datacenter,
-    region          = env.var.region,
-    consul_domain   = env.var.consul_domain
+    datacenter      = var.env.datacenter,
+    consul_domain   = var.env.consul_domain
   }
 
   nomad_manager_hcl  = templatefile("${path.module}/templates/nomad_manager.tftpl", local.vars)

@@ -28,7 +28,6 @@ tts:
 ffmpeg:
   ffmpeg_bin: /usr/bin/ffmpeg
 
-device_tracker: !include device_tracker.yaml
 binary_sensor: !include binary_sensors.yaml
 fan: !include fans.yaml
 light: !include lights.yaml

@@ -15,20 +15,17 @@ entryPoints:
     proxyProtocol:
       trustedIPs:
         - 192.168.168.1
+        - 192.168.2.0/24
+        - 127.0.0.1
+
+    forwardedHeaders:
+      trustedIPs:
+        - 192.168.168.1
+        - 192.168.2.0/24
+        - 127.0.0.1
 
   postgres:
     address: :5432
-
-# uncomment and populate if using LetsEncrypt
-# certificatesResolvers:
-#   myresolver:
-#     acme:
-#       email: "your-email@example.com"
-#       storage: "/letsencrypt/acme.json"
-#       dnsChallenge:
-#         provider: "cloudflare"
-#         resolvers:
-#           - "1.1.1.1:53"
 
 providers:
   file:

@@ -1,16 +1,15 @@
 locals {
   defaults = {
     lab_name          = "homelab"
-    consul_domain     = "service.consul"
+    consul_domain     = "consul"
+    service_domain     = "service.consul"
     datacenter        = "dc1"
-    region            = "global"
     timezone          = "Etc/UTC"
     uid               = 1000
     gid               = 1000
   }
   vars = merge(local.defaults, var.env)
 }
-
 
 variable "env" {
   description = "A map of all environment variables"
@@ -27,17 +26,16 @@ variable "storage" {
       volume_id   = string
       external_id = string
       access_mode = string
+      # Wrap the type in optional()
+      nodes       = optional(list(string)) 
     }))
   })
   description = "Configuration for host storage and volume mapping"
-}  
-
-
-variable "nomad_jobs" {
-  type = map(object({
-    jobs = map(any)
-  }))
-  description = "A map of nomad jobs in deployment order"
 }
 
-
+# variable "nomad_jobs" {
+#   type = map(object({
+#     jobs = map(any)
+#   }))
+#   description = "A map of nomad jobs in deployment order"
+# }

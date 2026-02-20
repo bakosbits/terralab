@@ -12,7 +12,7 @@ SERVICES_DIR="$ROOT/terraform/services"
 CLUSTER_DIR="$ROOT/terraform/cluster"
 PACKER_DIR="$ROOT/packer"
 JOBS_DIR="$SERVICES_DIR/nomad_jobs"
-CONSUL_KV_DIR="$SERVICES_DIR/consul_kv"
+CONSUL_KV_DIR="$SERVICES_DIR/consulkv"
 NOMAD_VARS_DIR="$SERVICES_DIR/nomad_vars"
 
 # Output directories
@@ -174,8 +174,7 @@ generate_cluster() {
 
   cat > "$out" <<'EOF'
 env = {
-  datacenter      = "dc1"
-  region          = "global"  
+  datacenter      = "dc1" 
   cidr            = "192.168.X.0/24"
   ciuser          = "CHANGEME"
   cipassword      = "CHANGEME"

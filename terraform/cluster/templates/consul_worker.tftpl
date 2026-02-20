@@ -3,7 +3,5 @@ client_addr = "0.0.0.0"
 bind_addr   = "{{ GetPrivateIP }}"
 data_dir    = "/opt/consul"
 datacenter  = "${datacenter}"
-domain      = "${consul_domain}" 
-region      = "${region}"
 retry_join  = ${retry_join_json}
 log_level   = "warn"

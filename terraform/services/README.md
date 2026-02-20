@@ -60,7 +60,7 @@ This map defines the Nomad jobs to be deployed. The jobs are grouped into catego
 nomad_jobs = {
   primary = {
     jobs = {
-      "storage-controller" = {
+      "storage_controller" = {
         version = "latest"
         cpu     = 500
         ram     = 512
