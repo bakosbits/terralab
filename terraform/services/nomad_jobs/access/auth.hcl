@@ -42,7 +42,7 @@ job "auth" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/thomseddon/traefik-forward-auth:2.2.0"
+        image = "thomseddon/traefik-forward-auth:2.2.0"
         ports = ["http"]
       }
 

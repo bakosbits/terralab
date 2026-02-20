@@ -33,9 +33,9 @@ variable "storage" {
   description = "Configuration for host storage and volume mapping"
 }
 
-# variable "nomad_jobs" {
-#   type = map(object({
-#     jobs = map(any)
-#   }))
-#   description = "A map of nomad jobs in deployment order"
-# }
+variable "nomad_jobs" {
+  type = map(object({
+    jobs = list(string)
+  }))
+  description = "A map of nomad jobs in deployment order"
+}

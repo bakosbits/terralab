@@ -4,6 +4,15 @@ job "mosquitto" {
 
   group "mosquitto" {
 
+    update {
+      canary            = 1
+      auto_promote      = true
+      auto_revert       = true
+      min_healthy_time  = "30s"
+      healthy_deadline  = "5m"
+      progress_deadline = "10m"
+    }
+
     network {
       port "mqtt" { static = 1883 }
       port "websocket" { static = 9001 }
@@ -34,7 +43,7 @@ job "mosquitto" {
 
 
     service {
-      name = "mosquitto"
+      name = "mqtt"
       port = "mqtt"
 
       check {
@@ -45,20 +54,11 @@ job "mosquitto" {
       }
     }
 
-    update {
-      canary            = 1
-      auto_promote      = true
-      auto_revert       = true
-      min_healthy_time  = "30s"
-      healthy_deadline  = "5m"
-      progress_deadline = "10m"
-    }
-
     task "mosquitto" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/library/eclipse-mosquitto:2.1.2-alpine"
+        image = "${registry_cache}/library/eclipse-mosquitto:alpine"
         ports = ["mqtt", "websocket"]
         volumes = [
           "secrets/password.txt:/mosquitto/config/password.txt",

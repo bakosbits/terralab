@@ -53,9 +53,9 @@ job "wikijs" {
       }
 
       env {
-        PUID = 1010
-        PGID = 1010
-        TZ   = "America/Denver"
+        PUID = "${uid}"
+        PGID = "${gid}"
+        TZ   = "${timezone}"
       }
 
       resources {
