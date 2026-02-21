@@ -39,8 +39,8 @@ job "keepalived" {
         data        = <<-EOH
           KEEPALIVED_ROUTER_ID: 75
           KEEPALIVED_VIRTUAL_IPS:
-            - ${coredns_vip}/24
-            - ${traefik_vip}/24
+            - ${keepalived_vip}/24
+            - ${keepalived_vip}/24
           KEEPALIVED_UNICAST_PEERS:
           {{- range service "coredns" }}
             {{- if ne .Address (env "attr.unique.network.ip-address") }}

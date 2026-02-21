@@ -31,7 +31,6 @@ variable "env" {
     disks = object({
       disk_size    = string
       storage_pool = string
-      type         = string
     })
 
     boot = object({

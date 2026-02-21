@@ -15,7 +15,7 @@ chpasswd:
     ${ciuser}:${cipassword}
   expire: False
 
-package_update: false
+package_update: true
 
 # Role-specific config (consul, nomad)
 write_files:
@@ -42,7 +42,5 @@ runcmd:
 %{ endif ~}
   - echo "nameserver ${dns}" | sudo tee /etc/resolv.conf
   - systemctl daemon-reload
-  - apt-get update && apt-get upgrade -y
   - systemctl enable --now consul  
   - systemctl enable --now nomad
-  - reboot

@@ -7,10 +7,14 @@ export DEBIAN_FRONTEND=noninteractive
 # Install consul and nomad
 sudo apt-get update
 sudo apt-get install -y consul nomad
+sudo apt-get upgrade -y
 
 # Configure consul and nomad
 sudo rm /etc/consul.d/* /etc/nomad.d/*
 sudo systemctl disable consul nomad
+
+# Set nameserver
+echo "nameserver 192.168.2.1" | sudo tee /etc/resolv.conf
 
 # Disable root
 sudo /usr/bin/passwd -l root

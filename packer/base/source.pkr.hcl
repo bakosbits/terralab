@@ -34,9 +34,7 @@ source "proxmox-iso" "base" {
 
   disks {
     disk_size         = var.env.disks.disk_size
-    disk_type         = var.env.disks.disk_type
     storage_pool      = var.env.disks.storage_pool
-    type              = var.env.disks.storage_pool_type
   }
 
   boot_iso {

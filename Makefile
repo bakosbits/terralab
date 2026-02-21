@@ -68,10 +68,10 @@ deploy-services:##........Deploy all Nomad job groups sequentially
 
 .PHONY: build-%
 build-%:##...............Build an image with packer
-	cd packer/$* && packer build -var-file=../var.packer.pkrvars .
+	cd packer/$* && packer build -var-file=../var.packer.pkrvars.hcl .
 
 .PHONY: build-all
 build-all:##.............Build all images with packer
-	cd packer/base && packer build -var-file=../var.packer.pkrvars . && \
-	cd ../manager && packer build -var-file=../var.packer.pkrvars . && \
-	cd ../worker && packer build -var-file=../var.packer.pkrvars .
+	cd packer/base && packer build -var-file=../var.packer.pkrvars.hcl . && \
+	cd ../manager && packer build -var-file=../var.packer.pkrvars.hcl . && \
+	cd ../worker && packer build -var-file=../var.packer.pkrvars.hcl .

@@ -31,7 +31,7 @@ Service definitions are managed through a combination of `*.auto.tfvars` files a
 There are 3 tfvars files used to define services:
   1. **auto.tfvars**: General environment variables and template variables
   2. **nomad_jobs.auto.tfvars**: Defines nomad jobs grouped by deployment tier (primary, secondary, tertiary)
-  3. **volumes.auto.tfvars**: Defines CSI and Dynamic Host volumes
+  3. **storage.auto.tfvars**: Defines storage type (host/CSI), mount configuration, and volumes
 
 ### Auto-Discovered Directories
 
@@ -118,16 +118,22 @@ POSTGRES_PASSWORD : ${postgres_password}
 POSTGRES_DB       : postgres
 ```
 
-#### `volumes`
+#### `storage`
 
-This map defines the CSI volumes to be created for your services.
+This map defines storage type, mount configuration, and volumes for your services.
 
 ```hcl
-volumes = {
-  "loki" = {
-    volume_id   = "loki"
-    external_id = "loki"
-    access_mode = "single-node-writer"
+storage = {
+  type        = "host"
+  mount_point = "/mnt"
+  nfs_server  = ""
+
+  volumes = {
+    "loki" = {
+      volume_id   = "loki"
+      external_id = "loki"
+      access_mode = "single-node-writer"
+    }
   }
 }
 ```
@@ -162,5 +168,5 @@ This will deploy all the services defined in your `services.auto.tfvars` file.
 2.  **Add Configuration to Consul KV (Optional)**: If your service needs configuration files, add them to a new subdirectory in `consul_kv/`.
 3.  **Define the Service in `nomad_jobs.auto.tfvars`**: Add your service to the appropriate deployment tier (primary, secondary, or tertiary) in the `nomad_jobs` map.
 4.  **Add Nomad Variables (Optional)**: If your service needs secrets or environment variables, create a `nomad_vars/{service}.tftpl` file.
-5.  **Add Volumes (Optional)**: If your service needs a volume, add it to the `volumes.auto.tfvars` map.
+5.  **Add Volumes (Optional)**: If your service needs a volume, add it to the `storage.auto.tfvars` map under `storage.volumes`.
 6.  **Deploy**: Run `make deploy-services`.

@@ -24,13 +24,6 @@ job "traefik" {
       access_mode     = "single-node-writer"
     }
 
-    volume "traefik-logs" {
-      type            = "${storage_type}"
-      source          = "traefik-logs"
-      attachment_mode = "file-system"
-      access_mode     = "single-node-writer"
-    }
-
     service {
       name = "traefik"
       port = "http"
