@@ -1,5 +1,5 @@
 env = {
-  datacenter      = "dc1"
+  datacenter      = "dc1" 
   cidr            = "192.168.X.0/24"
   ciuser          = "CHANGEME"
   cipassword      = "CHANGEME"

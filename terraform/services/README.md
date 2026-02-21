@@ -30,7 +30,7 @@ Service definitions are managed through a combination of `*.auto.tfvars` files a
 
 There are 3 tfvars files used to define services:
   1. **auto.tfvars**: General environment variables and template variables
-  2. **nomad_jobs.auto.tfvars**: Defines nomad jobs grouped by deployment tier (primary, secondary, tertiary)
+  2. **nomad_jobs.auto.tfvars**: Defines nomad jobs grouped by deployment tier (core, primary, secondary, tertiary), referenced as `"subdir/name"` paths
   3. **storage.auto.tfvars**: Defines storage type (host/CSI), mount configuration, and volumes
 
 ### Auto-Discovered Directories
@@ -54,34 +54,34 @@ Together these give you the following capabilities:
 
 #### `nomad_jobs`
 
-This map defines the Nomad jobs to be deployed. The jobs are grouped into categories that are deployed in a specific order.
+This map defines the Nomad jobs to be deployed. Jobs are referenced as `"subdir/name"` paths matching their location under `nomad_jobs/`, and are grouped into tiers deployed in order.
 
 ```hcl
 nomad_jobs = {
+  core = {
+    jobs = [
+      "core/traefik",
+      "core/docker_registry",
+    ]
+  }
   primary = {
-    jobs = {
-      "storage_controller" = {
-        version = "latest"
-        cpu     = 500
-        ram     = 512
-      }
-      "influxdb" = {
-        version = "2.7"
-        cpu     = 500
-        ram     = 1024
-      }
-    }
+    jobs = [
+      "backend_storage/influxdb",
+      "backend_storage/postgres",
+    ]
   }
   secondary = {
-    jobs = {
-      "traefik" = {
-        version = "3.0"
-        cpu     = 250
-        ram     = 256
-      }
-    }
+    jobs = [
+      "observability/grafana",
+      "observability/prometheus",
+    ]
   }
-  # ... other deployment tiers
+  tertiary = {
+    jobs = [
+      "productivity/gitea",
+      "multimedia/jellyfin",
+    ]
+  }
 }
 ```
 

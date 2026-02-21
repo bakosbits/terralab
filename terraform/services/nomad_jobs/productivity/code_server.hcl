@@ -1,8 +1,8 @@
-job "code-server" {
+job "code_server" {
   datacenters = ["${datacenter}"]
   type        = "service"
 
-  group "code-server" {
+  group "code_server" {
 
     update {
       canary            = 1
@@ -17,9 +17,9 @@ job "code-server" {
       port "http" { to = 8443 }
     }
 
-    volume "code-server" {
+    volume "code_server" {
       type            = "${storage_type}"
-      source          = "code-server"
+      source          = "code-_erver"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
@@ -32,11 +32,11 @@ job "code-server" {
     }
     
     service {
-      name = "code-server"
+      name = "code_server"
       port = "http"
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.code-server.entrypoints=websecure",
+        "traefik.http.routers.code_server.entrypoints=websecure",
       ]
 
       check {
@@ -48,7 +48,7 @@ job "code-server" {
       }
     }
 
-    task "code-server" {
+    task "code_server" {
       driver = "docker"
 
       config {
@@ -57,7 +57,7 @@ job "code-server" {
       }
 
       volume_mount {
-        volume      = "code-server"
+        volume      = "code_server"
         destination = "/config"
       }
 
