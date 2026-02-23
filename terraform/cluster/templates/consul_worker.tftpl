@@ -6,3 +6,11 @@ data_dir       = "/opt/consul"
 datacenter     = "${datacenter}"
 retry_join     = ${retry_join_json}
 log_level      = "warn"
+
+limits {
+    http_max_conns_per_client = 0
+}
+
+skip_leave_on_interrupt = true
+rejoin_after_leave      = true
+disable_update_check    = true
