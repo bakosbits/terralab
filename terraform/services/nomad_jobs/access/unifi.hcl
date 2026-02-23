@@ -31,6 +31,7 @@ job "unifi" {
         "traefik.enable=true",
         "traefik.http.routers.unifi.entrypoints=websecure",
         "traefik.http.services.unifi.loadbalancer.server.scheme=https",
+        "traefik.http.services.unifi.loadbalancer.server.port=$${NOMAD_HOST_PORT_http}",
       ]
 
       check {
@@ -46,7 +47,7 @@ job "unifi" {
 
       config {
         network_mode = "host"
-        image        = "${registry_cache}/linuxserver/unifi-network-application:10.1.85"
+        image        = "linuxserver/unifi-network-application:10.0.162"
         ports        = ["http"]
       }
 

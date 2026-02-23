@@ -6,9 +6,9 @@ locals {
 }
 
 resource "nomad_job" "core" {
-  for_each   = toset(var.nomad_jobs.core.jobs)
-  jobspec    = templatefile("${local.jobs}/${each.value}.hcl", local.vars)
-  detach     = false
+  for_each = toset(var.nomad_jobs.core.jobs)
+  jobspec  = templatefile("${local.jobs}/${each.value}.hcl", local.vars)
+  detach   = false
   depends_on = [
     nomad_dynamic_host_volume_registration.dynamic_volumes,
     nomad_csi_volume_registration.nfs_volumes,
@@ -26,7 +26,7 @@ resource "nomad_job" "primary" {
   for_each   = toset(var.nomad_jobs.primary.jobs)
   jobspec    = templatefile("${local.jobs}/${each.value}.hcl", local.vars)
   detach     = false
-  depends_on = [ nomad_job.core ]
+  depends_on = [nomad_job.core]
   timeouts {
     create = "15m"
     update = "15m"

@@ -1,8 +1,8 @@
-job "code_server" {
+job "code-server" {
   datacenters = ["${datacenter}"]
   type        = "service"
 
-  group "code_server" {
+  group "code-server" {
 
     update {
       canary            = 1
@@ -19,7 +19,7 @@ job "code_server" {
 
     volume "code_server" {
       type            = "${storage_type}"
-      source          = "code-_erver"
+      source          = "code_server"
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
@@ -30,9 +30,9 @@ job "code_server" {
       attachment_mode = "file-system"
       access_mode     = "single-node-writer"
     }
-    
+
     service {
-      name = "code_server"
+      name = "code-server"
       port = "http"
       tags = [
         "traefik.enable=true",
@@ -48,11 +48,11 @@ job "code_server" {
       }
     }
 
-    task "code_server" {
+    task "code-server" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/linuxserver/code-server:latest"
+        image = "linuxserver/code-server:latest"
         ports = ["http"]
       }
 

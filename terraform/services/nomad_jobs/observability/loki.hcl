@@ -34,9 +34,9 @@ job "loki" {
 
 
       config {
-        image = "${registry_cache}/grafana/loki:main-035b4d2"
+        image = "grafana/loki:main-035b4d2"
         ports = ["http"]
-        args = ["-config.file=/local/loki-config.yaml"]
+        args  = ["-config.file=/local/loki-config.yaml"]
       }
 
       volume_mount {

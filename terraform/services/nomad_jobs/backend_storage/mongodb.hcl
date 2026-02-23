@@ -27,14 +27,21 @@ job "mongo" {
     service {
       name = "mongo"
       port = "mongo"
+
+      check {
+        type     = "tcp"
+        port     = "mongo"
+        interval = "10s"
+        timeout  = "2s"
+      }
     }
 
     task "mongo" {
       driver = "docker"
 
       config {
-        image        = "${registry_cache}/library/mongo:8.0.14"
         network_mode = "host"
+        image        = "mongo:8.0.14"
         ports        = ["mongo"]
         volumes = [
           "local/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh:ro"

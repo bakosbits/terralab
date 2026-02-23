@@ -51,7 +51,7 @@ job "motioneye" {
       driver = "docker"
 
       config {
-        image      = "${registry_cache}/ccrisan/motioneye:master-amd64"
+        image      = "ccrisan/motioneye:master-amd64"
         hostname   = "motioneye"
         privileged = true
         ports      = ["http"]

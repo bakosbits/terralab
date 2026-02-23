@@ -1,6 +1,6 @@
-HOST            : cannery.${domain}
+HOST            : cannery.${tld}
 PORT            : 4000
-DATABASE_URL    : ecto://postgres:${postgres_password}@postgres.${domain}:5432/cannery?sslmode=disable
+DATABASE_URL    : ecto://postgres:${postgres_password}@postgres.${tld}:5432/cannery?sslmode=disable
 POOL_SIZE       : 10
 SECRET_KEY_BASE : ${cannery_secret_key_base}
 REGISTRATION    : public

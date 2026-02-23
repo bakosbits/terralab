@@ -27,10 +27,10 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   network_device {
-    bridge  = var.env.vm.bridge
-    model   = var.env.vm.network_model
-    vlan_id = var.env.vm.vlan_id
+    bridge = var.env.vm.bridge
+    model  = var.env.vm.network_model
   }
+
 
   disk {
     datastore_id = var.env.vm.vm_storage
@@ -54,8 +54,8 @@ resource "proxmox_virtual_environment_vm" "vm" {
     }
 
     dns {
-      servers = [each.value.dns]
-      domain  = var.env.domain
+      servers = [var.env.nameserver]
+      domain  = var.env.tld
     }
 
     ip_config {

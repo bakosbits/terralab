@@ -51,7 +51,7 @@ job "gitea" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/gitea/gitea:1.25.4"
+        image = "gitea/gitea:1.25.4"
         ports = ["http"]
       }
 

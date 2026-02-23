@@ -13,9 +13,6 @@ sudo apt-get upgrade -y
 sudo rm /etc/consul.d/* /etc/nomad.d/*
 sudo systemctl disable consul nomad
 
-# Set nameserver
-echo "nameserver 192.168.2.1" | sudo tee /etc/resolv.conf
-
 # Disable root
 sudo /usr/bin/passwd -l root
 sudo sed -e 's/PermitRootLogin yes/#PermitRootLogin prohibit-password/' -i /etc/ssh/sshd_config

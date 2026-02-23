@@ -51,7 +51,7 @@ job "plex" {
       driver = "docker"
 
       config {
-        image        = "${registry_cache}/plexinc/pms-docker:latest"
+        image        = "plexinc/pms-docker:latest"
         network_mode = "host"
         ports        = ["http"]
       }

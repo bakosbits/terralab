@@ -37,7 +37,7 @@ job "ollama" {
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.open-webui.entrypoints=websecure",
-        "traefik.http.routers.open-webui.rule=Host(`ai.${domain}`)",        
+        "traefik.http.routers.open-webui.rule=Host(`ai.${tld}`)",
       ]
 
       check {

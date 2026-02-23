@@ -21,7 +21,7 @@ locals {
       disk_size   = var.env.manager.disk_size
       cores       = var.env.manager.cores
       memory      = var.env.manager.memory
-      dns         = var.env.dns
+      dns         = var.env.nameserver
     }
   ]
 
@@ -38,10 +38,10 @@ locals {
       disk_size   = var.env.worker.disk_size
       cores       = var.env.worker.cores
       memory      = var.env.worker.memory
-      dns         = var.env.dns
+      dns         = var.env.nameserver
 
       keepalived_priority = 100 + (i * 25)
-    
+
     }
   ]
 }

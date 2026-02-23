@@ -51,7 +51,7 @@ job "sabnzbd" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/linuxserver/sabnzbd:4.3.2"
+        image = "linuxserver/sabnzbd:4.3.2"
         ports = ["http"]
       }
 

@@ -17,9 +17,6 @@ sudo systemctl disable consul nomad
 sudo mkdir -p /etc/ceph
 sudo cp /tmp/configs/ceph/* /etc/ceph
 
-# Set nameserver
-echo "nameserver 192.168.2.1" | sudo tee /etc/resolv.conf
-
 # Disable root
 sudo /usr/bin/passwd -l root
 sudo sed -e 's/PermitRootLogin yes/#PermitRootLogin prohibit-password/' -i /etc/ssh/sshd_config

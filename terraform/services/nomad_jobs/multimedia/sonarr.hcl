@@ -51,7 +51,7 @@ job "sonarr" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/linuxserver/sonarr:4.0.14"
+        image = "linuxserver/sonarr:4.0.14"
         ports = ["http"]
       }
 

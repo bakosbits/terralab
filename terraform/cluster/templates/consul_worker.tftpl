@@ -1,7 +1,8 @@
-server      = false
-client_addr = "0.0.0.0"
-bind_addr   = "{{ GetPrivateIP }}"
-data_dir    = "/opt/consul"
-datacenter  = "${datacenter}"
-retry_join  = ${retry_join_json}
-log_level   = "warn"
+server         = false
+client_addr    = "0.0.0.0"
+bind_addr      = "{{ GetPrivateInterfaces | include \"network\" \"${cidr}\" | attr \"address\" }}"
+advertise_addr = "{{ GetPrivateInterfaces | include \"network\" \"${cidr}\" | attr \"address\" }}"
+data_dir       = "/opt/consul"
+datacenter     = "${datacenter}"
+retry_join     = ${retry_join_json}
+log_level      = "warn"

@@ -51,7 +51,7 @@ job "jellyfin" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/linuxserver/jellyfin:10.11.6"
+        image = "linuxserver/jellyfin:10.11.6"
         ports = ["http"]
       }
 
@@ -69,7 +69,7 @@ job "jellyfin" {
         PUID                        = "${uid}"
         PGID                        = "${gid}"
         TZ                          = "${timezone}"
-        JELLYFIN_PublishedServerUrl = "https://jellyfin.${domain}"
+        JELLYFIN_PublishedServerUrl = "https://jellyfin.${tld}"
       }
 
       resources {

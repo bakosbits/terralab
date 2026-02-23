@@ -22,7 +22,7 @@ job "vector" {
       }
 
       config {
-        image = "${registry_cache}/timberio/vector:latest-debian"
+        image = "timberio/vector:latest-debian"
         args  = ["--config", "/local/vector.yaml"]
 
         volumes = [

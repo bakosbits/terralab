@@ -22,7 +22,7 @@ job "cloudflared" {
       driver = "docker"
 
       config {
-        image        = "${registry_cache}cloudflare/cloudflared:latest"
+        image        = "cloudflare/cloudflared:latest"
         network_mode = "host"
         args = [
           "tunnel",

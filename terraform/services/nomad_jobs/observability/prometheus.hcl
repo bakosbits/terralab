@@ -24,7 +24,7 @@ job "prometheus" {
     task "prometheus" {
       driver = "docker"
       config {
-        image = "${registry_cache}/prom/prometheus:main"
+        image = "prom/prometheus:main"
         ports = ["http"]
         args = [
           "--config.file=/etc/prometheus/prometheus.yml",

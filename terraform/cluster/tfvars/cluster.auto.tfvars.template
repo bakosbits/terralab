@@ -1,12 +1,12 @@
 env = {
-  datacenter      = "dc1" 
-  cidr            = "192.168.X.0/24"
-  ciuser          = "CHANGEME"
-  cipassword      = "CHANGEME"
-  sshkeys         = "ssh-rsa AAAA... user@host"
-  domain          = "example.com"
-  dns             = "192.168.X.X"
-  pve_nodes       = ["pve01", "pve02", "pve03"]
+  datacenter = "dc1" 
+  cidr       = "192.168.X.0/24"
+  ciuser     = "CHANGEME"
+  cipassword = "CHANGEME"
+  sshkeys    = "ssh-rsa AAAA... user@host"
+  tld        = "example.com"
+  nameserver = "192.168.X.X"
+  pve_nodes  = ["pve01", "pve02", "pve03"]
 
   provider = {
     url      = "https://192.168.X.X:8006"

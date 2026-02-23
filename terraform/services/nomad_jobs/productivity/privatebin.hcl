@@ -14,7 +14,7 @@ job "privatebin" {
     }
 
     network {
-      port "http" { to = 8080}
+      port "http" { to = 8080 }
     }
 
     volume "privatebin" {
@@ -30,7 +30,7 @@ job "privatebin" {
       tags = [
         "traefik.enable=true",
         "traefik.http.routers.privatebin.entrypoints=websecure",
-        "traefik.http.routers.privatebin.rule=Host(`bin.${domain}`)",        
+        "traefik.http.routers.privatebin.rule=Host(`bin.${tld}`)",
       ]
 
       check {
@@ -45,8 +45,8 @@ job "privatebin" {
       driver = "docker"
 
       config {
-        image        = "${registry_cache}/privatebin/fs:edge"
-        ports        = ["http"]
+        image = "privatebin/fs:edge"
+        ports = ["http"]
       }
 
       volume_mount {

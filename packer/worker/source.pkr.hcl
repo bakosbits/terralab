@@ -20,6 +20,16 @@ source "proxmox-clone" "client" {
   machine         = var.env.machine
   scsi_controller = var.env.scsi_controller
   qemu_agent      = var.env.qemu_agent
+
+  network_adapters {
+    model    = var.env.network_adapters_1.model
+    bridge   = var.env.network_adapters_1.bridge
+  }
+
+  network_adapters {
+    model    = var.env.network_adapters_2.model
+    bridge   = var.env.network_adapters_2.bridge
+  }    
   
   ssh_username = var.env.ssh_username
   ssh_password = var.env.ssh_password

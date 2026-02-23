@@ -37,7 +37,7 @@ job "drawio" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/jgraph/drawio:latest"
+        image = "jgraph/drawio:latest"
         ports = ["http"]
       }
 

@@ -58,7 +58,7 @@ job "deluge" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/linuxserver/deluge:latest"
+        image = "linuxserver/deluge:latest"
         ports = ["http"]
       }
 

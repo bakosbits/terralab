@@ -1,19 +1,19 @@
 tls:
   certificates:
-    - certFile: "/etc/traefik/certs/${domain}.fullchain"
-      keyFile: "/etc/traefik/certs/${domain}.key"
+    - certFile: "/etc/traefik/certs/${tld}.fullchain"
+      keyFile: "/etc/traefik/certs/${tld}.key"
   stores:
     default:
       defaultCertificate:
-        certFile: "/etc/traefik/certs/${domain}.fullchain"
-        keyFile: "/etc/traefik/certs/${domain}.key"
+        certFile: "/etc/traefik/certs/${tld}.fullchain"
+        keyFile: "/etc/traefik/certs/${tld}.key"
 
 
 http:
   routers:
     nomad:
       service: nomad
-      rule: Host(`nomad.${domain}`)
+      rule: Host(`nomad.${tld}`)
       entrypoints:
         - websecure
       middlewares:
@@ -21,7 +21,7 @@ http:
 
     consul:
       service: consul
-      rule: Host(`consul.${domain}`)
+      rule: Host(`consul.${tld}`)
       entrypoints:
         - websecure
       middlewares:
@@ -29,19 +29,19 @@ http:
 
     pfsense:
       service: pfsense
-      rule: Host(`pfsense.${domain}`)
+      rule: Host(`pfsense.${tld}`)
       entrypoints:
         - websecure
 
     proxmox:
       service: proxmox
-      rule: Host(`pve.${domain}`)
+      rule: Host(`pve.${tld}`)
       entrypoints:
         - websecure
 
     backup:
       service: backup
-      rule: Host(`backup.${domain}`)
+      rule: Host(`backup.${tld}`)
       entrypoints:
         - websecure
 

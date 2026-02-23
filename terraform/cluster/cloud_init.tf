@@ -9,13 +9,15 @@ locals {
     retry_join_json = local.retry_join_json,
     priority        = local.keepalived_priority
     datacenter      = var.env.datacenter,
-    consul_domain   = var.env.consul_domain
+    consul_tld      = var.env.consul_tld
+    cidr            = var.env.cidr
+    registry_mirror = var.env.registry_mirror
   }
 
   nomad_manager_hcl  = templatefile("${path.module}/templates/nomad_manager.tftpl", local.vars)
-  nomad_worker_hcl   = templatefile("${path.module}/templates/nomad_worker.tftpl", local.vars)
   consul_manager_hcl = templatefile("${path.module}/templates/consul_manager.tftpl", local.vars)
   consul_worker_hcl  = templatefile("${path.module}/templates/consul_worker.tftpl", local.vars)
+  registry_mirror    = templatefile("${path.module}/templates/registry_mirror.tftpl", local.vars)
 }
 
 # Cloud-init config for each host and role: (Manager, Worker)
@@ -35,13 +37,14 @@ resource "proxmox_virtual_environment_file" "cloud_init" {
       ciuser             = var.env.ciuser
       cipassword         = var.env.cipassword
       sshkey             = trimspace(var.env.sshkeys)
-      dns                = var.env.dns
+      nameserver         = var.env.nameserver
       use_host_storage   = var.env.use_host_storage
       storage_mount      = var.env.storage_mount
       consul_manager_hcl = local.consul_manager_hcl
       consul_worker_hcl  = local.consul_worker_hcl
       nomad_manager_hcl  = local.nomad_manager_hcl
-      nomad_worker_hcl   = local.nomad_worker_hcl
+      nomad_worker_hcl   = templatefile("${path.module}/templates/nomad_worker.tftpl", merge(local.vars, { priority = try(each.value.keepalived_priority, local.keepalived_priority) }))
+      registry_mirror    = local.registry_mirror
     })
   }
 }

@@ -45,7 +45,7 @@ job "grafana" {
       user   = "root"
 
       config {
-        image = "${registry_cache}/grafana/grafana-oss:11.1.3"
+        image = "grafana/grafana-oss:11.1.3"
         ports = ["http"]
       }
 

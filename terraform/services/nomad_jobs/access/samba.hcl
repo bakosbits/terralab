@@ -39,7 +39,7 @@ job "samba" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/dockurr/samba"
+        image = "dockurr/samba"
         ports = ["http"]
       }
 

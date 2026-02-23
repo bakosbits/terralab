@@ -33,7 +33,7 @@ job "nginx" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/linuxserver/nginx:latest"
+        image = "linuxserver/nginx:latest"
         ports = ["http"]
         volumes = [
           "/mnt/volumes/nginx/config:/config",

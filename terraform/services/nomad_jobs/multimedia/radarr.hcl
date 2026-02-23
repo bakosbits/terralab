@@ -58,7 +58,7 @@ job "radarr" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/linuxserver/radarr:6.0.4"
+        image = "linuxserver/radarr:6.0.4"
         ports = ["http"]
       }
 

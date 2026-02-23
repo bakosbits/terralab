@@ -23,7 +23,7 @@ variable "env" {
       type = string
     })
 
-    network_adapters = object({
+    network_adapters_1 = object({
       model  = string
       bridge = string
     })

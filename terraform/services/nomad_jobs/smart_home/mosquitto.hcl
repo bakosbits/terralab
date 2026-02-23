@@ -58,7 +58,7 @@ job "mosquitto" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/library/eclipse-mosquitto:alpine"
+        image = "eclipse-mosquitto:alpine"
         ports = ["mqtt", "websocket"]
         volumes = [
           "secrets/password.txt:/mosquitto/config/password.txt",

@@ -51,7 +51,7 @@ job "prowlarr" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/linuxserver/prowlarr:2.3.0"
+        image = "linuxserver/prowlarr:2.3.0"
         ports = ["http"]
       }
 

@@ -28,8 +28,9 @@ source "proxmox-iso" "base" {
   }
 
   network_adapters {
-    model    = var.env.network_adapters.model
-    bridge   = var.env.network_adapters.bridge
+    model    = var.env.network_adapters_1.model
+    bridge   = var.env.network_adapters_1.bridge
+#    vlan_tag = var.env.network_adapters_1.vlan
   }
 
   disks {
@@ -43,14 +44,15 @@ source "proxmox-iso" "base" {
     unmount  = var.env.boot.unmount
   }
 
-  
-  http_directory = "./http"
-  http_port_min  = 8200
-  http_port_max  = 8200
-  boot_wait      = "10s"
-  boot_command   = [
+  http_directory    = "./http"
+  http_port_min     = 8200
+  http_port_max     = 8200
+  # http_bind_address = var.env.http_bind_address
+
+  boot_wait    = "10s"
+  boot_command = [
     "<esc><wait>auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg<enter>"
-    ]
+  ]
 
   ssh_username = var.env.ssh_username
   ssh_password = var.env.ssh_password

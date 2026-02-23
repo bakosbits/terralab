@@ -55,7 +55,7 @@ job "transmission" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/linuxserver/transmission:4.1.0"
+        image = "linuxserver/transmission:4.1.0"
         ports = ["http"]
       }
 

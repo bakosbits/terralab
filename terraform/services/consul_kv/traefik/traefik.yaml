@@ -24,9 +24,6 @@ entryPoints:
         - 192.168.2.0/24
         - 127.0.0.1
 
-  postgres:
-    address: :5432
-
 providers:
   file:
     directory: /etc/traefik/dynamic
@@ -34,7 +31,7 @@ providers:
     
   consulCatalog:
     exposedByDefault: false
-    defaultRule: Host(`{{ normalize .Name }}.${domain}`)
+    defaultRule: Host(`{{ normalize .Name }}.${tld}`)
     endpoint:
       address: 127.0.0.1:8500
 

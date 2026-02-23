@@ -14,7 +14,7 @@ job "keepalived" {
 
     service {
       name = "keepalived"
-    }          
+    }
 
     task "keepalived" {
       driver = "docker"
@@ -40,13 +40,6 @@ job "keepalived" {
           KEEPALIVED_ROUTER_ID: 75
           KEEPALIVED_VIRTUAL_IPS:
             - ${keepalived_vip}/24
-            - ${keepalived_vip}/24
-          KEEPALIVED_UNICAST_PEERS:
-          {{- range service "coredns" }}
-            {{- if ne .Address (env "attr.unique.network.ip-address") }}
-            - {{ .Address }}
-            {{- end }}
-          {{- end }}
           KEEPALIVED_PRIORITY: {{ env "PRIORITY" }}
           KEEPALIVED_INTERFACE: {{ sockaddr "GetDefaultInterfaces | attr \"name\"" }}
         EOH

@@ -37,7 +37,7 @@ job "cannery" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/shibaobun/cannery:latest"
+        image = "shibaobun/cannery:latest"
         ports = ["http"]
       }
 

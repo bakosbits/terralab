@@ -51,7 +51,7 @@ job "influxdb" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/library/influxdb:2.7.8-alpine"
+        image = "influxdb:2.7.8-alpine"
         ports = ["http"]
       }
 

@@ -22,9 +22,9 @@ job "auth" {
       port = "http"
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.auth.rule.Host(`auth.${domain}`)",     
+        "traefik.http.routers.auth.rule=Host(`auth.${tld}`)",
         "traefik.http.routers.auth.entrypoints=websecure",
-        "traefik.http.middlewares.auth.forwardauth.address=http://auth.${consul_domain}:4181/",
+        "traefik.http.middlewares.auth.forwardauth.address=http://auth.${consul_tld}:4181/",
         "traefik.http.middlewares.auth.forwardauth.trustForwardHeader=true",
         "traefik.http.middlewares.auth.forwardauth.authResponseHeaders=X-Forwarded-User X-Forwarded-email",
         "traefik.http.routers.auth.middlewares=auth",

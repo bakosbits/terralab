@@ -46,7 +46,7 @@ job "flaresolverr" {
       driver = "docker"
 
       config {
-        image = "${registry_cache}/flaresolverr/flaresolverr:v3.4.6"
+        image = "flaresolverr/flaresolverr:v3.4.6"
         ports = ["http"]
       }
 

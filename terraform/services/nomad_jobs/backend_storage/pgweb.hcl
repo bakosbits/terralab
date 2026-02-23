@@ -38,7 +38,7 @@ job "pgweb" {
       driver = "docker"
 
       config {
-        image        = "${registry_cache}/sosedoff/pgweb:0.17.0"
+        image        = "sosedoff/pgweb:0.17.0"
         network_mode = "host"
         ports        = ["http"]
         command      = "/usr/bin/pgweb"

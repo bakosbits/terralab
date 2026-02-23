@@ -15,10 +15,15 @@ chpasswd:
     ${ciuser}:${cipassword}
   expire: False
 
-package_update: true
+package_update: false
 
 # Role-specific config (consul, nomad)
 write_files:
+
+  - path: /etc/dhcpcd.conf
+    content: |
+      nohook resolv.conf
+
   - path: /etc/consul.d/consul.hcl
     content: |
 %{ if role == "manager" ~}
@@ -35,12 +40,20 @@ ${indent(6, "\n${nomad_manager_hcl}")}
 ${indent(6, "\n${nomad_worker_hcl}")}
 %{ endif ~}
 
+  - path: /etc/docker/daemon.json
+    content: |
+%{ if role == "worker" ~}
+${indent(6, "\n${registry_mirror}")}
+%{ endif ~}
+
 runcmd:
 # We only want storage mounted on our worker nodes
 %{ if role == "worker" && use_host_storage ~}
   -  echo "${storage_mount}" >> /etc/fstab
 %{ endif ~}
-  - echo "nameserver ${dns}" | sudo tee /etc/resolv.conf
   - systemctl daemon-reload
+  - mount -a
   - systemctl enable --now consul  
   - systemctl enable --now nomad
+  - echo "nameserver ${nameserver}" > /etc/resolv.conf
+  - echo "done" > /tmp/cloud-config.done

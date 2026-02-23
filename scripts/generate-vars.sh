@@ -188,8 +188,8 @@ env = {
   ciuser          = "CHANGEME"
   cipassword      = "CHANGEME"
   sshkeys         = "ssh-rsa AAAA... user@host"
-  domain          = "example.com"
-  dns             = "192.168.X.X"
+  tld             = "example.com"
+  nameserv        = "192.168.X.X"
   pve_nodes       = ["pve01", "pve02", "pve03"]
 
   provider = {

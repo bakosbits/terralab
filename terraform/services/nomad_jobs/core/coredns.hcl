@@ -6,7 +6,7 @@ job "coredns" {
 
     update {
       max_parallel      = 1
-      min_healthy_time  = "10s"   # 30s is long for a DNS service
+      min_healthy_time  = "10s" # 30s is long for a DNS service
       healthy_deadline  = "5m"
       progress_deadline = "10m"
       auto_revert       = true
@@ -39,6 +39,12 @@ job "coredns" {
           port     = "dns"
           interval = "10s"
           timeout  = "2s"
+
+          check_restart {
+            limit           = 3
+            grace           = "30s"
+            ignore_warnings = false
+          }
         }
       }
 
