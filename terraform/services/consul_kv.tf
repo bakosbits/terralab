@@ -1,13 +1,14 @@
-# This resource reads template files from the consul_kv directory
+# This resource reads template files from nomad_jobs/*/consul_kv/
 # and defines configuration files stored in Consul KV
 
 locals {
-  consul_kv_dir = "${path.module}/consul_kv"
-
   kv = {
-    for file in fileset(local.consul_kv_dir, "*/*") :
-    "${local.vars.lab_name}/${file}" => {
-      source_path = abspath("${local.consul_kv_dir}/${file}")
+    for file in toset(flatten([
+      for job in local.deployed_jobs :
+      fileset(local.jobs, "${job}/consul_kv/*")
+    ])) :
+    "${local.vars.lab_name}/${split("/consul_kv/", file)[0]}/${split("/consul_kv/", file)[1]}" => {
+      source_path = abspath("${local.jobs}/${file}")
     }
   }
 }

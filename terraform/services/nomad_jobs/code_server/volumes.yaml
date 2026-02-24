@@ -1,0 +1,10 @@
+code_server:
+  volume_id: code_server
+  external_id: code_server
+  access_mode: single-node-writer
+  nodes: null
+projects:
+  volume_id: projects
+  external_id: projects
+  access_mode: single-node-writer
+  nodes: null

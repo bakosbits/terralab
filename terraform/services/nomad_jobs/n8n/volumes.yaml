@@ -1,0 +1,5 @@
+n8n:
+  volume_id: n8n
+  external_id: n8n
+  access_mode: single-node-writer
+  nodes: null

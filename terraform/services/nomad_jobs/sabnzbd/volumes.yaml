@@ -1,0 +1,10 @@
+sabnzbd:
+  volume_id: sabnzbd
+  external_id: sabnzbd
+  access_mode: single-node-writer
+  nodes: null
+media-downloads:
+  volume_id: media-downloads
+  external_id: media/downloads
+  access_mode: single-node-writer
+  nodes: null

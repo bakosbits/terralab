@@ -1,0 +1,5 @@
+wikijs:
+  volume_id: wikijs
+  external_id: wikijs
+  access_mode: single-node-writer
+  nodes: null

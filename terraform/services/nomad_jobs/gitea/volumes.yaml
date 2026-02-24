@@ -1,0 +1,5 @@
+gitea:
+  volume_id: gitea
+  external_id: gitea
+  access_mode: single-node-writer
+  nodes: null

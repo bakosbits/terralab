@@ -1,0 +1,5 @@
+nginx:
+  volume_id: nginx
+  external_id: nginx
+  access_mode: single-node-writer
+  nodes: null

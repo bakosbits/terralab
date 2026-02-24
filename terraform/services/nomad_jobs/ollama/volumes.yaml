@@ -1,0 +1,10 @@
+ollama:
+  volume_id: ollama
+  external_id: ollama
+  access_mode: single-node-writer
+  nodes: null
+open-webui:
+  volume_id: open-webui
+  external_id: open-webui
+  access_mode: single-node-writer
+  nodes: null

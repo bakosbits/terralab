@@ -1,0 +1,5 @@
+vaultwarden:
+  volume_id: vaultwarden
+  external_id: vaultwarden
+  access_mode: single-node-writer
+  nodes: null

@@ -1,0 +1,5 @@
+hass:
+  volume_id: hass
+  external_id: hass
+  access_mode: single-node-writer
+  nodes: null

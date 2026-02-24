@@ -1,0 +1,10 @@
+motioneye-etc:
+  volume_id: motioneye-etc
+  external_id: motioneye/etc
+  access_mode: single-node-writer
+  nodes: null
+motioneye-shared:
+  volume_id: motioneye-shared
+  external_id: motioneye/shared
+  access_mode: single-node-writer
+  nodes: null

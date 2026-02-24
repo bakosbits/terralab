@@ -1,0 +1,10 @@
+prowlarr:
+  volume_id: prowlarr
+  external_id: prowlarr
+  access_mode: single-node-writer
+  nodes: null
+media:
+  volume_id: media
+  external_id: media
+  access_mode: single-node-writer
+  nodes: null

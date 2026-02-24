@@ -1,0 +1,5 @@
+grafana:
+  volume_id: grafana
+  external_id: grafana
+  access_mode: single-node-writer
+  nodes: null

@@ -1,0 +1,5 @@
+projects:
+  volume_id: projects
+  external_id: projects
+  access_mode: single-node-writer
+  nodes: null

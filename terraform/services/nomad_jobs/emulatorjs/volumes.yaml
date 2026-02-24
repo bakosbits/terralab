@@ -1,0 +1,10 @@
+arcade:
+  volume_id: arcade
+  external_id: arcade
+  access_mode: single-node-writer
+  nodes: null
+arcade-config:
+  volume_id: arcade-config
+  external_id: arcade/config
+  access_mode: single-node-writer
+  nodes: null

@@ -27,10 +27,24 @@ locals {
     if contains(keys(local.nomad_node_id_by_name), s.node_name)
   ]
 
+  # Only register volumes for jobs that are actually being deployed
+  deployed_jobs = toset(flatten([for tier in values(var.nomad_jobs) : tier.jobs]))
+
+  volume_files = [
+    for job in local.deployed_jobs :
+    "${job}/volumes.yaml"
+    if fileexists("${local.jobs}/${job}/volumes.yaml")
+  ]
+
+  all_volumes = length(local.volume_files) > 0 ? merge([
+    for f in local.volume_files :
+    yamldecode(file("${local.jobs}/${f}"))
+  ]...) : {}
+
   # If a volume specifies nodes, only register on those nodes.
   # Otherwise, register on all worker nodes.
   host_volumes = merge([
-    for vol_key, vol_value in var.storage.volumes : {
+    for vol_key, vol_value in local.all_volumes : {
       for node_id in(
         vol_value.nodes != null
         ? [for n in vol_value.nodes : local.nomad_node_id_by_name[n] if contains(keys(local.nomad_node_id_by_name), n)]
@@ -39,7 +53,7 @@ locals {
       "${node_id}-${vol_key}" => {
         node_id     = node_id
         name        = vol_key
-        host_path   = "${var.storage.mount_point}/${vol_value.external_id}"
+        host_path   = "${local.vars.mount_point}/${vol_value.external_id}"
         access_mode = vol_value.access_mode
       }
     }
@@ -48,7 +62,7 @@ locals {
 
 resource "nomad_dynamic_host_volume_registration" "dynamic_volumes" {
   # Only run this if our storage mode is != csi
-  for_each = var.storage.type == "host" ? local.host_volumes : {}
+  for_each = local.vars.storage_type == "host" ? local.host_volumes : {}
 
   node_id   = each.value.node_id
   name      = each.value.name
@@ -65,7 +79,7 @@ resource "nomad_dynamic_host_volume_registration" "dynamic_volumes" {
 
 
 resource "nomad_csi_volume_registration" "nfs_volumes" {
-  for_each    = var.storage.type == "csi" ? var.storage.volumes : {}
+  for_each    = local.vars.storage_type == "csi" ? local.all_volumes : {}
   plugin_id   = "nfs"
   name        = each.key
   volume_id   = each.key

@@ -1,0 +1,5 @@
+loki:
+  volume_id: loki
+  external_id: loki
+  access_mode: single-node-writer
+  nodes: null

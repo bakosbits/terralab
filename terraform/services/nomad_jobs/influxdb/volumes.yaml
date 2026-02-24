@@ -1,0 +1,10 @@
+influxdb:
+  volume_id: influxdb
+  external_id: influxdb
+  access_mode: single-node-writer
+  nodes: null
+influxdb-config:
+  volume_id: influxdb-config
+  external_id: influxdb/config
+  access_mode: single-node-writer
+  nodes: null

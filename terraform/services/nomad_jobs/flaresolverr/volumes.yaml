@@ -1,0 +1,5 @@
+flaresolverr:
+  volume_id: flaresolverr
+  external_id: flaresolverr
+  access_mode: single-node-writer
+  nodes: null

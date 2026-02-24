@@ -1,0 +1,5 @@
+jellyfin:
+  volume_id: jellyfin
+  external_id: jellyfin
+  access_mode: single-node-writer
+  nodes: null

@@ -1,0 +1,5 @@
+GRAFANA_URL        : https://grafana.${tld}
+GF_PATHS_DATA      : /var/lib/grafana
+GRAFANA_EMAIL      : ${email}
+GRAFANA_PASSWORD   : ${grafana_password}
+GF_INSTALL_PLUGINS : grafana-piechart-panel

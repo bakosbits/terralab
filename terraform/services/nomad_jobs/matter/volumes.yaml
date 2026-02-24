@@ -1,0 +1,5 @@
+matter:
+  volume_id: matter
+  external_id: matter
+  access_mode: single-node-writer
+  nodes: null

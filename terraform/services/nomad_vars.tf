@@ -1,18 +1,17 @@
-# This resource reads .tftpl files from the nomad_vars directory
+# This resource reads .nv.yaml files from nomad_jobs/<service>/
 # and defines Nomad variables for use in job environments
 
 locals {
-  nomad_vars_dir = "${path.module}/nomad_vars"
-
   nomad_vars = {
-    for file in fileset(local.nomad_vars_dir, "*.tftpl") :
-    trimsuffix(file, ".tftpl") => {
+    for job in local.deployed_jobs :
+    job => {
       for line in [
-        for l in split("\n", templatefile("${local.nomad_vars_dir}/${file}", local.vars)) :
+        for l in split("\n", templatefile("${local.jobs}/${job}/${job}.nv.yaml", local.vars)) :
         l if trimspace(l) != ""
       ] :
       trimspace(split(":", line)[0]) => trimspace(join(":", slice(split(":", line), 1, length(split(":", line)))))
     }
+    if fileexists("${local.jobs}/${job}/${job}.nv.yaml")
   }
 }
 

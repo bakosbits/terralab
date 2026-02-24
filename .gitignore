@@ -1,16 +1,23 @@
+# Terraform
 *.tfplan
 *.tfstate
 *.backup
+.terraform/
+
+# Packer
 *.secret
 *.keyring
 *auto.tfvars
 *.pkrvars.*
-.terraform/
-.vscode
-.ssh/
+ceph/
+
+#Claud
+CLAUDE.md
 .claude
 plans/
-hass/
-ceph/
-CLAUDE.md
+
+# Home Assistant
+google_assistant.yaml
+secrets.yaml
+service_account.json
 

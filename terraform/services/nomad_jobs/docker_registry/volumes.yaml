@@ -1,0 +1,5 @@
+docker_registry:
+  volume_id: docker_registry
+  external_id: docker_registry
+  access_mode: single-node-writer
+  nodes: null
