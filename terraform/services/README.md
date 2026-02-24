@@ -35,7 +35,7 @@ nomad_jobs/
 | `<service>.nv.yaml` | Nomad variables at path `nomad/jobs/<service>`, `KEY : VALUE` format |
 | `consul_kv/<file>` | Config files stored in Consul KV at `{lab_name}/<service>/<file>` |
 
-All three optional asset types are **auto-discovered** by Terraform — no tfvars entries are needed beyond adding the job name to `var.nomad_jobs`.
+All three optional asset types are **auto-discovered** by Terraform. No tfvars entries are needed beyond adding the job name to `var.nomad_jobs`.
 
 ## Configuration
 
@@ -92,7 +92,7 @@ gitea:
   nodes: null
 ```
 
-**Volume naming convention**: a hyphen in the volume name is a path separator — the first hyphen becomes `/` in `external_id`. This is applied automatically by `make generate-vars`.
+**Volume naming convention**: a hyphen in the volume name is a path separator, so the first hyphen becomes `/` in `external_id`. This is applied automatically by `make generate-vars`.
 
 ```yaml
 media-downloads:          # volume name used in HCL source/volume_mount
