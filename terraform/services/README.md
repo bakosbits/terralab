@@ -50,7 +50,9 @@ Run `make generate-vars` to produce skeleton templates for both files.
 
 ### `var.nomad_jobs.auto.tfvars`
 
-Jobs are referenced by directory name under `nomad_jobs/`. Terraform resolves each entry to `nomad_jobs/{name}/{name}.hcl`.
+Jobs are referenced by directory name under `nomad_jobs/`. Terraform resolves each entry to `nomad_jobs/{name}/{name}.hcl`. 
+
+### `You have the option of stacking jobs into deployment buckets to address dependencies`
 
 ```hcl
 nomad_jobs = {
