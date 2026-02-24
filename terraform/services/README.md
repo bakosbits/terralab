@@ -52,7 +52,8 @@ Run `make generate-vars` to produce skeleton templates for both files.
 
 Jobs are referenced by directory name under `nomad_jobs/`. Terraform resolves each entry to `nomad_jobs/{name}/{name}.hcl`. 
 
-### `You have the option of stacking jobs into deployment buckets to address dependencies`
+You can use `var.nomad_jobs.auto.tfvars` from `make generate-vars` to group jobs into a primary, secondary or tertiary deployment bucket. This can help manage dependencies between services. A bucket wont start until the previous one completes successfully.
+
 
 ```hcl
 nomad_jobs = {
