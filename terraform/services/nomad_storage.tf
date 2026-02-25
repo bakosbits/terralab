@@ -13,9 +13,12 @@ data "http" "nomad_nodes" {
 }
 
 locals {
-  nomad_nodes = jsondecode(data.http.nomad_nodes.response_body)
+  nomad_nodes = [
+    for n in jsondecode(data.http.nomad_nodes.response_body) : n
+    if n.Status == "ready"
+  ]
 
-  # Build a map of node name -> nomad node ID
+  # Build a map of node name -> nomad node ID (ready nodes only)
   nomad_node_id_by_name = {
     for n in local.nomad_nodes : n.Name => n.ID
   }
