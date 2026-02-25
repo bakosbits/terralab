@@ -14,7 +14,7 @@ job "postgres" {
     }
 
     network {
-      port "postgres" { to = "5432" }
+      port "postgres" { static = "5432" }
     }
 
     volume "postgres" {
