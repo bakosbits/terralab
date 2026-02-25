@@ -1,21 +1,12 @@
 
 bind_addr = "0.0.0.0"
 data_dir = "/opt/nomad/"
-
-advertise {
-  http = "{{ GetPrivateInterfaces | include \"network\" \"${cidr}\" | attr \"address\" }}:4646"
-  rpc  = "{{ GetPrivateInterfaces | include \"network\" \"${cidr}\" | attr \"address\" }}:4647"
-  serf = "{{ GetPrivateInterfaces | include \"network\" \"${cidr}\" | attr \"address\" }}:4648"
-}
-
 datacenter = "${datacenter}"
 log_level = "warn"
 
 client {
-    enabled = true
-    meta {
-        keepalived_priority = "${priority}"
-    }       
+    enabled = true 
+       
     options = {
         docker.privileged.enabled = true
         docker.volumes.enabled = true

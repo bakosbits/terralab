@@ -1,16 +1,11 @@
-server         = false
-client_addr    = "0.0.0.0"
-bind_addr      = "{{ GetPrivateInterfaces | include \"network\" \"${cidr}\" | attr \"address\" }}"
-advertise_addr = "{{ GetPrivateInterfaces | include \"network\" \"${cidr}\" | attr \"address\" }}"
-data_dir       = "/opt/consul"
-datacenter     = "${datacenter}"
-retry_join     = ${retry_join_json}
-log_level      = "warn"
 
-limits {
-    http_max_conns_per_client = 0
-}
-
-skip_leave_on_interrupt = true
-rejoin_after_leave      = true
-disable_update_check    = true
+server      = false
+client_addr = "0.0.0.0"
+bind_addr   = "{{ GetPrivateIP }}"
+data_dir    = "/opt/consul"
+datacenter  = "${datacenter}"
+retry_join  = ${retry_join_json}
+log_level   = "warn"
+node_meta {
+    keepalived_priority = "${priority}"
+} 
