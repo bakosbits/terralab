@@ -20,10 +20,6 @@ package_update: false
 # Role-specific config (consul, nomad)
 write_files:
 
-  - path: /etc/dhcpcd.conf
-    content: |
-      nohook resolv.conf
-
   - path: /etc/consul.d/consul.hcl
     content: |
 %{ if role == "manager" ~}
