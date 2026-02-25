@@ -12,17 +12,6 @@ entryPoints:
     address: :443
     http:
       tls: true
-    proxyProtocol:
-      trustedIPs:
-        - 192.168.168.1
-        - 192.168.2.0/24
-        - 127.0.0.1
-
-    forwardedHeaders:
-      trustedIPs:
-        - 192.168.168.1
-        - 192.168.2.0/24
-        - 127.0.0.1
 
 providers:
   file:
