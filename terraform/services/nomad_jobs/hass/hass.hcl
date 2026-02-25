@@ -1,8 +1,8 @@
-job "home_assistant" {
+job "hass" {
   datacenters = ["${datacenter}"]
   type        = "service"
 
-  group "home_assistant" {
+  group "hass" {
 
     update {
       canary            = 1
@@ -25,28 +25,30 @@ job "home_assistant" {
     }
 
     service {
-      name = "home-assistant"
+      name = "hass"
       port = "http"
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.home_assistant.entrypoints=websecure",
+        "traefik.http.routers.hass.entrypoints=websecure",
       ]
 
       check {
         type     = "http"
-        path     = "/"
+        path     = "/manifest.json"
+        port     = "http"         
         interval = "10s"
         timeout  = "2s"
       }
     }
 
-    task "home_assistant" {
+    task "hass" {
       driver = "docker"
 
       config {
         image        = "homeassistant/home-assistant:2026.1.2"
         network_mode = "host"
         ports        = ["http"]
+        privileged   = true
         volumes = [
           "local/automations.yaml:/config/automations.yaml",
           "local/binary_sensors.yaml:/config/binary_sensors.yaml",
@@ -81,91 +83,91 @@ job "home_assistant" {
       template {
         destination = "local/automations.yaml"
         data        = <<-EOF
-        {{- key "${lab_name}/home_assistant/automations.yaml" }}
+        {{- key "${lab_name}/hass/automations.yaml" }}
         EOF
       }
 
       template {
         destination = "local/binary_sensors.yaml"
         data        = <<-EOF
-        {{- key "${lab_name}/home_assistant/binary_sensors.yaml" }}
+        {{- key "${lab_name}/hass/binary_sensors.yaml" }}
         EOF
       }
 
       template {
         destination = "local/configuration.yaml"
         data        = <<-EOF
-        {{- key "${lab_name}/home_assistant/configuration.yaml" }}
+        {{- key "${lab_name}/hass/configuration.yaml" }}
         EOF
       }
 
       template {
         destination = "local/covers.yaml"
         data        = <<-EOF
-        {{- key "${lab_name}/home_assistant/covers.yaml" }}
+        {{- key "${lab_name}/hass/covers.yaml" }}
         EOF
       }
 
       template {
         destination = "local/customize.yaml"
         data        = <<-EOF
-        {{- key "${lab_name}/home_assistant/customize.yaml" }}
+        {{- key "${lab_name}/hass/customize.yaml" }}
         EOF
       }
 
       template {
         destination = "local/fans.yaml"
         data        = <<-EOF
-        {{- key "${lab_name}/home_assistant/fans.yaml" }}
+        {{- key "${lab_name}/hass/fans.yaml" }}
         EOF
       }
 
       template {
         destination = "local/lights.yaml"
         data        = <<-EOF
-        {{- key "${lab_name}/home_assistant/lights.yaml" }}
+        {{- key "${lab_name}/hass/lights.yaml" }}
         EOF
       }
 
       template {
         destination = "local/google_assistant.yaml"
         data        = <<-EOF
-        {{- key "${lab_name}/home_assistant/google_assistant.yaml" }}
+        {{- key "${lab_name}/hass/google_assistant.yaml" }}
         EOF
       }
 
       template {
         destination = "local/scripts.yaml"
         data        = <<-EOF
-        {{- key "${lab_name}/home_assistant/scripts.yaml" }}
+        {{- key "${lab_name}/hass/scripts.yaml" }}
         EOF
       }
 
       template {
         destination = "local/secrets.yaml"
         data        = <<-EOF
-        {{- key "${lab_name}/home_assistant/secrets.yaml" }}
+        {{- key "${lab_name}/hass/secrets.yaml" }}
         EOF
       }
 
       template {
         destination = "local/service_account.json"
         data        = <<-EOF
-        {{- key "${lab_name}/home_assistant/service_account.json" }}
+        {{- key "${lab_name}/hass/service_account.json" }}
         EOF
       }
 
       template {
         destination = "local/switches.yaml"
         data        = <<-EOF
-        {{- key "${lab_name}/home_assistant/switches.yaml" }}
+        {{- key "${lab_name}/hass/switches.yaml" }}
         EOF
       }
 
       template {
         destination = "local/trusted_proxies.yaml"
         data        = <<-EOF
-        {{- key "${lab_name}/home_assistant/trusted_proxies.yaml" }}
+        {{- key "${lab_name}/hass/trusted_proxies.yaml" }}
         EOF
       }
     }
