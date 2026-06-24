@@ -5,7 +5,7 @@
     - light.led_light
     - light.rocket_lamp
     - light.movie_lamp
-    - light.loft_floor_lamp
+    - light.loft_lamp
 
 - platform: group
   name: Evening lights
@@ -23,6 +23,7 @@
     - light.led_light
     - light.rocket_lamp
     - light.movie_lamp
+    - light.loft_lamp
     - light.master_lamp_1
     - light.master_lamp_2
     - light.nook_light
@@ -46,5 +47,4 @@
     - light.guest_lamp_2
     - light.water_closet_light
     - light.stairway_lights
-    - light.loft_floor_lamp
   

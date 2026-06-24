@@ -44,8 +44,8 @@ ${indent(6, "\n${registry_mirror}")}
 
 runcmd:
 # We only want storage mounted on our worker nodes
-%{ if role == "worker" && use_host_storage ~}
-  -  echo "${storage_mount}" >> /etc/fstab
+%{ if role == "worker"  ~}
+  -  echo "${cephfs_mount}" >> /etc/fstab
 %{ endif ~}
   - systemctl daemon-reload
   - mount -a

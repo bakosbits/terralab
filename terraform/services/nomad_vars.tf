@@ -2,16 +2,11 @@
 # and defines Nomad variables for use in job environments
 
 locals {
+
   nomad_vars = {
     for job in local.deployed_jobs :
-    job => {
-      for line in [
-        for l in split("\n", templatefile("${local.jobs}/${job}/${job}.nv.yaml", local.vars)) :
-        l if trimspace(l) != ""
-      ] :
-      trimspace(split(":", line)[0]) => trimspace(join(":", slice(split(":", line), 1, length(split(":", line)))))
-    }
-    if fileexists("${local.jobs}/${job}/${job}.nv.yaml")
+    job => yamldecode(templatefile("${local.jobs}/${job}/nomad_vars.yaml", var.env))
+    if fileexists("${local.jobs}/${job}/nomad_vars.yaml")
   }
 }
 

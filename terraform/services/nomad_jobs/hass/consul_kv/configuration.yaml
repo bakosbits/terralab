@@ -3,7 +3,6 @@ homeassistant:
   customize_domain:
     automation:
       initial_state: on
-
 frontend:
 config:
 sun:
@@ -13,27 +12,117 @@ logbook:
 stream:
 history:
 media_source:
-
 http:
   use_x_forwarded_for: true
   trusted_proxies: !include trusted_proxies.yaml
   ip_ban_enabled: true
   login_attempts_threshold: 3
-
 google_assistant: !include google_assistant.yaml
-
 tts:
   - platform: google_translate
-
 ffmpeg:
   ffmpeg_bin: /usr/bin/ffmpeg
-
 binary_sensor: !include binary_sensors.yaml
 fan: !include fans.yaml
 light: !include lights.yaml
-switch: !include switches.yaml
-cover: !include covers.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
+media_player: !include media_players.yaml
 
+group:
+  exterior_lights:
+    name: Exterior lights
+    entities:
+      - switch.front_porch_lights
+      - switch.back_pation_light
+      - switch.side_door_light
+  interior_switches:
+    name: Interior switches
+    entities:
+      - switch.garage_light
+      - switch.guest_bath_fan
+      - switch.laundry_light
+      - switch.master_bath_fan
+      - switch.nook_bath_fan
+      - switch.family_room_fan_switch
+      - switch.bedroom_fan_switch
+      - switch.water_closet_fan
 
+template:
+  - cover:
+      - unique_id: "garage_door_cover"
+        name: "Garage Door"
+        device_class: garage
+        state: >
+          {% if is_state('binary_sensor.garage_door', 'on') %}
+            open
+          {% else %}
+            closed
+          {% endif %}
+        icon: >-
+          {% if is_state('binary_sensor.garage_door', 'on') %}
+            mdi:garage-open
+          {% else %}
+            mdi:garage
+          {% endif %}
+        open_cover:
+          - action: switch.turn_on
+            target:
+              entity_id: switch.garage_door
+        close_cover:
+          - action: switch.turn_on
+            target:
+              entity_id: switch.garage_door
+        stop_cover:
+          - action: switch.turn_on
+            target:
+              entity_id: switch.garage_door
+
+  - switch:
+      - unique_id: kitchen_sensor_switch
+        name: Kitchen sensor
+        state: "{{ is_state('automation.motion_toggle_kitchen_lights', 'on') }}"
+        turn_on:
+          - action: homeassistant.turn_on
+            target:
+              entity_id: automation.motion_toggle_kitchen_lights
+        turn_off:
+          - action: homeassistant.turn_off
+            target:
+              entity_id: automation.motion_toggle_kitchen_lights
+
+      - unique_id: loft_sensor_switch
+        name: Loft sensor
+        state: "{{ is_state('automation.motion_toggle_loft_lights', 'on') }}"
+        turn_on:
+          - action: homeassistant.turn_on
+            target:
+              entity_id: automation.motion_toggle_loft_lights
+        turn_off:
+          - action: homeassistant.turn_off
+            target:
+              entity_id: automation.motion_toggle_loft_lights
+
+      - unique_id: living_room_sensor_switch
+        name: Living room sensor
+        state: "{{ is_state('automation.motion_toggle_living_room_lights', 'on') }}"
+        turn_on:
+          - action: homeassistant.turn_on
+            target:
+              entity_id: automation.motion_toggle_living_room_lights
+        turn_off:
+          - action: homeassistant.turn_off
+            target:
+              entity_id: automation.motion_toggle_living_room_lights
+
+      - unique_id: family_room_sensor_switch
+        name: Family room sensor
+        state: "{{ is_state('automation.motion_toggle_family_room_lights', 'on') }}"
+        turn_on:
+          - action: homeassistant.turn_on
+            target:
+              entity_id: automation.motion_toggle_family_room_lights
+        turn_off:
+          - action: homeassistant.turn_off
+            target:
+              entity_id: automation.motion_toggle_family_room_lights

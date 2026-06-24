@@ -38,8 +38,7 @@ resource "proxmox_virtual_environment_file" "cloud_init" {
       cipassword         = var.env.cipassword
       sshkey             = trimspace(var.env.sshkeys)
       nameserver         = var.env.nameserver
-      use_host_storage   = var.env.use_host_storage
-      storage_mount      = var.env.storage_mount
+      cephfs_mount       = var.env.cephfs_mount
       consul_manager_hcl = local.consul_manager_hcl
       consul_worker_hcl  = local.consul_worker_hcl
       nomad_manager_hcl  = local.nomad_manager_hcl

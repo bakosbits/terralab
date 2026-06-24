@@ -1,0 +1,168 @@
+
+44_87_63_09_13_b5:
+  name: 44_87_63_09_13_b5
+  mac: 44:87:63:09:13:B5
+  icon:
+  picture:
+  track: true
+
+rachio_3f4072:
+  name: rachio-3f4072
+  mac: D0:40:EF:3F:40:72
+  icon:
+  picture:
+  track: true
+
+64_16_66_c6_b7_0a:
+  name: 64_16_66_c6_b7_0a
+  mac: 64:16:66:C6:B7:0A
+  icon:
+  picture:
+  track: true
+
+64_16_66_c6_ae_a5:
+  name: 64_16_66_c6_ae_a5
+  mac: 64:16:66:C6:AE:A5
+  icon:
+  picture:
+  track: true
+
+9e_65_f9_07_8a_bf:
+  name: 9e_65_f9_07_8a_bf
+  mac: 9E:65:F9:07:8A:BF
+  icon:
+  picture:
+  track: true
+
+stream810georgia_7cd30a0f6d7c:
+  name: stream810georgia-7cd30a0f6d7c
+  mac: 7C:D3:0A:0F:6D:7E
+  icon:
+  picture:
+  track: true
+
+google_home:
+  name: google-home
+  mac: 48:D6:D5:75:86:25
+  icon:
+  picture:
+  track: true
+
+dc_e5_5b_5f_64_47:
+  name: dc_e5_5b_5f_64_47
+  mac: DC:E5:5B:5F:64:47
+  icon:
+  picture:
+  track: true
+
+wiz8406a0:
+  name: wiz8406a0
+  mac: CC:40:85:84:06:A0
+  icon:
+  picture:
+  track: true
+
+64_16_66_c6_9a_3c:
+  name: 64_16_66_c6_9a_3c
+  mac: 64:16:66:C6:9A:3C
+  icon:
+  picture:
+  track: true
+
+wiz20a5da:
+  name: wiz20a5da
+  mac: CC:40:85:20:A5:DA
+  icon:
+  picture:
+  track: true
+
+stream810georgia_7cd30a0f7148:
+  name: stream810georgia-7cd30a0f7148
+  mac: 7C:D3:0A:0F:71:4A
+  icon:
+  picture:
+  track: true
+
+stream810georgia_7cd30a0fd4a4:
+  name: stream810georgia-7cd30a0fd4a4
+  mac: 7C:D3:0A:0F:D4:A6
+  icon:
+  picture:
+  track: true
+
+wiz27c8c4:
+  name: wiz27c8c4
+  mac: 98:77:D5:27:C8:C4
+  icon:
+  picture:
+  track: true
+
+frontdoor:
+  name: frontdoor
+  mac: 9C:8E:CD:36:92:C9
+  icon:
+  picture:
+  track: true
+
+google_home_mini:
+  name: google-home-mini
+  mac: 20:DF:B9:5E:AF:C4
+  icon:
+  picture:
+  track: true
+
+chromecast:
+  name: chromecast
+  mac: 54:60:09:4D:03:96
+  icon:
+  picture:
+  track: true
+
+52_13_3e_00_48_f4:
+  name: 52_13_3e_00_48_f4
+  mac: 52:13:3E:00:48:F4
+  icon:
+  picture:
+  track: true
+
+amy_s_s24:
+  name: amy-s-s24
+  mac: C2:02:F2:63:96:C7
+  icon:
+  picture:
+  track: true
+
+casey_s_s24_fe:
+  name: casey-s-s24-fe
+  mac: 36:90:4B:30:47:2F
+  icon:
+  picture:
+  track: true
+
+mdkboost:
+  name: mdkboost
+  mac: 0E:1F:4A:AF:42:6B
+  icon:
+  picture:
+  track: true
+
+mdkrzr:
+  name: mdkrzr
+  mac: B2:29:45:C3:24:AD
+  icon:
+  picture:
+  track: true
+
+denverstrippers_pixel5:
+  name: denverstrippers-pixel5
+  mac: 3A:6E:92:CA:0F:84
+  icon:
+  picture:
+  track: true
+
+amazingamy:
+  name: AmazingAmy
+  mac: 7C:FA:80:F2:60:38
+  icon:
+  picture:
+  track: true

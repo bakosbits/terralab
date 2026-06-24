@@ -1,5 +1,0 @@
-unifi:
-  volume_id: unifi
-  external_id: unifi
-  access_mode: single-node-writer
-  nodes: null

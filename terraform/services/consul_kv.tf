@@ -7,7 +7,7 @@ locals {
       for job in local.deployed_jobs :
       fileset(local.jobs, "${job}/consul_kv/*")
     ])) :
-    "${local.vars.lab_name}/${split("/consul_kv/", file)[0]}/${split("/consul_kv/", file)[1]}" => {
+    "${var.env.lab_name}/${split("/consul_kv/", file)[0]}/${split("/consul_kv/", file)[1]}" => {
       source_path = abspath("${local.jobs}/${file}")
     }
   }
@@ -17,6 +17,6 @@ resource "consul_keys" "consul_kv" {
   for_each = local.kv
   key {
     path  = each.key
-    value = templatefile(each.value.source_path, local.vars)
+    value = templatefile(each.value.source_path, var.env)
   }
 }

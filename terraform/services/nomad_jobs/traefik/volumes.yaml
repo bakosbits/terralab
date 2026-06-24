@@ -1,5 +1,0 @@
-certs:
-  volume_id: certs
-  external_id: certs
-  access_mode: single-node-writer
-  nodes: null

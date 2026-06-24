@@ -19,8 +19,6 @@ format:##................Format both terraform and nomad job files
 	cd terraform/cluster && terraform fmt -recursive -write
 	cd terraform/services && terraform fmt -recursive -write
 	cd terraform/services/nomad_jobs && nomad fmt -recursive -write
-	cd terraform/services/consul_kv && nomad fmt -recursive -write
-	cd terraform/services/nomad_vars && nomad fmt -recursive -write
 
 .PHONY: generate-vars
 generate-vars:##.......Generate skeleton tfvars templates from the project

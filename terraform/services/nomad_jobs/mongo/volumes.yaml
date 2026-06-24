@@ -1,5 +1,0 @@
-mongo:
-  volume_id: mongo
-  external_id: mongo
-  access_mode: single-node-writer
-  nodes: null

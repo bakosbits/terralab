@@ -1,5 +1,0 @@
-privatebin:
-  volume_id: privatebin
-  external_id: privatebin
-  access_mode: single-node-writer
-  nodes: null

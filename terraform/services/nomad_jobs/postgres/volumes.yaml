@@ -1,5 +1,0 @@
-postgres:
-  volume_id: postgres
-  external_id: postgres
-  access_mode: single-node-writer
-  nodes: null

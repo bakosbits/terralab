@@ -1,0 +1,9 @@
+  - platform: unifi_direct
+    host: upstairsap.bakos.lan
+    username: !secret unifi_user
+    password: !secret unifi_password
+
+  - platform: unifi_direct
+    host: downstairsap.bakos.lan
+    username: !secret unifi_user
+    password: !secret unifi_password

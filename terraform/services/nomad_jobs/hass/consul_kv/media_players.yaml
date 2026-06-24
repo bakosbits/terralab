@@ -15,7 +15,7 @@
     - media_player.loft_speaker
 
 - platform: universal
-  name: Home theater      
+  name: Home theater
   children:
     - media_player.home_theater_cast
     - media_player.home_theater_remote
@@ -36,12 +36,12 @@
       action: media_player.volume_down
       data:
         entity_id: media_player.home_theater_remote
-  unique_id: home_theater
   browse_media_entity: media_player.home_theater_cast        
-  device_class: tv  
+  unique_id: home_theater
+  device_class: tv        
 
 - platform: universal
-  name: Bedroom tv        
+  name: Bedroom tv
   children:
     - media_player.bedroom_tv_cast
     - media_player.bedroom_tv_remote
@@ -62,32 +62,6 @@
       action: media_player.volume_down      
       data:
         entity_id: media_player.bedroom_tv_remote   
-  unique_id: bedroom_tv
   browse_media_entity: media_player.bedroom_tv_cast          
-  device_class: tv  
-
-- platform: universal
-  name: Sony Bravia
-  children:
-    - media_player.sony_bravia_cast
-    - media_player.sony_bravia_remote
-  commands:
-    turn_off:
-      action: media_player.turn_off
-      data:
-        entity_id: media_player.sony_bravia_remote
-    turn_on:
-      action: media_player.turn_on
-      data:
-        entity_id: media_player.sony_bravia_remote
-    volume_up:
-      action: media_player.volume_up
-      data:
-        entity_id: media_player.sony_bravia_remote
-    volume_down:
-      action: media_player.volume_down      
-      data:
-        entity_id: media_player.sony_bravia_remote   
-  unique_id: Sony Bravia tv
-  browse_media_entity: media_player.sony_bravia_cast          
-  device_class: tv  
+  unique_id: bedroom_tv
+  device_class: tv          

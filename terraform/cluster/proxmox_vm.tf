@@ -1,4 +1,4 @@
-# The primary resource for creating consul, nomad and coredns hosts
+# The primary resource for creating consul and nomad and corehosts
 
 resource "proxmox_virtual_environment_vm" "vm" {
   for_each  = local.all_nodes
@@ -27,8 +27,9 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   network_device {
-    bridge = var.env.vm.bridge
-    model  = var.env.vm.network_model
+    bridge  = var.env.vm.bridge
+    model   = var.env.vm.network_model
+    vlan_id = var.env.vm.vlan_id
   }
 
 

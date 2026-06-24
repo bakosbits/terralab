@@ -18,7 +18,6 @@
   entities:
     - binary_sensor.garage_motion_1
     - binary_sensor.garage_motion_2
-    - binary_sensor.garage_motion_3
 
 - platform: group
   name: Hall motion

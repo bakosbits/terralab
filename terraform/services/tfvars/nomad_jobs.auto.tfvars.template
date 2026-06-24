@@ -9,7 +9,6 @@ nomad_jobs = {
       "auth",
       "cannery",
       "cloudflared",
-      "code_server",
       "coredns",
       "cyberchef",
       "deluge",
