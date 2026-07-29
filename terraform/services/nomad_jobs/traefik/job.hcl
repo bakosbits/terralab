@@ -49,7 +49,6 @@ job "traefik" {
 
       config {
         image        = "traefik:3.6.6"
-        ports        = ["http", "https"]
         network_mode = "host"
         volumes = [
           "/mnt/traefik:/etc/traefik",

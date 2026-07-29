@@ -1,5 +1,5 @@
 source "proxmox-iso" "base" {
-  
+
   proxmox_url = var.env.proxmox_url
   username    = var.env.proxmox_user
   password    = var.env.proxmox_password
@@ -19,7 +19,14 @@ source "proxmox-iso" "base" {
   machine         = var.env.machine
   scsi_controller = var.env.scsi_controller
   qemu_agent      = var.env.qemu_agent
-  
+  bios            = "ovmf"
+
+  efi_config {
+    efi_storage_pool  = var.env.efi_storage_pool
+    efi_type          = "4m"
+    pre_enrolled_keys = true
+  }
+
   cloud_init              = var.env.cloud_init
   cloud_init_storage_pool = var.env.cloud_init_storage_pool
 
@@ -28,14 +35,13 @@ source "proxmox-iso" "base" {
   }
 
   network_adapters {
-    model    = var.env.network_adapters_1.model
-    bridge   = var.env.network_adapters_1.bridge
-#    vlan_tag = var.env.network_adapters_1.vlan
+    model  = var.env.network_adapters.model
+    bridge = var.env.network_adapters.bridge
   }
 
   disks {
-    disk_size         = var.env.disks.disk_size
-    storage_pool      = var.env.disks.storage_pool
+    disk_size    = var.env.disks.disk_size
+    storage_pool = var.env.disks.storage_pool
   }
 
   boot_iso {
@@ -44,18 +50,27 @@ source "proxmox-iso" "base" {
     unmount  = var.env.boot.unmount
   }
 
-  http_directory    = "./http"
-  http_port_min     = 8200
-  http_port_max     = 8200
-  # http_bind_address = var.env.http_bind_address
+  http_directory = "./http"
+  http_port_min  = 8200
+  http_port_max  = 8200
 
-  boot_wait    = "10s"
+  # UEFI/GRUB: move to "Install" (text, 2nd entry), edit it, append preseed to
+  # the linux line, then F10. The text entry has no gfxpayload line so the
+  # cursor lands directly on linux after pressing e — no <down> needed.
+  boot_wait = "5s"
   boot_command = [
-    "<esc><wait>auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg<enter>"
+    "<wait5>",
+    "c",
+    "<wait>",
+    "linux /install.amd/vmlinuz auto=true url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg priority=critical netcfg/choose_interface=auto --- ",
+    "<enter>",
+    "initrd /install.amd/initrd.gz",
+    "<enter>",
+    "boot",
+    "<enter>"
   ]
-
   ssh_username = var.env.ssh_username
   ssh_password = var.env.ssh_password
   ssh_timeout  = "20m"
-  
+
 }

@@ -6,8 +6,7 @@ locals {
   retry_join_json = jsonencode([for m in local.manager_nodes : m.ip])
 
   vars = {
-    retry_join_json = local.retry_join_json,
-    priority        = local.keepalived_priority
+    retry_join_json = local.retry_join_json
     datacenter      = var.env.datacenter,
     consul_tld      = var.env.consul_tld
     cidr            = var.env.cidr
@@ -42,7 +41,7 @@ resource "proxmox_virtual_environment_file" "cloud_init" {
       consul_manager_hcl = local.consul_manager_hcl
       consul_worker_hcl  = local.consul_worker_hcl
       nomad_manager_hcl  = local.nomad_manager_hcl
-      nomad_worker_hcl   = templatefile("${path.module}/templates/nomad_worker.tftpl", merge(local.vars, { priority = try(each.value.keepalived_priority, local.keepalived_priority) }))
+      nomad_worker_hcl   = templatefile("${path.module}/templates/nomad_worker.tftpl", local.vars)
       registry_mirror    = local.registry_mirror
     })
   }

@@ -6,8 +6,8 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Install consul and nomad
 sudo apt-get update
-sudo apt-get install -y consul nomad
 sudo apt-get upgrade -y
+sudo apt-get install -y consul nomad
 
 # Configure consul and nomad
 sudo rm /etc/consul.d/* /etc/nomad.d/*

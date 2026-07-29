@@ -20,7 +20,7 @@ sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
 
-# Install cloud-init, cloud-utilsdocker, nomad, consul
+# Install cloud-init, cloud-utils
 sudo apt-get update
 sudo apt-get install -y cloud-init cloud-utils
 
@@ -37,8 +37,6 @@ sudo touch /etc/cloud/cloud-init.disabled
 
 # Cleanup tmp
 sudo find /tmp -type f -atime +10 -delete
-
-eject -r
 
 # Finish
 exit 0

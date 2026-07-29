@@ -46,8 +46,8 @@ job "ollama" {
       }
 
       resources {
-        cpu    = 10000
-        memory = 10240
+        cpu    = 12000
+        memory = 24576
       }
     }
   }

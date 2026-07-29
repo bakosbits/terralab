@@ -16,27 +16,9 @@ variable "env" {
     scsi_controller = string
     qemu_agent      = bool
 
-    cloud_init              = bool
-    cloud_init_storage_pool = string
-
-    vga = object({
-      type = string
-    })
-
-    network_adapters_1 = object({
+    network_adapters = object({
       model  = string
       bridge = string
-    })
-
-    disks = object({
-      disk_size    = string
-      storage_pool = string
-    })
-
-    boot = object({
-      type    = string
-      iso     = string
-      unmount = bool
     })
   })
 }

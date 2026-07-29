@@ -27,20 +27,18 @@ d-i mirror/http/proxy string
 d-i pkgsel/run_tasksel boolean false
 d-i pkgsel/include string qemu-guest-agent openssh-server make wget gpg curl sudo lsb-release
 
-# Partitioning - GPT/EFI layout (virtio-scsi disk = /dev/sda, OVMF firmware)
-# No $iflabel guards needed - default_label forces GPT unconditionally.
-# No non_efi_system - VM boots via OVMF so partman detects EFI natively.
+# Partitioning - swap in the front so growpart can work automagically
 d-i partman-auto/disk string /dev/sda
 d-i partman-auto/method string regular
-d-i partman-partitioning/default_label string gpt
 d-i partman-auto/confirm boolean true
-d-i partman-basicfilesystems/no_swap boolean false
 d-i partman-auto/expert_recipe string                         \
       boot-root ::                                            \
-              538 538 1075 fat32                              \
-                      method{ efi } format{ }                 \
+              64 512 300% linux-swap                          \
+                      $primary{ }                             \
+                      method{ swap } format{ }                \
               .                                               \
-              500 10000 1000000000 ext4                       \
+              500 10000 -1 ext4                               \
+                      $primary{ } $bootable{ }                \
                       method{ format } format{ }              \
                       use_filesystem{ } filesystem{ ext4 }    \
                       mountpoint{ / }                         \
@@ -51,9 +49,8 @@ d-i partman/choose_partition select finish
 d-i partman/confirm_nooverwrite boolean true
 d-i partman/confirm boolean true
 
-# Grub - EFI variant
-d-i grub-installer/force-efi-extra-removable boolean true
-d-i grub-installer/with_other_os boolean false
+# Grub install
+d-i grub-installer/bootdev  string default
 
 # Misc
 apt-cdrom-setup apt-setup/cdrom/set-first boolean false

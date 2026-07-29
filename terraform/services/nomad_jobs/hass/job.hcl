@@ -22,8 +22,7 @@ job "hass" {
       port = "http"
       tags = [
         "traefik.enable=true",
-        "traefik.http.routers.hass.entrypoints=websecure",
-        "traefik.http.routers.hass.middlewares=auth",
+        "traefik.http.routers.hass.entrypoints=websecure"
       ]
 
       check {
@@ -39,10 +38,21 @@ job "hass" {
       driver = "docker"
 
       config {
-        image        = "homeassistant/home-assistant:2026.1.2"
+        image        = "homeassistant/home-assistant:2026.7.4"
         network_mode = "host"
         privileged   = true
         volumes = [
+          "local/automations.yaml:/config/automations.yaml",
+          "local/binary_sensors.yaml:/config/binary_sensors.yaml",
+          "local/configuration.yaml:/config/configuration.yaml",
+          "local/customize.yaml:/config/customize.yaml",
+          "local/fans.yaml:/config/fans.yaml",
+          "local/lights.yaml:/config/lights.yaml",
+          "local/google_assistant.yaml:/config/google_assistant.yaml",
+          "local/secrets.yaml:/config/secrets.yaml",
+          "local/scripts.yaml:/config/scripts.yaml",
+          "local/service_account.yaml:/config/service_account.yaml",
+          "local/trusted_proxies.yaml:/config/trusted_proxies.yaml",
           "/mnt/hass:/config"
         ]
       }

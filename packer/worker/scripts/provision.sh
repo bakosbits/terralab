@@ -6,8 +6,8 @@ export DEBIAN_FRONTEND=noninteractive
 
 # Install docker, nomad, consul
 sudo apt-get update
-sudo apt-get install -y consul nomad docker-ce nfs-common ceph-common
 sudo apt-get upgrade -y
+sudo apt-get install -y consul nomad docker-ce nfs-common ceph-common
 
 # Configure consul and nomad
 sudo rm /etc/consul.d/* /etc/nomad.d/*
@@ -16,6 +16,13 @@ sudo systemctl disable consul nomad
 # Configure ceph
 sudo mkdir -p /etc/ceph
 sudo cp /tmp/configs/ceph/* /etc/ceph
+
+# Ensure Docker starts only after remote filesystems (Ceph) are mounted
+sudo mkdir -p /etc/systemd/system/docker.service.d
+sudo tee /etc/systemd/system/docker.service.d/wait-for-ceph.conf > /dev/null << 'EOF'
+[Unit]
+After=remote-fs.target
+EOF
 
 # Disable root
 sudo /usr/bin/passwd -l root

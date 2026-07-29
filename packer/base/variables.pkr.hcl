@@ -18,22 +18,20 @@ variable "env" {
 
     cloud_init              = bool
     cloud_init_storage_pool = string
-    iso_storage_pool        = string
-    http_bind_address       = string
+    efi_storage_pool        = string
 
     vga = object({
       type = string
     })
 
-    network_adapters_1 = object({
+    network_adapters = object({
       model  = string
       bridge = string
-      vlan   = number
     })
 
     disks = object({
-      disk_size         = string
-      storage_pool      = string
+      disk_size    = string
+      storage_pool = string
     })
 
     boot = object({

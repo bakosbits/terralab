@@ -10,12 +10,19 @@ resource "proxmox_virtual_environment_vm" "vm" {
   clone {
     vm_id     = each.value.clone_id
     node_name = var.env.clone_node_name
-    full      = var.env.vm.full_clone
+    full      = true
   }
+
+  machine = "q35"
 
   cpu {
     type  = var.env.vm.cpu_type
     cores = each.value.cores
+  }
+
+  efi_disk {
+    datastore_id = var.env.vm.vm_storage
+    type         = "4m"
   }
 
   memory {
