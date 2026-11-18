@@ -14,12 +14,21 @@ job "postgres" {
     }
 
     network {
-      port "postgres" { static = "5432" }
+      port "postgres" {
+        to = 5432
+      }
     }
 
     service {
       name = "postgres"
       port = "postgres"
+
+      tags = [
+        "traefik.enable=true",
+        "traefik.tcp.routers.postgres.entrypoints=postgres",
+        "traefik.tcp.routers.postgres.rule=HostSNI(`*`)",
+        "traefik.tcp.services.postgres.loadBalancer.server.port=$${NOMAD_HOST_PORT_postgres}"
+      ]
 
       check {
         type     = "tcp"

@@ -49,7 +49,7 @@ job "hass" {
           "local/media_players.yaml:/config/media_players.yaml",          
           "local/secrets.yaml:/config/secrets.yaml",
           "local/scripts.yaml:/config/scripts.yaml",
-          "local/service_account.yaml:/config/service_account.yaml",
+          "local/service_account.json:/config/service_account.json",
           "/mnt/hass:/config"
         ]
       }

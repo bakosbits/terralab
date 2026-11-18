@@ -35,6 +35,10 @@ entryPoints:
     http:
       tls: true
 
+  postgres:
+    address: :5432
+
+
 providers:
   file:
     directory: /etc/traefik/dynamic
