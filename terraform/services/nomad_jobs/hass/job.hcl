@@ -38,21 +38,18 @@ job "hass" {
       driver = "docker"
 
       config {
-        image        = "homeassistant/home-assistant:2026.7.4"
+        image        = "homeassistant/home-assistant:2026.11.1"
         network_mode = "host"
         privileged   = true
         volumes = [
           "local/automations.yaml:/config/automations.yaml",
-          "local/binary_sensors.yaml:/config/binary_sensors.yaml",
           "local/configuration.yaml:/config/configuration.yaml",
           "local/customize.yaml:/config/customize.yaml",
-          "local/fans.yaml:/config/fans.yaml",
-          "local/lights.yaml:/config/lights.yaml",
           "local/google_assistant.yaml:/config/google_assistant.yaml",
+          "local/media_players.yaml:/config/media_players.yaml",          
           "local/secrets.yaml:/config/secrets.yaml",
           "local/scripts.yaml:/config/scripts.yaml",
           "local/service_account.yaml:/config/service_account.yaml",
-          "local/trusted_proxies.yaml:/config/trusted_proxies.yaml",
           "/mnt/hass:/config"
         ]
       }
@@ -74,13 +71,6 @@ job "hass" {
       }
 
       template {
-        destination = "local/binary_sensors.yaml"
-        data        = <<-EOF
-        {{- key "${lab_name}/hass/binary_sensors.yaml" }}
-        EOF
-      }
-
-      template {
         destination = "local/configuration.yaml"
         data        = <<-EOF
         {{- key "${lab_name}/hass/configuration.yaml" }}
@@ -95,23 +85,16 @@ job "hass" {
       }
 
       template {
-        destination = "local/fans.yaml"
-        data        = <<-EOF
-        {{- key "${lab_name}/hass/fans.yaml" }}
-        EOF
-      }
-
-      template {
-        destination = "local/lights.yaml"
-        data        = <<-EOF
-        {{- key "${lab_name}/hass/lights.yaml" }}
-        EOF
-      }
-
-      template {
         destination = "local/google_assistant.yaml"
         data        = <<-EOF
         {{- key "${lab_name}/hass/google_assistant.yaml" }}
+        EOF
+      }
+
+      template {
+        destination = "local/media_players.yaml"
+        data        = <<-EOF
+        {{- key "${lab_name}/hass/media_players.yaml" }}
         EOF
       }
 
@@ -136,12 +119,6 @@ job "hass" {
         EOF
       }
 
-      template {
-        destination = "local/trusted_proxies.yaml"
-        data        = <<-EOF
-        {{- key "${lab_name}/hass/trusted_proxies.yaml" }}
-        EOF
-      }
     }
   }
 }

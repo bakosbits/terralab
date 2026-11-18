@@ -1,7 +1,0 @@
-- platform: group
-  name: Ceiling fans
-  unique_id: ceiling_fans
-  entities:
-    - fan.bedroom_fan
-    - fan.living_room_fan
-    - fan.family_room_fan

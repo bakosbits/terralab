@@ -52,7 +52,7 @@ job "traefik" {
         network_mode = "host"
         volumes = [
           "/mnt/traefik:/etc/traefik",
-          "/mnt/certs:/etc/traefik/certs",
+          "/mnt/certs:/etc/traefik/certs:ro",
           "local/traefik.yaml:/etc/traefik/traefik.yaml",
           "local/dynamic.yaml:/etc/traefik/dynamic/dynamic.yaml"
         ]

@@ -4,7 +4,6 @@ turn_on_evening_lights:
   - action: light.turn_on
     metadata: {}
     data:
-      kelvin: 2000
       brightness_pct: 15
     target:
       entity_id:

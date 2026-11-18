@@ -14,7 +14,10 @@ job "motioneye" {
     }
 
     network {
-      port "http" { static = 8765 }
+      port "http" { 
+        static = 80
+        to     = 8765 
+      }
     }
 
     service {
@@ -38,7 +41,7 @@ job "motioneye" {
       driver = "docker"
 
       config {
-        image      = "ccrisan/motioneye:master-amd64"
+        image      = "ghcr.io/motioneye-project/motioneye:latest"
         hostname   = "motioneye"
         privileged = true
         ports      = ["http"]
